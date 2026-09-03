@@ -1137,7 +1137,7 @@ header {
               0 0 100px rgba(124, 92, 255, 0.1);
   border: 1px solid rgba(124, 92, 255, 0.2);
   position: relative;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .wheel-container::before {
@@ -1156,9 +1156,7 @@ header {
   100% { transform: translateX(100%); }
 }
 
-.wheel-header {
-  margin-bottom: 40px;
-}
+.wheel-header { margin-bottom: 40px; }
 
 .wheel-badge {
   display: inline-block;
@@ -1305,133 +1303,16 @@ header {
 .ring-light:nth-child(15) { bottom: 4%; left: 38%; }
 .ring-light:nth-child(16) { bottom: 4%; right: 38%; }
 
-/* Само колесо — conic-gradient для секторов */
-.wheel {
+/* SVG Колесо */
+.wheel-svg {
   width: 100%;
   height: 100%;
   border-radius: 50%;
   position: relative;
-  overflow: hidden;
+  z-index: 2;
   box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.15),
               0 20px 60px rgba(0, 0, 0, 0.5);
   transition: transform 5s cubic-bezier(0.17, 0.67, 0.12, 0.99);
-  background: conic-gradient(
-    from -90deg,
-    #4b5563 0deg 45deg,
-    #10b981 45deg 90deg,
-    #3b82f6 90deg 135deg,
-    #f59e0b 135deg 180deg,
-    #4b5563 180deg 225deg,
-    #10b981 225deg 270deg,
-    #3b82f6 270deg 315deg,
-    #dc2626 315deg 360deg
-  );
-  z-index: 2;
-}
-
-/* Разделители между секторами */
-.wheel::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  border-radius: 50%;
-  background: 
-    linear-gradient(0deg, rgba(255,255,255,0.15) 1px, transparent 1px),
-    linear-gradient(45deg, rgba(255,255,255,0.15) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.15) 1px, transparent 1px),
-    linear-gradient(135deg, rgba(255,255,255,0.15) 1px, transparent 1px);
-  pointer-events: none;
-}
-
-/* Иконки и текст на секторах */
-.wheel-item {
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  z-index: 3;
-  pointer-events: none;
-}
-
-.item-icon {
-  font-size: 32px;
-  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.5));
-}
-
-.item-label {
-  font-size: 15px;
-  font-weight: 800;
-  color: white;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
-  white-space: nowrap;
-}
-
-/* Позиционирование иконок по кругу */
-.item-1 { top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-67.5deg) translate(0, -140px) rotate(67.5deg); }
-.item-2 { top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-22.5deg) translate(0, -140px) rotate(22.5deg); }
-.item-3 { top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(22.5deg) translate(0, -140px) rotate(-22.5deg); }
-.item-4 { top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(67.5deg) translate(0, -140px) rotate(-67.5deg); }
-.item-5 { top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(112.5deg) translate(0, -140px) rotate(-112.5deg); }
-.item-6 { top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(157.5deg) translate(0, -140px) rotate(-157.5deg); }
-.item-7 { top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-157.5deg) translate(0, -140px) rotate(157.5deg); }
-.item-8 { top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-112.5deg) translate(0, -140px) rotate(112.5deg); }
-
-.item-8 .item-label {
-  color: #fbbf24;
-  text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
-  animation: jackpotPulse 1.5s ease-in-out infinite;
-}
-
-@keyframes jackpotPulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.15); }
-}
-
-/* Центральный круг */
-.wheel-center {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 80px;
-  height: 80px;
-  background: linear-gradient(135deg, #7c5cff 0%, #a855f7 100%);
-  border-radius: 50%;
-  z-index: 5;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 0 30px rgba(124, 92, 255, 0.8),
-              inset 0 0 20px rgba(255, 255, 255, 0.2);
-  border: 3px solid rgba(255, 255, 255, 0.3);
-}
-
-.center-glow {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
-  border-radius: 50%;
-  animation: centerGlow 2s ease-in-out infinite;
-}
-
-@keyframes centerGlow {
-  0%, 100% { transform: scale(1); opacity: 0.5; }
-  50% { transform: scale(1.2); opacity: 0.8; }
-}
-
-.center-text {
-  position: relative;
-  z-index: 2;
-  color: white;
-  font-size: 14px;
-  font-weight: 900;
-  letter-spacing: 2px;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 /* Кнопка крутить */
@@ -1519,7 +1400,7 @@ header {
   letter-spacing: 2px;
 }
 
-/* Сообщения о выигрыше/проигрыше */
+/* Сообщения */
 .win-overlay, .lose-overlay {
   position: fixed;
   top: 0;
@@ -1676,200 +1557,7 @@ header {
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
 }
 
-/* ===== СВЕТЛАЯ ТЕМА ===== */
-body.light-theme {
-  background: linear-gradient(135deg, #f5f5f7 0%, #e8e8ed 50%, #d8d8e0 100%);
-  color: #1a1a24;
-}
-
-body.light-theme header {
-  background: rgba(255, 255, 255, 0.9);
-  border-bottom: 1px solid rgba(124, 92, 255, 0.15);
-}
-
-body.light-theme .logo {
-  background: linear-gradient(135deg, #7c5cff 0%, #a855f7 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-body.light-theme .profile-card {
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(124, 92, 255, 0.15);
-  box-shadow: 0 25px 80px -12px rgba(0, 0, 0, 0.1);
-}
-
-body.light-theme .profile-name {
-  background: linear-gradient(135deg, #1a1a24 0%, #7c5cff 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-body.light-theme .section-card {
-  background: rgba(255, 255, 255, 0.7);
-  border: 1px solid rgba(124, 92, 255, 0.15);
-}
-
-body.light-theme .section-header h3 { color: #1a1a24; }
-body.light-theme .section-content { color: #555; }
-body.light-theme .section-note { color: #888; }
-
-body.light-theme .user-id-top {
-  background: rgba(124, 92, 255, 0.1);
-  color: #7c5cff;
-  border: 1px solid rgba(124, 92, 255, 0.3);
-}
-
-body.light-theme .bonus-calm-card {
-  background: rgba(251, 191, 36, 0.08);
-  border: 1px solid rgba(251, 191, 36, 0.25);
-}
-
-body.light-theme .bonus-calm-label { color: #666; }
-
-body.light-theme .modal-content {
-  background: rgba(255, 255, 255, 0.98);
-  border: 1px solid rgba(124, 92, 255, 0.2);
-}
-
-body.light-theme .modal-header h3 {
-  background: linear-gradient(135deg, #7c5cff 0%, #a855f7 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-body.light-theme .form-input {
-  background: rgba(0, 0, 0, 0.03);
-  border: 2px solid rgba(124, 92, 255, 0.2);
-  color: #1a1a24;
-}
-
-body.light-theme .form-input::placeholder { color: #999; }
-body.light-theme .form-group label { color: #555; }
-
-body.light-theme .modal-close { color: #888; }
-body.light-theme .modal-close:hover {
-  background: rgba(0, 0, 0, 0.05);
-  color: #1a1a24;
-}
-
-body.light-theme .btn-cancel {
-  background: rgba(0, 0, 0, 0.05);
-  color: #1a1a24;
-}
-
-body.light-theme .btn-cancel:hover {
-  background: rgba(0, 0, 0, 0.1);
-}
-
-body.light-theme .toggle-btn {
-  background: rgba(0, 0, 0, 0.03);
-  border: 1px solid rgba(124, 92, 255, 0.2);
-  color: #555;
-}
-
-body.light-theme .toggle-btn:hover {
-  background: rgba(124, 92, 255, 0.08);
-}
-
-body.light-theme .btn-setting {
-  background: rgba(124, 92, 255, 0.1);
-  color: #7c5cff;
-  border: 1px solid rgba(124, 92, 255, 0.3);
-}
-
-body.light-theme .setting-label { color: #666; }
-body.light-theme .setting-value { color: #1a1a24; }
-body.light-theme .settings-block-title { color: #1a1a24; }
-
-body.light-theme .currency-select {
-  background: rgba(0, 0, 0, 0.03);
-  border: 1px solid rgba(124, 92, 255, 0.2);
-  color: #1a1a24;
-}
-
-body.light-theme .currency-select option {
-  background: white;
-  color: #1a1a24;
-}
-
-body.light-theme .friend-item { background: rgba(255, 255, 255, 0.5); }
-body.light-theme .friend-name { color: #1a1a24; }
-body.light-theme .empty-state { color: #888; }
-body.light-theme .support-link { color: #7c5cff; }
-
-body.light-theme .referral-code {
-  background: rgba(124, 92, 255, 0.08);
-  border: 1px solid rgba(124, 92, 255, 0.2);
-  color: #7c5cff;
-}
-
-body.light-theme .btn-copy {
-  background: rgba(124, 92, 255, 0.1);
-  color: #7c5cff;
-  border: 1px solid rgba(124, 92, 255, 0.3);
-}
-
-body.light-theme .btn-edit-small {
-  background: rgba(124, 92, 255, 0.1);
-  color: #7c5cff;
-  border: 1px solid rgba(124, 92, 255, 0.3);
-}
-
-body.light-theme .file-upload-btn {
-  background: rgba(124, 92, 255, 0.08);
-  border: 2px dashed rgba(124, 92, 255, 0.3);
-  color: #7c5cff;
-}
-
-body.light-theme .file-name { color: #666; }
-body.light-theme .setting-hint { color: #888; }
-
-body.light-theme .dropdown {
-  background: rgba(255, 255, 255, 0.98);
-  border: 1px solid rgba(124, 92, 255, 0.2);
-}
-
-body.light-theme .dropdown button { color: #1a1a24; }
-body.light-theme .dropdown button:hover { background: rgba(124, 92, 255, 0.1); }
-
-body.light-theme .catalog-header h1 {
-  background: linear-gradient(135deg, #1a1a24 0%, #7c5cff 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-body.light-theme .catalog-header p { color: #666; }
-
-body.light-theme .tab-btn {
-  background: rgba(255, 255, 255, 0.7);
-  border: 1px solid rgba(124, 92, 255, 0.2);
-  color: #555;
-}
-
-body.light-theme .tab-btn:hover { background: rgba(124, 92, 255, 0.1); }
-
-body.light-theme .product-card {
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(124, 92, 255, 0.15);
-}
-
-body.light-theme .product-title { color: #1a1a24; }
-body.light-theme .product-desc { color: #666; }
-
-body.light-theme .auth-card {
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(124, 92, 255, 0.15);
-}
-
-body.light-theme .auth-card p { color: #666; }
-
-body.light-theme .bonus-indicator {
-  background: linear-gradient(135deg, rgba(251, 191, 36, 0.2) 0%, rgba(245, 158, 11, 0.15) 100%);
-  border: 1px solid rgba(251, 191, 36, 0.4);
-  color: #d97706;
-}
-
+/* Светлая тема для колеса */
 body.light-theme .wheel-container {
   background: rgba(255, 255, 255, 0.95);
   border: 1px solid rgba(124, 92, 255, 0.2);
@@ -1900,31 +1588,8 @@ body.light-theme .win-subtitle { color: #666; }
 body.light-theme .lose-title { color: #666; }
 body.light-theme .lose-subtitle { color: #888; }
 
-/* ===== АДАПТИВНОСТЬ ===== */
+/* Адаптивность колеса */
 @media (max-width: 600px) {
-  header { padding: 15px 20px; }
-  
-  .catalog-header h1 { font-size: 28px; }
-  .catalog-tabs { gap: 8px; }
-  .tab-btn { padding: 10px 16px; font-size: 14px; }
-  
-  .profile-card { padding: 40px 25px; }
-  .big-avatar { width: 110px; height: 110px; }
-  .profile-name { font-size: 26px; }
-  .bonus-calm-amount { font-size: 32px; }
-  .bonus-emoji { font-size: 30px; }
-  
-  .friend-item { flex-direction: column; align-items: flex-start; }
-  .friend-actions { width: 100%; justify-content: flex-end; }
-  
-  .bonus-indicator {
-    padding: 4px 8px;
-    font-size: 12px;
-  }
-  
-  .bonus-indicator .bonus-icon { font-size: 14px; }
-  .bonus-indicator .bonus-value { font-size: 13px; }
-  
   .wheel-container { padding: 30px 20px; }
   .wheel-title { font-size: 32px; }
   
@@ -1937,25 +1602,6 @@ body.light-theme .lose-subtitle { color: #888; }
     width: 350px;
     height: 350px;
   }
-  
-  .item-icon { font-size: 24px; }
-  .item-label { font-size: 12px; }
-  
-  .item-1 { top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-67.5deg) translate(0, -105px) rotate(67.5deg); }
-  .item-2 { top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-22.5deg) translate(0, -105px) rotate(22.5deg); }
-  .item-3 { top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(22.5deg) translate(0, -105px) rotate(-22.5deg); }
-  .item-4 { top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(67.5deg) translate(0, -105px) rotate(-67.5deg); }
-  .item-5 { top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(112.5deg) translate(0, -105px) rotate(-112.5deg); }
-  .item-6 { top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(157.5deg) translate(0, -105px) rotate(-157.5deg); }
-  .item-7 { top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-157.5deg) translate(0, -105px) rotate(157.5deg); }
-  .item-8 { top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-112.5deg) translate(0, -105px) rotate(112.5deg); }
-  
-  .wheel-center {
-    width: 60px;
-    height: 60px;
-  }
-  
-  .center-text { font-size: 11px; }
   
   .btn-spin {
     padding: 16px 40px;
