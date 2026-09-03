@@ -24,34 +24,27 @@
       
       <!-- Рулетка -->
       <div class="roulette-wrapper">
-        <!-- Указатель по центру -->
         <div class="roulette-pointer">
           <div class="pointer-line"></div>
           <div class="pointer-triangle"></div>
         </div>
         
-        <!-- Лента с секторами -->
         <div class="roulette-viewport">
-          <div class="roulette-strip" id="roulette-strip">
-            <!-- Сектора генерируются через JS -->
-          </div>
+          <div class="roulette-strip" id="roulette-strip"></div>
         </div>
       </div>
 
-      <!-- Кнопка крутить -->
       <button class="btn-spin ready" id="btn-spin" onclick="spinRoulette()">
         <span class="btn-shine"></span>
         <span class="btn-text">🎯 КРУТИТЬ РУЛЕТКУ</span>
       </button>
 
-      <!-- Таймер -->
       <div class="timer-section" id="timer-section" style="display: none;">
         <div class="timer-icon">⏳</div>
         <div class="timer-label">Следующее вращение через:</div>
         <div class="timer-display" id="timer-display">00:00:00</div>
       </div>
 
-      <!-- Сообщение о выигрыше -->
       <div class="win-overlay" id="win-message" style="display: none;">
         <div class="confetti-container" id="confetti"></div>
         <div class="win-card">
@@ -59,7 +52,7 @@
           <div class="win-icon" id="win-icon"></div>
           <div class="win-title" id="win-title">ПОЗДРАВЛЯЕМ!</div>
           <div class="win-subtitle">Ты выиграл:</div>
-          <div class="win-amount" id="win-amount">+0 🎁</div>
+          <div class="win-amount" id="win-amount">+0 </div>
           <button class="btn-claim" onclick="closeWinMessage()">
             <span class="btn-shine"></span>
             ЗАБРАТЬ
@@ -67,7 +60,6 @@
         </div>
       </div>
 
-      <!-- Сообщение о проигрыше -->
       <div class="lose-overlay" id="lose-message" style="display: none;">
         <div class="lose-card">
           <div class="lose-icon">😔</div>
@@ -88,12 +80,14 @@
     let currentUser = null;
     let isSpinning = false;
 
-    // Призы и их шансы
+    // ===== ТЕСТОВЫЙ РЕЖИМ =====
+    const TEST_MODE = true; // Поставь false когда закончишь тестировать
+
     const prizes = [
-      { amount: 0, chance: 40, label: 'Пусто', icon: '', color: '#4b5563' },
-      { amount: 50, chance: 30, label: '50', icon: '🎁', color: '#10b981' },
+      { amount: 0, chance: 40, label: 'Пусто', icon: '😢', color: '#4b5563' },
+      { amount: 50, chance: 30, label: '50', icon: '', color: '#10b981' },
       { amount: 100, chance: 20, label: '100', icon: '💎', color: '#3b82f6' },
-      { amount: 500, chance: 9.997, label: '500', icon: '🔥', color: '#f59e0b' },
+      { amount: 500, chance: 9.997, label: '500', icon: '', color: '#f59e0b' },
       { amount: 7777777, chance: 0.003, label: '7.7M', icon: '👑', color: '#dc2626' }
     ];
 
@@ -108,7 +102,6 @@
       checkSpinAvailability();
     }
 
-    // Генерация ленты секторов
     function generateStrip(wonPrize) {
       const strip = document.getElementById('roulette-strip');
       strip.innerHTML = '';
@@ -154,7 +147,6 @@
       return prizes[prizes.length - 1];
     }
 
-    // Ждём пока элемент отрисуется
     function waitForRender(element) {
       return new Promise(resolve => {
         const check = () => {
@@ -169,6 +161,14 @@
     }
 
     async function checkSpinAvailability() {
+      // В тестовом режиме — всегда показываем кнопку
+      if (TEST_MODE) {
+        document.getElementById('btn-spin').style.display = 'block';
+        document.getElementById('btn-spin').classList.add('ready');
+        document.getElementById('timer-section').style.display = 'none';
+        return;
+      }
+
       const { data: profile } = await supabase.from('profiles').select('last_spin_at').eq('id', currentUser.id).single();
       if (!profile || !profile.last_spin_at) {
         document.getElementById('btn-spin').style.display = 'block';
@@ -236,22 +236,15 @@
       btnSpin.disabled = true;
       btnSpin.querySelector('.btn-text').textContent = '🎡 КРУТИМ...';
 
-      // 1. Выбираем выигрышный приз
       const wonPrize = getWinningPrize();
-
-      // 2. Генерируем ленту с выигрышным сектором на позиции WINNER_INDEX
       generateStrip(wonPrize);
       
-      // 3. Ждём полного рендеринга ленты
       await waitForRender(strip);
-      // Дополнительная задержка для гарантии
       await new Promise(r => setTimeout(r, 150));
 
-      // 4. Получаем РЕАЛЬНУЮ ширину сектора из DOM
       const winnerSector = strip.children[WINNER_INDEX];
       const SECTOR_WIDTH = winnerSector.offsetWidth;
       
-      // Проверка: если ширина 0, что-то пошло не так
       if (SECTOR_WIDTH === 0) {
         console.error('Sector width is 0!');
         isSpinning = false;
@@ -260,57 +253,45 @@
         return;
       }
 
-      // 5. Вычисляем смещение через getBoundingClientRect для максимальной точности
       const viewport = document.querySelector('.roulette-viewport');
       const viewportRect = viewport.getBoundingClientRect();
       const winnerRect = winnerSector.getBoundingClientRect();
       
-      // Центр выигрышного сектора относительно viewport
       const winnerCenterInViewport = winnerRect.left - viewportRect.left + (winnerRect.width / 2);
       const viewportCenter = viewportRect.width / 2;
-      
-      // Сколько нужно сдвинуть ленту, чтобы центр выигрышного сектора оказался в центре viewport
       const offsetToCenter = winnerCenterInViewport - viewportCenter;
-      
-      // Маленькое случайное смещение (±10% ширины сектора)
       const randomOffset = (Math.random() - 0.5) * SECTOR_WIDTH * 0.2;
-      
-      // Итоговое смещение
       const targetTranslate = -(offsetToCenter + randomOffset);
 
-      // 6. Сбрасываем позицию ленты
       strip.style.transition = 'none';
       strip.style.transform = 'translateX(0px)';
       
-      // Принудительный reflow
       void strip.offsetHeight;
       void strip.offsetWidth;
 
-      // 7. Запускаем анимацию
       strip.style.transition = 'transform 6s cubic-bezier(0.15, 0.85, 0.25, 1)';
       strip.style.transform = `translateX(${targetTranslate}px)`;
 
-      // 8. Ждём окончания анимации
       setTimeout(async () => {
-        // Проверка: какой сектор реально под указателем
-        const finalWinnerRect = winnerSector.getBoundingClientRect();
-        const finalViewportRect = viewport.getBoundingClientRect();
-        const finalWinnerCenter = finalWinnerRect.left - finalViewportRect.left + (finalWinnerRect.width / 2);
-        const isCorrectlyPositioned = Math.abs(finalWinnerCenter - finalViewportRect.width / 2) < SECTOR_WIDTH * 0.3;
-        
-        if (!isCorrectlyPositioned) {
-          console.warn('Winner sector not correctly positioned!', {
-            winnerCenter: finalWinnerCenter,
-            viewportCenter: finalViewportRect.width / 2,
-            difference: Math.abs(finalWinnerCenter - finalViewportRect.width / 2)
-          });
+        // В тестовом режиме НЕ сохраняем last_spin_at
+        if (!TEST_MODE) {
+          if (wonPrize.amount > 0) {
+            const { data: profile } = await supabase.from('profiles').select('bonus_balance').eq('id', currentUser.id).single();
+            const newBalance = (profile?.bonus_balance || 0) + wonPrize.amount;
+            await supabase.from('profiles').update({ bonus_balance: newBalance, last_spin_at: new Date().toISOString() }).eq('id', currentUser.id);
+          } else {
+            await supabase.from('profiles').update({ last_spin_at: new Date().toISOString() }).eq('id', currentUser.id);
+          }
+        } else {
+          // В тестовом режиме всё равно начисляем бонусы, но без таймера
+          if (wonPrize.amount > 0) {
+            const { data: profile } = await supabase.from('profiles').select('bonus_balance').eq('id', currentUser.id).single();
+            const newBalance = (profile?.bonus_balance || 0) + wonPrize.amount;
+            await supabase.from('profiles').update({ bonus_balance: newBalance }).eq('id', currentUser.id);
+          }
         }
 
         if (wonPrize.amount > 0) {
-          const { data: profile } = await supabase.from('profiles').select('bonus_balance').eq('id', currentUser.id).single();
-          const newBalance = (profile?.bonus_balance || 0) + wonPrize.amount;
-          await supabase.from('profiles').update({ bonus_balance: newBalance, last_spin_at: new Date().toISOString() }).eq('id', currentUser.id);
-
           document.getElementById('win-icon').textContent = wonPrize.icon;
           document.getElementById('win-title').textContent = wonPrize.amount === 7777777 ? '🎰 ДЖЕКПОТ! 🎰' : 'ПОЗДРАВЛЯЕМ!';
           document.getElementById('win-amount').textContent = `+${wonPrize.amount.toLocaleString('ru-RU')} 🎁`;
@@ -318,16 +299,21 @@
           
           if (wonPrize.amount >= 500) createConfetti();
         } else {
-          await supabase.from('profiles').update({ last_spin_at: new Date().toISOString() }).eq('id', currentUser.id);
           document.getElementById('lose-message').style.display = 'flex';
         }
         
         isSpinning = false;
         btnSpin.disabled = false;
-        btnSpin.querySelector('.btn-text').textContent = '🎯 КРУТИТЬ РУЛЕТКУ';
-        btnSpin.style.display = 'none';
-        document.getElementById('timer-section').style.display = 'block';
-        startTimer(24 * 60 * 60 * 1000);
+        btnSpin.querySelector('.btn-text').textContent = ' КРУТИТЬ РУЛЕТКУ';
+        
+        // В тестовом режиме сразу показываем кнопку, без таймера
+        if (TEST_MODE) {
+          btnSpin.classList.add('ready');
+        } else {
+          btnSpin.style.display = 'none';
+          document.getElementById('timer-section').style.display = 'block';
+          startTimer(24 * 60 * 60 * 1000);
+        }
       }, 6000);
     };
 
