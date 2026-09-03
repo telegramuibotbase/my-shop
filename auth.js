@@ -16,7 +16,7 @@ if (discordBtn) {
     
     // ВАЖНО: Замените 'ВАШ-USERNAME' и 'my-shop' на ваши реальные данные!
     // Это адрес, куда Discord вернёт пользователя после входа.
-    const redirectUrl = 'https://telegramuibotbase.io/my-shop/index.html';
+    const redirectUrl = 'https://telegramuibotbase.github.io/my-shop/index.html';
 
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'discord',
