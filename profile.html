@@ -13,25 +13,21 @@
 
   <main class="profile-page">
     <div class="profile-card">
-      <!-- ID по центру НАД аватаркой -->
       <div class="user-id-top" id="profile-user-id">ID #000000</div>
       
-      <!-- Аватарка по центру -->
       <div class="avatar-center-wrapper">
         <img id="profile-avatar" class="big-avatar" src="" alt="avatar">
         <div class="avatar-badge" id="profile-provider">Discord</div>
       </div>
       
-      <!-- Имя по центру под аватаркой -->
       <h2 id="profile-name" class="profile-name">Загрузка...</h2>
       
       <button class="btn-edit-small" onclick="openEditModal()">✏️ Редактировать профиль</button>
       
-      <!-- Бонусный баланс -->
       <div class="bonus-calm-section">
         <div class="bonus-calm-card">
           <div class="bonus-calm-icon">🎁</div>
-          <div class="bonus-calm-label">Бонусный баланс</div>
+          <div class="bonus-calm-label" data-i18n="bonusBalance">Бонусный баланс</div>
           <div class="bonus-calm-amount" id="profile-bonus-balance">0 ₽</div>
           <button class="btn-bonus-calm" onclick="alert('Бонусы начисляются за покупки и активность!')">
             Подробнее
@@ -61,13 +57,13 @@
         </div>
       </div>
       
-      <div class="section-card">
+      <div class="section-card clickable" onclick="openSettingsModal()">
         <div class="section-header">
           <h3>⚙️ Настройки</h3>
+          <span class="section-arrow">→</span>
         </div>
         <div class="section-content">
-          <p>Здесь будут настройки вашего аккаунта</p>
-          <p class="section-note">Скоро: уведомления, приватность, безопасность</p>
+          <p>Тема, язык, валюта, привязка аккаунтов</p>
         </div>
       </div>
       
@@ -86,6 +82,7 @@
     </div>
   </main>
 
+  <!-- Модальное окно редактирования профиля -->
   <div class="modal" id="editModal">
     <div class="modal-content">
       <div class="modal-header">
@@ -101,7 +98,7 @@
           <label>Новая аватарка</label>
           <div class="file-upload-wrapper">
             <input type="file" id="edit-avatar-file" class="file-input" accept="image/*" onchange="previewImage(this)">
-            <label for="edit-avatar-file" class="file-upload-btn"> Выбрать файл</label>
+            <label for="edit-avatar-file" class="file-upload-btn">📁 Выбрать файл</label>
             <span class="file-name" id="file-name">Файл не выбран</span>
           </div>
         </div>
@@ -116,6 +113,7 @@
     </div>
   </div>
 
+  <!-- Модальное окно добавления друга -->
   <div class="modal" id="addFriendModal">
     <div class="modal-content">
       <div class="modal-header">
@@ -135,6 +133,135 @@
     </div>
   </div>
 
+  <!-- Модальное окно НАСТРОЕК -->
+  <div class="modal" id="settingsModal">
+    <div class="modal-content settings-modal">
+      <div class="modal-header">
+        <h3>⚙️ Настройки</h3>
+        <button class="modal-close" onclick="closeSettingsModal()">×</button>
+      </div>
+      <div class="modal-body settings-body">
+        
+        <!-- Безопасность -->
+        <div class="settings-section">
+          <h4 class="settings-section-title"> Безопасность</h4>
+          
+          <div class="setting-item">
+            <div class="setting-info">
+              <div class="setting-label" data-i18n="email">Почта</div>
+              <div class="setting-value" id="current-email">Не привязана</div>
+            </div>
+            <button class="btn-setting" onclick="openEmailModal()">
+              <span id="email-btn-text">Привязать</span>
+            </button>
+          </div>
+          
+          <div class="setting-item">
+            <div class="setting-info">
+              <div class="setting-label">Telegram</div>
+              <div class="setting-value" id="current-telegram">Не привязан</div>
+            </div>
+            <button class="btn-setting" onclick="openTelegramModal()">
+              <span id="telegram-btn-text">Привязать</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Внешний вид -->
+        <div class="settings-section">
+          <h4 class="settings-section-title" data-i18n="appearance">🎨 Внешний вид</h4>
+          
+          <div class="setting-item">
+            <div class="setting-info">
+              <div class="setting-label" data-i18n="theme">Тема</div>
+            </div>
+            <div class="theme-toggle">
+              <button class="theme-btn active" id="theme-dark" onclick="setTheme('dark')">🌙 Тёмная</button>
+              <button class="theme-btn" id="theme-light" onclick="setTheme('light')">️ Светлая</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Язык -->
+        <div class="settings-section">
+          <h4 class="settings-section-title" data-i18n="language">🌐 Язык</h4>
+          
+          <div class="setting-item">
+            <div class="setting-info">
+              <div class="setting-label" data-i18n="selectLanguage">Выберите язык</div>
+            </div>
+            <div class="language-toggle">
+              <button class="lang-btn active" id="lang-ru" onclick="setLanguage('ru')">🇷🇺 Русский</button>
+              <button class="lang-btn" id="lang-en" onclick="setLanguage('en')">🇬🇧 English</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Валюта -->
+        <div class="settings-section">
+          <h4 class="settings-section-title" data-i18n="currency">💱 Валюта</h4>
+          
+          <div class="setting-item">
+            <div class="setting-info">
+              <div class="setting-label" data-i18n="selectCurrency">Отображение цен</div>
+            </div>
+            <select class="currency-select" id="currency-select" onchange="setCurrency(this.value)">
+              <option value="RUB">🇷🇺 RUB (Рубль)</option>
+              <option value="USD">🇺🇸 USD (Доллар)</option>
+              <option value="EUR">🇪🇺 EUR (Евро)</option>
+              <option value="BYN">🇧🇾 BYN (Бел. рубль)</option>
+            </select>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" onclick="closeSettingsModal()">Закрыть</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Модальное окно привязки почты -->
+  <div class="modal" id="emailModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>📧 Привязать почту</h3>
+        <button class="modal-close" onclick="closeEmailModal()">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Email адрес</label>
+          <input type="email" id="email-input" class="form-input" placeholder="example@mail.com">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" onclick="closeEmailModal()">Отмена</button>
+        <button class="btn-save" onclick="saveEmail()">💾 Сохранить</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Модальное окно привязки Telegram -->
+  <div class="modal" id="telegramModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>💬 Привязать Telegram</h3>
+        <button class="modal-close" onclick="closeTelegramModal()">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Telegram username</label>
+          <input type="text" id="telegram-input" class="form-input" placeholder="@username">
+        </div>
+        <p class="setting-hint">Введите ваш username в Telegram (например: @myshop)</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" onclick="closeTelegramModal()">Отмена</button>
+        <button class="btn-save" onclick="saveTelegram()">💾 Сохранить</button>
+      </div>
+    </div>
+  </div>
+
   <script type="module">
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
     import { supabaseConfig } from './supabase-config.js';
@@ -146,6 +273,239 @@
     let selectedFileBase64 = null;
     let currentUserId = null;
 
+    // ===== ПЕРЕВОДЫ =====
+    const translations = {
+      ru: {
+        bonusBalance: 'Бонусный баланс',
+        email: 'Почта',
+        appearance: '🎨 Внешний вид',
+        theme: 'Тема',
+        language: '🌐 Язык',
+        selectLanguage: 'Выберите язык',
+        currency: '💱 Валюта',
+        selectCurrency: 'Отображение цен',
+        notLinked: 'Не привязана',
+        notLinkedTg: 'Не привязан',
+        link: 'Привязать',
+        change: 'Изменить',
+        dark: '🌙 Тёмная',
+        light: '☀️ Светлая',
+        noFriends: 'У вас пока нет друзей',
+        referralTitle: '🎁 Реферальная система',
+        referralDesc: 'Приглашайте друзей и получайте бонусы!',
+        referralNote: 'Скоро: начисление бонусов за каждого приглашённого друга',
+        settingsTitle: '⚙️ Настройки',
+        settingsDesc: 'Тема, язык, валюта, привязка аккаунтов',
+        supportTitle: '💬 Поддержка',
+        supportDesc: 'Нужна помощь? Свяжитесь с нами!',
+        friendsTitle: '👥 Друзья',
+        addFriend: '+ Добавить',
+        copy: '📋 Скопировать',
+        yourCode: 'Ваш код: ',
+        editProfile: '✏️ Редактировать профиль',
+        details: 'Подробнее',
+        back: '← Назад'
+      },
+      en: {
+        bonusBalance: 'Bonus Balance',
+        email: 'Email',
+        appearance: '🎨 Appearance',
+        theme: 'Theme',
+        language: '🌐 Language',
+        selectLanguage: 'Select language',
+        currency: '💱 Currency',
+        selectCurrency: 'Price display',
+        notLinked: 'Not linked',
+        notLinkedTg: 'Not linked',
+        link: 'Link',
+        change: 'Change',
+        dark: '🌙 Dark',
+        light: '☀️ Light',
+        noFriends: 'You have no friends yet',
+        referralTitle: '🎁 Referral System',
+        referralDesc: 'Invite friends and earn bonuses!',
+        referralNote: 'Coming soon: bonuses for each invited friend',
+        settingsTitle: '⚙️ Settings',
+        settingsDesc: 'Theme, language, currency, account linking',
+        supportTitle: '💬 Support',
+        supportDesc: 'Need help? Contact us!',
+        friendsTitle: '👥 Friends',
+        addFriend: '+ Add',
+        copy: '📋 Copy',
+        yourCode: 'Your code: ',
+        editProfile: '️ Edit Profile',
+        details: 'Details',
+        back: '← Back'
+      }
+    };
+
+    // ===== КУРСЫ ВАЛЮТ (относительно RUB) =====
+    const currencyRates = {
+      RUB: { rate: 1, symbol: '₽', name: 'RUB' },
+      USD: { rate: 0.011, symbol: '$', name: 'USD' },
+      EUR: { rate: 0.010, symbol: '€', name: 'EUR' },
+      BYN: { rate: 0.036, symbol: 'Br', name: 'BYN' }
+    };
+
+    // ===== ЗАГРУЗКА НАСТРОЕК =====
+    function loadSettings() {
+      const settings = JSON.parse(localStorage.getItem('userSettings') || '{}');
+      const theme = settings.theme || 'dark';
+      const lang = settings.lang || 'ru';
+      const currency = settings.currency || 'RUB';
+      
+      // Применяем тему
+      document.body.classList.toggle('light-theme', theme === 'light');
+      document.getElementById('theme-dark').classList.toggle('active', theme === 'dark');
+      document.getElementById('theme-light').classList.toggle('active', theme === 'light');
+      
+      // Применяем язык
+      document.getElementById('lang-ru').classList.toggle('active', lang === 'ru');
+      document.getElementById('lang-en').classList.toggle('active', lang === 'en');
+      applyTranslations(lang);
+      
+      // Применяем валюту
+      document.getElementById('currency-select').value = currency;
+    }
+
+    // ===== ПРИМЕНЕНИЕ ПЕРЕВОДОВ =====
+    function applyTranslations(lang) {
+      const t = translations[lang];
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (t[key]) el.textContent = t[key];
+      });
+      
+      // Обновляем специфичные элементы
+      const emailBtn = document.getElementById('email-btn-text');
+      const telegramBtn = document.getElementById('telegram-btn-text');
+      const currentEmail = document.getElementById('current-email');
+      const currentTelegram = document.getElementById('current-telegram');
+      
+      if (emailBtn) emailBtn.textContent = currentEmail.dataset.linked === 'true' ? t.change : t.link;
+      if (telegramBtn) telegramBtn.textContent = currentTelegram.dataset.linked === 'true' ? t.change : t.link;
+      if (currentEmail && !currentEmail.dataset.linked) currentEmail.textContent = t.notLinked;
+      if (currentTelegram && !currentTelegram.dataset.linked) currentTelegram.textContent = t.notLinkedTg;
+    }
+
+    // ===== КОНВЕРТАЦИЯ ЦЕНЫ =====
+    window.convertPrice = function(amountRub) {
+      const settings = JSON.parse(localStorage.getItem('userSettings') || '{}');
+      const currency = settings.currency || 'RUB';
+      const data = currencyRates[currency];
+      const converted = (amountRub * data.rate).toFixed(currency === 'RUB' ? 0 : 2);
+      return converted + ' ' + data.symbol;
+    };
+
+    // ===== ФУНКЦИИ НАСТРОЕК =====
+    window.setTheme = function(theme) {
+      const settings = JSON.parse(localStorage.getItem('userSettings') || '{}');
+      settings.theme = theme;
+      localStorage.setItem('userSettings', JSON.stringify(settings));
+      
+      document.body.classList.toggle('light-theme', theme === 'light');
+      document.getElementById('theme-dark').classList.toggle('active', theme === 'dark');
+      document.getElementById('theme-light').classList.toggle('active', theme === 'light');
+    };
+
+    window.setLanguage = function(lang) {
+      const settings = JSON.parse(localStorage.getItem('userSettings') || '{}');
+      settings.lang = lang;
+      localStorage.setItem('userSettings', JSON.stringify(settings));
+      
+      document.getElementById('lang-ru').classList.toggle('active', lang === 'ru');
+      document.getElementById('lang-en').classList.toggle('active', lang === 'en');
+      applyTranslations(lang);
+    };
+
+    window.setCurrency = function(currency) {
+      const settings = JSON.parse(localStorage.getItem('userSettings') || '{}');
+      settings.currency = currency;
+      localStorage.setItem('userSettings', JSON.stringify(settings));
+    };
+
+    // ===== МОДАЛЬНЫЕ ОКНА =====
+    window.openSettingsModal = function() {
+      loadSettings();
+      document.getElementById('settingsModal').classList.add('active');
+    };
+    
+    window.closeSettingsModal = function() {
+      document.getElementById('settingsModal').classList.remove('active');
+    };
+
+    window.openEmailModal = function() {
+      document.getElementById('emailModal').classList.add('active');
+    };
+    
+    window.closeEmailModal = function() {
+      document.getElementById('emailModal').classList.remove('active');
+    };
+
+    window.openTelegramModal = function() {
+      document.getElementById('telegramModal').classList.add('active');
+    };
+    
+    window.closeTelegramModal = function() {
+      document.getElementById('telegramModal').classList.remove('active');
+    };
+
+    // ===== СОХРАНЕНИЕ ПОЧТЫ =====
+    window.saveEmail = async function() {
+      const email = document.getElementById('email-input').value.trim();
+      
+      if (!email || !email.includes('@')) {
+        alert('Введите корректный email!');
+        return;
+      }
+      
+      // Сохраняем в localStorage (привязка к Supabase требует подтверждения по почте)
+      const settings = JSON.parse(localStorage.getItem('userSettings') || '{}');
+      settings.email = email;
+      localStorage.setItem('userSettings', JSON.stringify(settings));
+      
+      // Обновляем отображение
+      const currentEmail = document.getElementById('current-email');
+      currentEmail.textContent = email;
+      currentEmail.dataset.linked = 'true';
+      
+      const t = translations[settings.lang || 'ru'];
+      document.getElementById('email-btn-text').textContent = t.change;
+      
+      closeEmailModal();
+      alert('Почта привязана! ✅');
+    };
+
+    // ===== СОХРАНЕНИЕ TELEGRAM =====
+    window.saveTelegram = function() {
+      let username = document.getElementById('telegram-input').value.trim();
+      
+      if (!username) {
+        alert('Введите username!');
+        return;
+      }
+      
+      // Добавляем @ если нет
+      if (!username.startsWith('@')) {
+        username = '@' + username;
+      }
+      
+      const settings = JSON.parse(localStorage.getItem('userSettings') || '{}');
+      settings.telegram = username;
+      localStorage.setItem('userSettings', JSON.stringify(settings));
+      
+      const currentTelegram = document.getElementById('current-telegram');
+      currentTelegram.textContent = username;
+      currentTelegram.dataset.linked = 'true';
+      
+      const t = translations[settings.lang || 'ru'];
+      document.getElementById('telegram-btn-text').textContent = t.change;
+      
+      closeTelegramModal();
+      alert('Telegram привязан! ✅');
+    };
+
+    // ===== ЗАГРУЗКА ПРОФИЛЯ =====
     async function loadProfile() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) { window.location.href = 'login.html'; return; }
@@ -163,7 +523,7 @@
         
         currentUserId = newProfile?.user_id;
         currentAvatarUrl = defaultAvatar;
-        displayProfile(defaultName, defaultAvatar, 0, provider, newProfile?.user_id);
+        displayProfile(defaultName, defaultAvatar, 0, provider, newProfile?.user_id, user.email);
         loadFriends();
         return;
       }
@@ -174,26 +534,52 @@
       const bonusBalance = profile.bonus_balance || 0;
       const provider = (user.app_metadata?.provider || 'Discord').charAt(0).toUpperCase() + (user.app_metadata?.provider || 'discord').slice(1);
       
-      displayProfile(name, currentAvatarUrl, bonusBalance, provider, profile.user_id);
+      displayProfile(name, currentAvatarUrl, bonusBalance, provider, profile.user_id, user.email);
       loadFriends();
     }
     
-    function displayProfile(name, avatar, bonusBalance, provider, userId) {
+    function displayProfile(name, avatar, bonusBalance, provider, userId, userEmail) {
       document.getElementById('profile-avatar').src = avatar || 'https://via.placeholder.com/120';
       document.getElementById('profile-name').textContent = name;
       document.getElementById('profile-provider').textContent = provider;
-      document.getElementById('profile-bonus-balance').textContent = bonusBalance.toLocaleString('ru-RU') + ' ₽';
+      document.getElementById('profile-bonus-balance').textContent = window.convertPrice(bonusBalance);
       document.getElementById('profile-user-id').textContent = 'ID #' + (userId || '000000');
       document.getElementById('referral-code').textContent = 'Ваш код: REF-' + (userId || '000000');
       document.getElementById('edit-name').value = name;
       document.getElementById('preview-avatar').src = avatar || 'https://via.placeholder.com/80';
+      
+      // Загружаем привязанные данные
+      const settings = JSON.parse(localStorage.getItem('userSettings') || '{}');
+      
+      if (userEmail) {
+        const currentEmail = document.getElementById('current-email');
+        currentEmail.textContent = userEmail;
+        currentEmail.dataset.linked = 'true';
+        document.getElementById('email-btn-text').textContent = translations[settings.lang || 'ru'].change;
+      }
+      
+      if (settings.telegram) {
+        const currentTelegram = document.getElementById('current-telegram');
+        currentTelegram.textContent = settings.telegram;
+        currentTelegram.dataset.linked = 'true';
+        document.getElementById('telegram-btn-text').textContent = translations[settings.lang || 'ru'].change;
+      }
+      
+      // Загружаем настройки
+      loadSettings();
     }
     
     async function loadFriends() {
       const { data: friends } = await supabase.from('friends').select('*, profiles!friend_id(name, avatar_url, user_id)').eq('user_id', currentUser.id).eq('status', 'accepted');
       const friendsList = document.getElementById('friends-list');
-      if (!friends || friends.length === 0) { friendsList.innerHTML = '<div class="empty-state">У вас пока нет друзей</div>'; return; }
-      friendsList.innerHTML = friends.map(friend => `<div class="friend-item"><img src="${friend.profiles.avatar_url || 'https://via.placeholder.com/40'}" class="friend-avatar"><div class="friend-info"><div class="friend-name">${friend.profiles.name}</div><div class="friend-id">ID #${friend.profiles.user_id}</div></div><div class="friend-actions"><button class="btn-friend-action" onclick="sendMessage('${friend.friend_id}')"> Написать</button><button class="btn-friend-action" onclick="sendBonus('${friend.friend_id}')">⭐ Бонус</button></div></div>`).join('');
+      const settings = JSON.parse(localStorage.getItem('userSettings') || '{}');
+      const lang = settings.lang || 'ru';
+      
+      if (!friends || friends.length === 0) { 
+        friendsList.innerHTML = '<div class="empty-state">' + translations[lang].noFriends + '</div>'; 
+        return; 
+      }
+      friendsList.innerHTML = friends.map(friend => `<div class="friend-item"><img src="${friend.profiles.avatar_url || 'https://via.placeholder.com/40'}" class="friend-avatar"><div class="friend-info"><div class="friend-name">${friend.profiles.name}</div><div class="friend-id">ID #${friend.profiles.user_id}</div></div><div class="friend-actions"><button class="btn-friend-action" onclick="sendMessage('${friend.friend_id}')">💬 Написать</button><button class="btn-friend-action" onclick="sendBonus('${friend.friend_id}')">⭐ Бонус</button></div></div>`).join('');
     }
     
     window.previewImage = function(input) {
@@ -244,11 +630,14 @@
     
     window.copyReferralCode = function() {
       const code = document.getElementById('referral-code').textContent;
-      navigator.clipboard.writeText(code).then(() => alert('Код скопирован! '));
+      navigator.clipboard.writeText(code).then(() => alert('Код скопирован! 📋'));
     }
     
     document.getElementById('editModal').addEventListener('click', (e) => { if (e.target.id === 'editModal') closeEditModal(); });
     document.getElementById('addFriendModal').addEventListener('click', (e) => { if (e.target.id === 'addFriendModal') closeAddFriendModal(); });
+    document.getElementById('settingsModal').addEventListener('click', (e) => { if (e.target.id === 'settingsModal') closeSettingsModal(); });
+    document.getElementById('emailModal').addEventListener('click', (e) => { if (e.target.id === 'emailModal') closeEmailModal(); });
+    document.getElementById('telegramModal').addEventListener('click', (e) => { if (e.target.id === 'telegramModal') closeTelegramModal(); });
     
     loadProfile();
   </script>
