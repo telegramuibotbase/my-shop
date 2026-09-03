@@ -28,13 +28,13 @@
         <div class="balance-label">Ваш баланс</div>
         <div class="balance-amount" id="profile-balance">0 ₽</div>
         <button class="btn-topup" onclick="alert('Пополнение скоро будет доступно!')">
-          💳 Пополнить
+           Пополнить
         </button>
       </div>
       
       <!-- Кнопка редактирования -->
       <button class="btn-edit" onclick="openEditModal()">
-        ️ Редактировать профиль
+        ✏️ Редактировать профиль
       </button>
     </div>
   </main>
@@ -54,8 +54,14 @@
         </div>
         
         <div class="form-group">
-          <label>Ссылка на аватарку</label>
-          <input type="url" id="edit-avatar" class="form-input" placeholder="https://...">
+          <label>Новая аватарка</label>
+          <div class="file-upload-wrapper">
+            <input type="file" id="edit-avatar-file" class="file-input" accept="image/*" onchange="previewImage(this)">
+            <label for="edit-avatar-file" class="file-upload-btn">
+               Выбрать файл
+            </label>
+            <span class="file-name" id="file-name">Файл не выбран</span>
+          </div>
         </div>
         
         <div class="avatar-preview">
@@ -65,65 +71,160 @@
       
       <div class="modal-footer">
         <button class="btn-cancel" onclick="closeEditModal()">Отмена</button>
-        <button class="btn-save" onclick="saveProfile()">Сохранить</button>
+        <button class="btn-save" onclick="saveProfile()"> Сохранить</button>
       </div>
     </div>
   </div>
 
-  <script>
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+    import { supabaseConfig } from './supabase-config.js';
+
+    const supabase = createClient(supabaseConfig.url, supabaseConfig.anonKey);
+    
+    let currentUser = null;
+    let selectedFile = null;
+
     // Загрузка данных профиля
-    const data = JSON.parse(localStorage.getItem('userData') || '{}');
+    async function loadProfile() {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        window.location.href = 'login.html';
+        return;
+      }
+      
+      currentUser = user;
+      
+      // Получаем данные из базы или метаданных
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', user.id)
+        .single();
+      
+      const name = profile?.name || user.user_metadata?.full_name || user.user_metadata?.name || 'Пользователь';
+      const avatar = profile?.avatar_url || user.user_metadata?.avatar_url || '';
+      const balance = profile?.balance || 0;
+      const provider = (user.app_metadata?.provider || 'Discord').charAt(0).toUpperCase() + (user.app_metadata?.provider || 'discord').slice(1);
+      
+      document.getElementById('profile-avatar').src = avatar || 'https://via.placeholder.com/120';
+      document.getElementById('profile-name').textContent = name;
+      document.getElementById('profile-provider').textContent = provider;
+      document.getElementById('profile-balance').textContent = balance + ' ₽';
+      
+      // Заполняем поля редактирования
+      document.getElementById('edit-name').value = name;
+      document.getElementById('preview-avatar').src = avatar || 'https://via.placeholder.com/80';
+    }
     
-    document.getElementById('profile-avatar').src = data.avatar || 'https://via.placeholder.com/120';
-    document.getElementById('profile-name').textContent = data.name || 'Пользователь';
-    document.getElementById('profile-provider').textContent = data.provider || 'Discord';
-    document.getElementById('profile-balance').textContent = (data.balance || 0) + ' ₽';
-    
-    // Заполняем поля редактирования
-    document.getElementById('edit-name').value = data.name || '';
-    document.getElementById('edit-avatar').value = data.avatar || '';
-    document.getElementById('preview-avatar').src = data.avatar || 'https://via.placeholder.com/80';
-    
-    // Предпросмотр аватарки
-    document.getElementById('edit-avatar').addEventListener('input', (e) => {
-      document.getElementById('preview-avatar').src = e.target.value || 'https://via.placeholder.com/80';
-    });
+    // Предпросмотр изображения
+    window.previewImage = function(input) {
+      if (input.files && input.files[0]) {
+        selectedFile = input.files[0];
+        document.getElementById('file-name').textContent = selectedFile.name;
+        
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          document.getElementById('preview-avatar').src = e.target.result;
+        };
+        reader.readAsDataURL(selectedFile);
+      }
+    }
     
     // Открытие модального окна
-    function openEditModal() {
+    window.openEditModal = function() {
       document.getElementById('editModal').classList.add('active');
     }
     
     // Закрытие модального окна
-    function closeEditModal() {
+    window.closeEditModal = function() {
       document.getElementById('editModal').classList.remove('active');
+      selectedFile = null;
+      document.getElementById('edit-avatar-file').value = '';
+      document.getElementById('file-name').textContent = 'Файл не выбран';
     }
     
     // Сохранение профиля
-    function saveProfile() {
+    window.saveProfile = async function() {
       const newName = document.getElementById('edit-name').value.trim();
-      const newAvatar = document.getElementById('edit-avatar').value.trim();
       
       if (!newName) {
         alert('Введите имя!');
         return;
       }
       
-      // Обновляем данные
-      const updatedData = {
-        ...data,
-        name: newName,
-        avatar: newAvatar || data.avatar
-      };
+      let avatarUrl = currentUser.user_metadata?.avatar_url;
       
-      localStorage.setItem('userData', JSON.stringify(updatedData));
+      // Если выбран новый файл - загружаем его
+      if (selectedFile) {
+        const fileExt = selectedFile.name.split('.').pop();
+        const fileName = `${currentUser.id}.${fileExt}`;
+        const filePath = `avatars/${fileName}`;
+        
+        // Загружаем файл в Supabase Storage
+        const { error: uploadError } = await supabase.storage
+          .from('profile-avatars')
+          .upload(filePath, selectedFile, { upsert: true });
+        
+        if (uploadError) {
+          // Если бакет не существует, создаём публичную ссылку из base64
+          alert('Хранилище ещё не настроено. Используем временное сохранение.');
+          const reader = new FileReader();
+          reader.onloadend = async function() {
+            avatarUrl = reader.result; // base64
+            await updateProfileData(newName, avatarUrl);
+          }
+          reader.readAsDataURL(selectedFile);
+          return;
+        } else {
+          // Получаем публичную ссылку
+          const { data } = supabase.storage.from('profile-avatars').getPublicUrl(filePath);
+          avatarUrl = data.publicUrl;
+        }
+      }
+      
+      await updateProfileData(newName, avatarUrl);
+    }
+    
+    // Обновление данных профиля
+    async function updateProfileData(name, avatarUrl) {
+      // Обновляем в базе данных
+      const { error: dbError } = await supabase
+        .from('profiles')
+        .upsert({
+          id: currentUser.id,
+          name: name,
+          avatar_url: avatarUrl,
+          updated_at: new Date().toISOString()
+        });
+      
+      if (dbError) {
+        alert('Ошибка сохранения: ' + dbError.message);
+        return;
+      }
+      
+      // Обновляем метаданные пользователя
+      const { error: authError } = await supabase.auth.updateUser({
+        data: {
+          name: name,
+          avatar_url: avatarUrl
+        }
+      });
+      
+      if (authError) {
+        console.error('Ошибка обновления метаданных:', authError);
+      }
       
       // Обновляем отображение
-      document.getElementById('profile-name').textContent = newName;
-      document.getElementById('profile-avatar').src = newAvatar || data.avatar;
+      document.getElementById('profile-name').textContent = name;
+      document.getElementById('profile-avatar').src = avatarUrl;
       
       closeEditModal();
       alert('Профиль обновлён! ✅');
+      
+      // Перезагружаем страницу для обновления всех данных
+      setTimeout(() => location.reload(), 500);
     }
     
     // Закрытие по клику вне модального окна
@@ -132,6 +233,9 @@
         closeEditModal();
       }
     });
+    
+    // Загружаем профиль при старте
+    loadProfile();
   </script>
 </body>
 </html>
