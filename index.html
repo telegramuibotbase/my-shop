@@ -6,17 +6,16 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <!-- Шапка с аватаркой -->
+  <!-- Шапка -->
   <header>
     <div class="logo">🛍 Мой Магазин</div>
     
+    <!-- Аватарка СПРАВА -->
     <div class="user-menu" id="user-menu">
-      <!-- Круг с аватаркой (пока скрыт) -->
       <div class="avatar-circle" id="avatar-btn" style="display: none;">
         <img id="user-avatar" src="" alt="avatar">
       </div>
       
-      <!-- Выпадающее меню (пока скрыто) -->
       <div class="dropdown" id="dropdown">
         <button onclick="location.href='profile.html'">👤 Профиль</button>
         <button onclick="alert('Баланс: 0 ₽')">💰 Баланс</button>
@@ -33,7 +32,6 @@
     <p>Здесь скоро появятся товары...</p>
   </main>
 
-  <!-- Подключаем скрипт -->
   <script type="module" src="app.js"></script>
 </body>
 </html>
