@@ -9,7 +9,6 @@
 <body>
   <div class="stars"></div>
   <div class="stars2"></div>
-  <div class="stars3"></div>
 
   <header>
     <a href="index.html" class="logo">← Назад</a>
@@ -26,6 +25,23 @@
       <!-- Колесо -->
       <div class="wheel-wrapper">
         <div class="wheel-glow"></div>
+        
+        <!-- Указатель сверху -->
+        <div class="wheel-pointer">
+          <div class="pointer-glow"></div>
+          <svg viewBox="0 0 40 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 0L35 40L20 32L5 40L20 0Z" fill="#fbbf24"/>
+            <path d="M20 0L35 40L20 32L5 40L20 0Z" fill="url(#pointerGrad)"/>
+            <defs>
+              <linearGradient id="pointerGrad" x1="20" y1="0" x2="20" y2="40">
+                <stop stop-color="#fcd34d"/>
+                <stop offset="1" stop-color="#f59e0b"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+
+        <!-- Внешнее кольцо с лампочками -->
         <div class="wheel-outer-ring">
           <div class="ring-light"></div>
           <div class="ring-light"></div>
@@ -35,72 +51,58 @@
           <div class="ring-light"></div>
           <div class="ring-light"></div>
           <div class="ring-light"></div>
+          <div class="ring-light"></div>
+          <div class="ring-light"></div>
+          <div class="ring-light"></div>
+          <div class="ring-light"></div>
+          <div class="ring-light"></div>
+          <div class="ring-light"></div>
+          <div class="ring-light"></div>
+          <div class="ring-light">......</
         </div>
-        <div class="wheel-pointer">
-          <div class="pointer-glow"></div>
-          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 2L14 8H10L12 2Z" fill="#fbbf24"/>
-            <path d="M12 2L14 8H10L12 2Z" fill="url(#pointerGrad)"/>
-            <defs>
-              <linearGradient id="pointerGrad" x1="12" y1="2" x2="12" y2="8">
-                <stop stop-color="#fcd34d"/>
-                <stop offset="1" stop-color="#f59e0b"/>
-              </linearGradient>
-            </defs>
-          </svg>
-        </div>
+
+        <!-- Само колесо -->
         <div class="wheel" id="wheel">
+          <!-- Цветные сектора через conic-gradient в CSS -->
+          
+          <!-- Иконки и текст на секторах -->
+          <div class="wheel-item item-1">
+            <span class="item-icon">😢</span>
+            <span class="item-label">Пусто</span>
+          </div>
+          <div class="wheel-item item-2">
+            <span class="item-icon">🎁</span>
+            <span class="item-label">50</span>
+          </div>
+          <div class="wheel-item item-3">
+            <span class="item-icon">💎</span>
+            <span class="item-label">100</span>
+          </div>
+          <div class="wheel-item item-4">
+            <span class="item-icon">🔥</span>
+            <span class="item-label">500</span>
+          </div>
+          <div class="wheel-item item-5">
+            <span class="item-icon">😢</span>
+            <span class="item-label">Пусто</span>
+          </div>
+          <div class="wheel-item item-6">
+            <span class="item-icon">🎁</span>
+            <span class="item-label">50</span>
+          </div>
+          <div class="wheel-item item-7">
+            <span class="item-icon">💎</span>
+            <span class="item-label">100</span>
+          </div>
+          <div class="wheel-item item-8">
+            <span class="item-icon">👑</span>
+            <span class="item-label">7.7M</span>
+          </div>
+
+          <!-- Центральный круг -->
           <div class="wheel-center">
             <div class="center-glow"></div>
-            <div class="center-text">SPIN</div>
-          </div>
-          <div class="wheel-segment segment-1">
-            <div class="segment-content">
-              <span class="segment-icon">😢</span>
-              <span class="segment-value">Пусто</span>
-            </div>
-          </div>
-          <div class="wheel-segment segment-2">
-            <div class="segment-content">
-              <span class="segment-icon">🎁</span>
-              <span class="segment-value">50</span>
-            </div>
-          </div>
-          <div class="wheel-segment segment-3">
-            <div class="segment-content">
-              <span class="segment-icon"></span>
-              <span class="segment-value">100</span>
-            </div>
-          </div>
-          <div class="wheel-segment segment-4">
-            <div class="segment-content">
-              <span class="segment-icon">🔥</span>
-              <span class="segment-value">500</span>
-            </div>
-          </div>
-          <div class="wheel-segment segment-5">
-            <div class="segment-content">
-              <span class="segment-icon">😢</span>
-              <span class="segment-value">Пусто</span>
-            </div>
-          </div>
-          <div class="wheel-segment segment-6">
-            <div class="segment-content">
-              <span class="segment-icon">🎁</span>
-              <span class="segment-value">50</span>
-            </div>
-          </div>
-          <div class="wheel-segment segment-7">
-            <div class="segment-content">
-              <span class="segment-icon">💎</span>
-              <span class="segment-value">100</span>
-            </div>
-          </div>
-          <div class="wheel-segment segment-8">
-            <div class="segment-content">
-              <span class="segment-icon">👑</span>
-              <span class="segment-value">7.7M</span>
-            </div>
+            <span class="center-text">SPIN</span>
           </div>
         </div>
       </div>
@@ -113,7 +115,7 @@
 
       <!-- Таймер -->
       <div class="timer-section" id="timer-section" style="display: none;">
-        <div class="timer-icon"></div>
+        <div class="timer-icon">⏳</div>
         <div class="timer-label">Следующее вращение через:</div>
         <div class="timer-display" id="timer-display">00:00:00</div>
       </div>
@@ -140,9 +142,7 @@
           <div class="lose-icon">😔</div>
           <div class="lose-title">Не повезло...</div>
           <div class="lose-subtitle">Попробуй завтра!</div>
-          <button class="btn-claim lose-btn" onclick="closeWinMessage()">
-            OK
-          </button>
+          <button class="btn-claim lose-btn" onclick="closeWinMessage()">OK</button>
         </div>
       </div>
     </div>
@@ -160,10 +160,10 @@
 
     const prizes = [
       { amount: 0, chance: 40, label: 'Пусто', icon: '😢' },
-      { amount: 50, chance: 30, label: '50 бонусов', icon: '🎁' },
+      { amount: 50, chance: 30, label: '50 бонусов', icon: '' },
       { amount: 100, chance: 20, label: '100 бонусов', icon: '💎' },
-      { amount: 500, chance: 9.997, label: '500 бонусов', icon: '🔥' },
-      { amount: 7777777, chance: 0.003, label: '7,777,777 бонусов', icon: '👑' }
+      { amount: 500, chance: 9.997, label: '500 бонусов', icon: '' },
+      { amount: 7777777, chance: 0.003, label: '7,777,777 бонусов', icon: '' }
     ];
 
     async function checkAuth() {
@@ -243,10 +243,11 @@
       const wheel = document.getElementById('wheel');
       const btnSpin = document.getElementById('btn-spin');
       btnSpin.disabled = true;
-      btnSpin.querySelector('.btn-text').textContent = ' КРУТИМ...';
+      btnSpin.querySelector('.btn-text').textContent = '🎡 КРУТИМ...';
 
       const wonPrize = getRandomPrize();
       
+      // Определяем индекс сектора (0-7)
       let segmentIndex;
       if (wonPrize.amount === 0) segmentIndex = Math.random() < 0.5 ? 0 : 4;
       else if (wonPrize.amount === 50) segmentIndex = Math.random() < 0.5 ? 1 : 5;
@@ -254,10 +255,12 @@
       else if (wonPrize.amount === 500) segmentIndex = 3;
       else if (wonPrize.amount === 7777777) segmentIndex = 7;
 
+      // Вычисляем угол остановки
+      // Сектор 0 начинается с -90deg (верх), каждый сектор = 45deg
       const segmentAngle = 45;
-      const targetRotation = (360 - (segmentIndex * segmentAngle)) + (segmentAngle / 2);
+      const targetAngle = -90 - (segmentIndex * segmentAngle) - (segmentAngle / 2);
       const spins = 5 + Math.random() * 3;
-      const rotation = spins * 360 + targetRotation;
+      const rotation = spins * 360 + (targetAngle - (currentRotation % 360));
       currentRotation += rotation;
 
       wheel.style.transition = 'transform 5s cubic-bezier(0.17, 0.67, 0.12, 0.99)';
