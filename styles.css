@@ -1589,3 +1589,107 @@ body.light-theme .bonus-indicator {
     font-size: 13px;
   }
 }
+
+/* ===== БОНУСНЫЙ ИНДИКАТОР В ШАПКЕ (СЛЕВА ОТ АВАТАРКИ) ===== */
+.user-menu {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: auto;
+}
+
+.bonus-indicator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.15) 0%, rgba(245, 158, 11, 0.1) 100%);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #fbbf24;
+  box-shadow: 0 2px 8px rgba(251, 191, 36, 0.2);
+  transition: all 0.3s ease;
+  order: 1; /* СЛЕВА от аватарки */
+}
+
+.bonus-indicator:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
+}
+
+.bonus-icon {
+  font-size: 16px;
+  animation: bounce 2s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+.bonus-value {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* Аватарка справа от бонусов */
+.avatar-circle {
+  order: 2;
+}
+
+/* Светлая тема */
+body.light-theme .bonus-indicator {
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.2) 0%, rgba(245, 158, 11, 0.15) 100%);
+  border: 1px solid rgba(251, 191, 36, 0.4);
+  color: #d97706;
+}
+
+/* ===== БОНУСЫ В ПРОФИЛЕ (БЕЗ ВАЛЮТЫ) ===== */
+.bonus-calm-amount {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 42px;
+  font-weight: 800;
+  margin-bottom: 20px;
+}
+
+.bonus-calm-amount #profile-bonus-balance {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.bonus-currency-icon {
+  font-size: 36px;
+  animation: bounce 2s ease-in-out infinite;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+}
+
+/* Адаптивность */
+@media (max-width: 600px) {
+  .bonus-indicator {
+    padding: 4px 8px;
+    font-size: 12px;
+  }
+  
+  .bonus-icon {
+    font-size: 14px;
+  }
+  
+  .bonus-value {
+    font-size: 13px;
+  }
+  
+  .bonus-calm-amount {
+    font-size: 32px;
+  }
+  
+  .bonus-currency-icon {
+    font-size: 28px;
+  }
+}
