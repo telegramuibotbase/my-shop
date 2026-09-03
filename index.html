@@ -2,7 +2,8 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Мой магазин</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Мой Магазин</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -10,7 +11,6 @@
   <header>
     <div class="logo">🛍 Мой Магазин</div>
     
-    <!-- Аватарка СПРАВА -->
     <div class="user-menu" id="user-menu">
       <div class="avatar-circle" id="avatar-btn" style="display: none;">
         <img id="user-avatar" src="" alt="avatar">
@@ -18,18 +18,33 @@
       
       <div class="dropdown" id="dropdown">
         <button onclick="location.href='profile.html'">👤 Профиль</button>
-        <button onclick="alert('Баланс: 0 ₽')">💰 Баланс</button>
+        <button onclick="location.href='profile.html'">💰 Баланс</button>
         <button onclick="alert('Настройки')">⚙️ Настройки</button>
         <button onclick="alert('Поддержка: @support')">💬 Поддержка</button>
-        <button id="logout-btn" class="logout"> Выйти</button>
+        <button id="logout-btn" class="logout">🚪 Выйти</button>
       </div>
     </div>
   </header>
 
   <!-- Основной контент -->
-  <main>
-    <h2 style="color: #7c5cff;">Добро пожаловать в магазин!</h2>
-    <p>Здесь скоро появятся товары...</p>
+  <main class="catalog-page">
+    <div class="catalog-header">
+      <h1>Каталог товаров</h1>
+      <p>Выберите категорию, чтобы увидеть предложения</p>
+    </div>
+
+    <!-- Кнопки категорий -->
+    <div class="catalog-tabs">
+      <button class="tab-btn active" data-category="all">🔥 Все</button>
+      <button class="tab-btn" data-category="soft">💻 СОФТ</button>
+      <button class="tab-btn" data-category="services">🛠 УСЛУГИ</button>
+      <button class="tab-btn" data-category="bonuses">🎁 БОНУСЫ</button>
+    </div>
+
+    <!-- Сетка товаров -->
+    <div class="product-grid" id="product-grid">
+      <!-- Товары будут добавлены через JS -->
+    </div>
   </main>
 
   <script type="module" src="app.js"></script>
