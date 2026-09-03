@@ -8,27 +8,130 @@
 <body>
   <!-- Шапка -->
   <header>
-    <a href="index.html" class="logo" style="text-decoration: none;">← Назад в магазин</a>
+    <a href="index.html" class="logo" style="text-decoration: none;">← Назад</a>
   </header>
 
   <!-- Основной контент -->
   <main class="profile-page">
     <div class="profile-card">
-      <img id="profile-avatar" class="big-avatar" src="" alt="avatar">
-      <h2 id="profile-name">Загрузка...</h2>
-      <div class="provider-badge" id="profile-provider">Через: ...</div>
-      <p class="email" id="profile-email"></p>
+      <!-- Аватарка -->
+      <div class="avatar-wrapper">
+        <img id="profile-avatar" class="big-avatar" src="" alt="avatar">
+        <div class="avatar-badge" id="profile-provider">Discord</div>
+      </div>
+      
+      <!-- Имя -->
+      <h2 id="profile-name" class="profile-name">Загрузка...</h2>
+      
+      <!-- Баланс -->
+      <div class="balance-section">
+        <div class="balance-label">Ваш баланс</div>
+        <div class="balance-amount" id="profile-balance">0 ₽</div>
+        <button class="btn-topup" onclick="alert('Пополнение скоро будет доступно!')">
+          💳 Пополнить
+        </button>
+      </div>
+      
+      <!-- Кнопка редактирования -->
+      <button class="btn-edit" onclick="openEditModal()">
+        ️ Редактировать профиль
+      </button>
     </div>
   </main>
 
+  <!-- Модальное окно редактирования -->
+  <div class="modal" id="editModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Редактировать профиль</h3>
+        <button class="modal-close" onclick="closeEditModal()">×</button>
+      </div>
+      
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Ваше имя</label>
+          <input type="text" id="edit-name" class="form-input" placeholder="Введите имя">
+        </div>
+        
+        <div class="form-group">
+          <label>Ссылка на аватарку</label>
+          <input type="url" id="edit-avatar" class="form-input" placeholder="https://...">
+        </div>
+        
+        <div class="avatar-preview">
+          <img id="preview-avatar" src="" alt="preview">
+        </div>
+      </div>
+      
+      <div class="modal-footer">
+        <button class="btn-cancel" onclick="closeEditModal()">Отмена</button>
+        <button class="btn-save" onclick="saveProfile()">Сохранить</button>
+      </div>
+    </div>
+  </div>
+
   <script>
-    // Читаем данные, сохранённые при входе
+    // Загрузка данных профиля
     const data = JSON.parse(localStorage.getItem('userData') || '{}');
     
     document.getElementById('profile-avatar').src = data.avatar || 'https://via.placeholder.com/120';
     document.getElementById('profile-name').textContent = data.name || 'Пользователь';
-    document.getElementById('profile-provider').textContent = 'Аккаунт через: ' + (data.provider || 'Неизвестно');
-    document.getElementById('profile-email').textContent = data.email || '';
+    document.getElementById('profile-provider').textContent = data.provider || 'Discord';
+    document.getElementById('profile-balance').textContent = (data.balance || 0) + ' ₽';
+    
+    // Заполняем поля редактирования
+    document.getElementById('edit-name').value = data.name || '';
+    document.getElementById('edit-avatar').value = data.avatar || '';
+    document.getElementById('preview-avatar').src = data.avatar || 'https://via.placeholder.com/80';
+    
+    // Предпросмотр аватарки
+    document.getElementById('edit-avatar').addEventListener('input', (e) => {
+      document.getElementById('preview-avatar').src = e.target.value || 'https://via.placeholder.com/80';
+    });
+    
+    // Открытие модального окна
+    function openEditModal() {
+      document.getElementById('editModal').classList.add('active');
+    }
+    
+    // Закрытие модального окна
+    function closeEditModal() {
+      document.getElementById('editModal').classList.remove('active');
+    }
+    
+    // Сохранение профиля
+    function saveProfile() {
+      const newName = document.getElementById('edit-name').value.trim();
+      const newAvatar = document.getElementById('edit-avatar').value.trim();
+      
+      if (!newName) {
+        alert('Введите имя!');
+        return;
+      }
+      
+      // Обновляем данные
+      const updatedData = {
+        ...data,
+        name: newName,
+        avatar: newAvatar || data.avatar
+      };
+      
+      localStorage.setItem('userData', JSON.stringify(updatedData));
+      
+      // Обновляем отображение
+      document.getElementById('profile-name').textContent = newName;
+      document.getElementById('profile-avatar').src = newAvatar || data.avatar;
+      
+      closeEditModal();
+      alert('Профиль обновлён! ✅');
+    }
+    
+    // Закрытие по клику вне модального окна
+    document.getElementById('editModal').addEventListener('click', (e) => {
+      if (e.target.id === 'editModal') {
+        closeEditModal();
+      }
+    });
   </script>
 </body>
 </html>
