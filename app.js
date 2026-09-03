@@ -13,7 +13,6 @@ async function checkAuth() {
   const { data: { user } } = await supabase.auth.getUser();
   
   if (!user) {
-    // Если не авторизован — перекидываем на страницу входа
     window.location.href = 'login.html';
     return;
   }
@@ -22,11 +21,16 @@ async function checkAuth() {
   userAvatar.src = user.user_metadata?.avatar_url || 'https://via.placeholder.com/40';
   avatarBtn.style.display = 'block';
   
-  // Сохраняем данные пользователя для страницы профиля
+  // Определяем провайдера
+  const provider = user.app_metadata?.provider || 'Неизвестно';
+  const providerName = provider.charAt(0).toUpperCase() + provider.slice(1); // Делаем первую букву заглавной
+  
+  // Сохраняем данные для страницы профиля
   localStorage.setItem('userData', JSON.stringify({
-    name: user.user_metadata?.name || user.email,
+    name: user.user_metadata?.full_name || user.user_metadata?.name || user.email,
     avatar: user.user_metadata?.avatar_url,
-    provider: 'Discord'
+    provider: providerName,
+    email: user.email
   }));
 }
 
