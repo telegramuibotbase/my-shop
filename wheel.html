@@ -1,1 +1,326 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Колесо Бонусов</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="stars"></div>
+  <div class="stars2"></div>
 
+  <header>
+    <a href="index.html" class="logo">← Назад</a>
+  </header>
+
+  <main class="wheel-page">
+    <div class="wheel-container">
+      <div class="wheel-header">
+        <div class="wheel-badge">🎰 DAILY SPIN</div>
+        <h1 class="wheel-title">Колесо Бонусов</h1>
+        <p class="wheel-subtitle">Испытай удачу и выиграй до <span class="highlight">7,777,777</span> бонусов!</p>
+      </div>
+      
+      <!-- Колесо -->
+      <div class="wheel-wrapper">
+        <div class="wheel-glow"></div>
+        
+        <!-- Указатель -->
+        <div class="wheel-pointer">
+          <div class="pointer-glow"></div>
+          <svg viewBox="0 0 40 50" fill="none">
+            <path d="M20 0L35 40L20 32L5 40L20 0Z" fill="url(#pointerGrad)"/>
+            <defs>
+              <linearGradient id="pointerGrad" x1="20" y1="0" x2="20" y2="40">
+                <stop stop-color="#fcd34d"/>
+                <stop offset="1" stop-color="#f59e0b"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+
+        <!-- Внешнее кольцо с лампочками -->
+        <div class="wheel-outer-ring">
+          <div class="ring-light"></div>
+          <div class="ring-light"></div>
+          <div class="ring-light"></div>
+          <div class="ring-light"></div>
+          <div class="ring-light"></div>
+          <div class="ring-light"></div>
+          <div class="ring-light"></div>
+          <div class="ring-light"></div>
+          <div class="ring-light"></div>
+          <div class="ring-light"></div>
+          <div class="ring-light"></div>
+          <div class="ring-light"></div>
+          <div class......</
+        </div>
+
+        <!-- SVG Колесо -->
+        <svg class="wheel-svg" id="wheel" viewBox="0 0 420 420">
+          <defs>
+            <clipPath id="wheelClip">
+              <circle cx="210" cy="210" r="200"/>
+            </clipPath>
+          </defs>
+          
+          <g clip-path="url(#wheelClip)">
+            <!-- Сектор 1: Пусто (серый) -->
+            <path d="M210,210 L210,10 A200,200 0 0,1 351.4,68.6 Z" fill="#4b5563" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+            <!-- Сектор 2: 50 (зелёный) -->
+            <path d="M210,210 L351.4,68.6 A200,200 0 0,1 410,210 Z" fill="#10b981" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+            <!-- Сектор 3: 100 (синий) -->
+            <path d="M210,210 L410,210 A200,200 0 0,1 351.4,351.4 Z" fill="#3b82f6" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+            <!-- Сектор 4: 500 (оранжевый) -->
+            <path d="M210,210 L351.4,351.4 A200,200 0 0,1 210,410 Z" fill="#f59e0b" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+            <!-- Сектор 5: Пусто (серый) -->
+            <path d="M210,210 L210,410 A200,200 0 0,1 68.6,351.4 Z" fill="#4b5563" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+            <!-- Сектор 6: 50 (зелёный) -->
+            <path d="M210,210 L68.6,351.4 A200,200 0 0,1 10,210 Z" fill="#10b981" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+            <!-- Сектор 7: 100 (синий) -->
+            <path d="M210,210 L10,210 A200,200 0 0,1 68.6,68.6 Z" fill="#3b82f6" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+            <!-- Сектор 8: 7.7M (красный джекпот) -->
+            <path d="M210,210 L68.6,68.6 A200,200 0 0,1 210,10 Z" fill="#dc2626" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+          </g>
+
+          <!-- Иконки и текст на секторах -->
+          <!-- Сектор 1: Пусто (верх-право, угол -67.5°) -->
+          <text x="295" y="100" text-anchor="middle" dominant-baseline="central" fill="white" font-size="28" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.5))">😢</text>
+          <text x="295" y="130" text-anchor="middle" dominant-baseline="central" fill="white" font-size="14" font-weight="800" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.5))">Пусто</text>
+
+          <!-- Сектор 2: 50 (право-верх, угол -22.5°) -->
+          <text x="355" y="175" text-anchor="middle" dominant-baseline="central" fill="white" font-size="28" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.5))">🎁</text>
+          <text x="355" y="205" text-anchor="middle" dominant-baseline="central" fill="white" font-size="16" font-weight="800" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.5))">50</text>
+
+          <!-- Сектор 3: 100 (право-низ, угол 22.5°) -->
+          <text x="355" y="245" text-anchor="middle" dominant-baseline="central" fill="white" font-size="28" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.5))">💎</text>
+          <text x="355" y="275" text-anchor="middle" dominant-baseline="central" fill="white" font-size="16" font-weight="800" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.5))">100</text>
+
+          <!-- Сектор 4: 500 (низ-право, угол 67.5°) -->
+          <text x="295" y="340" text-anchor="middle" dominant-baseline="central" fill="white" font-size="28" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.5))">🔥</text>
+          <text x="295" y="370" text-anchor="middle" dominant-baseline="central" fill="white" font-size="16" font-weight="800" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.5))">500</text>
+
+          <!-- Сектор 5: Пусто (низ-лево, угол 112.5°) -->
+          <text x="125" y="340" text-anchor="middle" dominant-baseline="central" fill="white" font-size="28" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.5))">😢</text>
+          <text x="125" y="370" text-anchor="middle" dominant-baseline="central" fill="white" font-size="14" font-weight="800" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.5))">Пусто</text>
+
+          <!-- Сектор 6: 50 (лево-низ, угол 157.5°) -->
+          <text x="65" y="245" text-anchor="middle" dominant-baseline="central" fill="white" font-size="28" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.5))">🎁</text>
+          <text x="65" y="275" text-anchor="middle" dominant-baseline="central" fill="white" font-size="16" font-weight="800" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.5))">50</text>
+
+          <!-- Сектор 7: 100 (лево-верх, угол -157.5°) -->
+          <text x="65" y="175" text-anchor="middle" dominant-baseline="central" fill="white" font-size="28" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.5))">💎</text>
+          <text x="65" y="205" text-anchor="middle" dominant-baseline="central" fill="white" font-size="16" font-weight="800" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.5))">100</text>
+
+          <!-- Сектор 8: 7.7M ДЖЕКПОТ (верх-лево, угол -112.5°) -->
+          <text x="125" y="100" text-anchor="middle" dominant-baseline="central" fill="#fbbf24" font-size="28" filter="drop-shadow(0 0 10px rgba(255,215,0,0.8))">👑</text>
+          <text x="125" y="130" text-anchor="middle" dominant-baseline="central" fill="#fbbf24" font-size="14" font-weight="800" filter="drop-shadow(0 0 10px rgba(255,215,0,0.8))">7.7M</text>
+
+          <!-- Центральный круг -->
+          <circle cx="210" cy="210" r="45" fill="url(#centerGrad)" stroke="rgba(255,255,255,0.3)" stroke-width="3"/>
+          <defs>
+            <linearGradient id="centerGrad" x1="165" y1="165" x2="255" y2="255">
+              <stop stop-color="#7c5cff"/>
+              <stop offset="1" stop-color="#a855f7"/>
+            </linearGradient>
+          </defs>
+          <circle cx="210" cy="210" r="45" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="2"/>
+          <text x="210" y="210" text-anchor="middle" dominant-baseline="central" fill="white" font-size="14" font-weight="900" letter-spacing="2">SPIN</text>
+        </svg>
+      </div>
+
+      <!-- Кнопка крутить -->
+      <button class="btn-spin" id="btn-spin" onclick="spinWheel()">
+        <span class="btn-shine"></span>
+        <span class="btn-text">🎯 КРУТИТЬ КОЛЕСО</span>
+      </button>
+
+      <!-- Таймер -->
+      <div class="timer-section" id="timer-section" style="display: none;">
+        <div class="timer-icon">⏳</div>
+        <div class="timer-label">Следующее вращение через:</div>
+        <div class="timer-display" id="timer-display">00:00:00</div>
+      </div>
+
+      <!-- Сообщение о выигрыше -->
+      <div class="win-overlay" id="win-message" style="display: none;">
+        <div class="confetti-container" id="confetti"></div>
+        <div class="win-card">
+          <div class="win-sparkles">✨</div>
+          <div class="win-icon" id="win-icon">🎉</div>
+          <div class="win-title" id="win-title">ПОЗДРАВЛЯЕМ!</div>
+          <div class="win-subtitle">Ты выиграл:</div>
+          <div class="win-amount" id="win-amount">+0 🎁</div>
+          <button class="btn-claim" onclick="closeWinMessage()">
+            <span class="btn-shine"></span>
+            ЗАБРАТЬ
+          </button>
+        </div>
+      </div>
+
+      <!-- Сообщение о проигрыше -->
+      <div class="lose-overlay" id="lose-message" style="display: none;">
+        <div class="lose-card">
+          <div class="lose-icon">😔</div>
+          <div class="lose-title">Не повезло...</div>
+          <div class="lose-subtitle">Попробуй завтра!</div>
+          <button class="btn-claim lose-btn" onclick="closeWinMessage()">OK</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+    import { supabaseConfig } from './supabase-config.js';
+
+    const supabase = createClient(supabaseConfig.url, supabaseConfig.anonKey);
+
+    let currentUser = null;
+    let isSpinning = false;
+    let currentRotation = 0;
+
+    const prizes = [
+      { amount: 0, chance: 40, label: 'Пусто', icon: '😢' },
+      { amount: 50, chance: 30, label: '50 бонусов', icon: '' },
+      { amount: 100, chance: 20, label: '100 бонусов', icon: '' },
+      { amount: 500, chance: 9.997, label: '500 бонусов', icon: '' },
+      { amount: 7777777, chance: 0.003, label: '7,777,777 бонусов', icon: '' }
+    ];
+
+    async function checkAuth() {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) { window.location.href = 'login.html'; return; }
+      currentUser = user;
+      checkSpinAvailability();
+    }
+
+    async function checkSpinAvailability() {
+      const { data: profile } = await supabase.from('profiles').select('last_spin_at').eq('id', currentUser.id).single();
+      if (!profile || !profile.last_spin_at) {
+        document.getElementById('btn-spin').style.display = 'block';
+        document.getElementById('timer-section').style.display = 'none';
+        return;
+      }
+      const lastSpin = new Date(profile.last_spin_at);
+      const now = new Date();
+      const diff = now - lastSpin;
+      const hours24 = 24 * 60 * 60 * 1000;
+      if (diff < hours24) {
+        document.getElementById('btn-spin').style.display = 'none';
+        document.getElementById('timer-section').style.display = 'block';
+        startTimer(hours24 - diff);
+      } else {
+        document.getElementById('btn-spin').style.display = 'block';
+        document.getElementById('timer-section').style.display = 'none';
+      }
+    }
+
+    function startTimer(remainingMs) {
+      const timerDisplay = document.getElementById('timer-display');
+      const interval = setInterval(() => {
+        remainingMs -= 1000;
+        if (remainingMs <= 0) {
+          clearInterval(interval);
+          document.getElementById('btn-spin').style.display = 'block';
+          document.getElementById('timer-section').style.display = 'none';
+          return;
+        }
+        const hours = Math.floor(remainingMs / (1000 * 60 * 60));
+        const minutes = Math.floor((remainingMs % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((remainingMs % (1000 * 60)) / 1000);
+        timerDisplay.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+      }, 1000);
+    }
+
+    function getRandomPrize() {
+      const random = Math.random() * 100;
+      let cumulative = 0;
+      for (const prize of prizes) {
+        cumulative += prize.chance;
+        if (random < cumulative) return prize;
+      }
+      return prizes[prizes.length - 1];
+    }
+
+    function createConfetti() {
+      const container = document.getElementById('confetti');
+      container.innerHTML = '';
+      const colors = ['#fbbf24', '#f59e0b', '#ef4444', '#10b981', '#3b82f6', '#ec4899', '#8b5cf6'];
+      for (let i = 0; i < 100; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti-piece';
+        confetti.style.left = Math.random() * 100 + '%';
+        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.animationDelay = Math.random() * 3 + 's';
+        confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+        container.appendChild(confetti);
+      }
+    }
+
+    window.spinWheel = async function() {
+      if (isSpinning) return;
+      isSpinning = true;
+
+      const wheel = document.getElementById('wheel');
+      const btnSpin = document.getElementById('btn-spin');
+      btnSpin.disabled = true;
+      btnSpin.querySelector('.btn-text').textContent = '🎡 КРУТИМ...';
+
+      const wonPrize = getRandomPrize();
+      
+      // Определяем индекс сектора (0-7)
+      let segmentIndex;
+      if (wonPrize.amount === 0) segmentIndex = Math.random() < 0.5 ? 0 : 4;
+      else if (wonPrize.amount === 50) segmentIndex = Math.random() < 0.5 ? 1 : 5;
+      else if (wonPrize.amount === 100) segmentIndex = Math.random() < 0.5 ? 2 : 6;
+      else if (wonPrize.amount === 500) segmentIndex = 3;
+      else if (wonPrize.amount === 7777777) segmentIndex = 7;
+
+      // Вычисляем угол остановки
+      // Сектор 0 начинается с -90deg (верх), каждый сектор = 45deg
+      const segmentAngle = 45;
+      const targetAngle = -90 - (segmentIndex * segmentAngle) - (segmentAngle / 2);
+      const spins = 5 + Math.random() * 3;
+      const rotation = spins * 360 + (targetAngle - (currentRotation % 360));
+      currentRotation += rotation;
+
+      wheel.style.transition = 'transform 5s cubic-bezier(0.17, 0.67, 0.12, 0.99)';
+      wheel.style.transform = `rotate(${currentRotation}deg)`;
+
+      setTimeout(async () => {
+        if (wonPrize.amount > 0) {
+          const { data: profile } = await supabase.from('profiles').select('bonus_balance').eq('id', currentUser.id).single();
+          const newBalance = (profile?.bonus_balance || 0) + wonPrize.amount;
+          await supabase.from('profiles').update({ bonus_balance: newBalance, last_spin_at: new Date().toISOString() }).eq('id', currentUser.id);
+
+          document.getElementById('win-icon').textContent = wonPrize.icon;
+          document.getElementById('win-title').textContent = wonPrize.amount === 7777777 ? '🎰 ДЖЕКПОТ! ' : 'ПОЗДРАВЛЯЕМ!';
+          document.getElementById('win-amount').textContent = `+${wonPrize.amount.toLocaleString('ru-RU')} 🎁`;
+          document.getElementById('win-message').style.display = 'flex';
+          
+          if (wonPrize.amount >= 500) createConfetti();
+        } else {
+          await supabase.from('profiles').update({ last_spin_at: new Date().toISOString() }).eq('id', currentUser.id);
+          document.getElementById('lose-message').style.display = 'flex';
+        }
+        
+        isSpinning = false;
+        btnSpin.disabled = false;
+        btnSpin.querySelector('.btn-text').textContent = ' КРУТИТЬ КОЛЕСО';
+        btnSpin.style.display = 'none';
+        document.getElementById('timer-section').style.display = 'block';
+        startTimer(24 * 60 * 60 * 1000);
+      }, 5000);
+    };
+
+    window.closeWinMessage = function() {
+      document.getElementById('win-message').style.display = 'none';
+      document.getElementById('lose-message').style.display = 'none';
+    };
+
+    checkAuth();
+  </script>
+</body>
+</html>
