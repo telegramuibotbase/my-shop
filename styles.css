@@ -1225,7 +1225,7 @@ header {
   50% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.8; }
 }
 
-/* Указатель */
+/* Указатель (НЕ вращается) */
 .wheel-pointer {
   position: absolute;
   top: -30px;
@@ -1303,7 +1303,7 @@ header {
 .ring-light:nth-child(15) { bottom: 4%; left: 38%; }
 .ring-light:nth-child(16) { bottom: 4%; right: 38%; }
 
-/* SVG Колесо */
+/* SVG Колесо (вращается ТОЛЬКО этот элемент!) */
 .wheel-svg {
   width: 100%;
   height: 100%;
@@ -1312,7 +1312,22 @@ header {
   z-index: 2;
   box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.15),
               0 20px 60px rgba(0, 0, 0, 0.5);
-  transition: transform 5s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+}
+
+/* Индикатор готовности к вращению */
+.btn-spin.ready {
+  animation: readyPulse 2s ease-in-out infinite;
+}
+
+@keyframes readyPulse {
+  0%, 100% { 
+    box-shadow: 0 8px 24px rgba(124, 92, 255, 0.4), 0 0 40px rgba(124, 92, 255, 0.2);
+    transform: scale(1);
+  }
+  50% { 
+    box-shadow: 0 8px 32px rgba(124, 92, 255, 0.7), 0 0 60px rgba(124, 92, 255, 0.4);
+    transform: scale(1.03);
+  }
 }
 
 /* Кнопка крутить */
@@ -1328,8 +1343,6 @@ header {
   font-weight: 800;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 8px 24px rgba(124, 92, 255, 0.4),
-              0 0 40px rgba(124, 92, 255, 0.2);
   margin-bottom: 30px;
   letter-spacing: 1px;
 }
@@ -1363,6 +1376,7 @@ header {
 .btn-spin:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+  animation: none;
 }
 
 /* Таймер */
@@ -1400,7 +1414,7 @@ header {
   letter-spacing: 2px;
 }
 
-/* Сообщения */
+/* Сообщения (overlay поверх всего, НЕ вращаются) */
 .win-overlay, .lose-overlay {
   position: fixed;
   top: 0;
@@ -1557,7 +1571,200 @@ header {
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
 }
 
-/* Светлая тема для колеса */
+/* ===== СВЕТЛАЯ ТЕМА ===== */
+body.light-theme {
+  background: linear-gradient(135deg, #f5f5f7 0%, #e8e8ed 50%, #d8d8e0 100%);
+  color: #1a1a24;
+}
+
+body.light-theme header {
+  background: rgba(255, 255, 255, 0.9);
+  border-bottom: 1px solid rgba(124, 92, 255, 0.15);
+}
+
+body.light-theme .logo {
+  background: linear-gradient(135deg, #7c5cff 0%, #a855f7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+body.light-theme .profile-card {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(124, 92, 255, 0.15);
+  box-shadow: 0 25px 80px -12px rgba(0, 0, 0, 0.1);
+}
+
+body.light-theme .profile-name {
+  background: linear-gradient(135deg, #1a1a24 0%, #7c5cff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+body.light-theme .section-card {
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(124, 92, 255, 0.15);
+}
+
+body.light-theme .section-header h3 { color: #1a1a24; }
+body.light-theme .section-content { color: #555; }
+body.light-theme .section-note { color: #888; }
+
+body.light-theme .user-id-top {
+  background: rgba(124, 92, 255, 0.1);
+  color: #7c5cff;
+  border: 1px solid rgba(124, 92, 255, 0.3);
+}
+
+body.light-theme .bonus-calm-card {
+  background: rgba(251, 191, 36, 0.08);
+  border: 1px solid rgba(251, 191, 36, 0.25);
+}
+
+body.light-theme .bonus-calm-label { color: #666; }
+
+body.light-theme .modal-content {
+  background: rgba(255, 255, 255, 0.98);
+  border: 1px solid rgba(124, 92, 255, 0.2);
+}
+
+body.light-theme .modal-header h3 {
+  background: linear-gradient(135deg, #7c5cff 0%, #a855f7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+body.light-theme .form-input {
+  background: rgba(0, 0, 0, 0.03);
+  border: 2px solid rgba(124, 92, 255, 0.2);
+  color: #1a1a24;
+}
+
+body.light-theme .form-input::placeholder { color: #999; }
+body.light-theme .form-group label { color: #555; }
+
+body.light-theme .modal-close { color: #888; }
+body.light-theme .modal-close:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: #1a1a24;
+}
+
+body.light-theme .btn-cancel {
+  background: rgba(0, 0, 0, 0.05);
+  color: #1a1a24;
+}
+
+body.light-theme .btn-cancel:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+body.light-theme .toggle-btn {
+  background: rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(124, 92, 255, 0.2);
+  color: #555;
+}
+
+body.light-theme .toggle-btn:hover {
+  background: rgba(124, 92, 255, 0.08);
+}
+
+body.light-theme .btn-setting {
+  background: rgba(124, 92, 255, 0.1);
+  color: #7c5cff;
+  border: 1px solid rgba(124, 92, 255, 0.3);
+}
+
+body.light-theme .setting-label { color: #666; }
+body.light-theme .setting-value { color: #1a1a24; }
+body.light-theme .settings-block-title { color: #1a1a24; }
+
+body.light-theme .currency-select {
+  background: rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(124, 92, 255, 0.2);
+  color: #1a1a24;
+}
+
+body.light-theme .currency-select option {
+  background: white;
+  color: #1a1a24;
+}
+
+body.light-theme .friend-item { background: rgba(255, 255, 255, 0.5); }
+body.light-theme .friend-name { color: #1a1a24; }
+body.light-theme .empty-state { color: #888; }
+body.light-theme .support-link { color: #7c5cff; }
+
+body.light-theme .referral-code {
+  background: rgba(124, 92, 255, 0.08);
+  border: 1px solid rgba(124, 92, 255, 0.2);
+  color: #7c5cff;
+}
+
+body.light-theme .btn-copy {
+  background: rgba(124, 92, 255, 0.1);
+  color: #7c5cff;
+  border: 1px solid rgba(124, 92, 255, 0.3);
+}
+
+body.light-theme .btn-edit-small {
+  background: rgba(124, 92, 255, 0.1);
+  color: #7c5cff;
+  border: 1px solid rgba(124, 92, 255, 0.3);
+}
+
+body.light-theme .file-upload-btn {
+  background: rgba(124, 92, 255, 0.08);
+  border: 2px dashed rgba(124, 92, 255, 0.3);
+  color: #7c5cff;
+}
+
+body.light-theme .file-name { color: #666; }
+body.light-theme .setting-hint { color: #888; }
+
+body.light-theme .dropdown {
+  background: rgba(255, 255, 255, 0.98);
+  border: 1px solid rgba(124, 92, 255, 0.2);
+}
+
+body.light-theme .dropdown button { color: #1a1a24; }
+body.light-theme .dropdown button:hover { background: rgba(124, 92, 255, 0.1); }
+
+body.light-theme .catalog-header h1 {
+  background: linear-gradient(135deg, #1a1a24 0%, #7c5cff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+body.light-theme .catalog-header p { color: #666; }
+
+body.light-theme .tab-btn {
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(124, 92, 255, 0.2);
+  color: #555;
+}
+
+body.light-theme .tab-btn:hover { background: rgba(124, 92, 255, 0.1); }
+
+body.light-theme .product-card {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(124, 92, 255, 0.15);
+}
+
+body.light-theme .product-title { color: #1a1a24; }
+body.light-theme .product-desc { color: #666; }
+
+body.light-theme .auth-card {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(124, 92, 255, 0.15);
+}
+
+body.light-theme .auth-card p { color: #666; }
+
+body.light-theme .bonus-indicator {
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.2) 0%, rgba(245, 158, 11, 0.15) 100%);
+  border: 1px solid rgba(251, 191, 36, 0.4);
+  color: #d97706;
+}
+
 body.light-theme .wheel-container {
   background: rgba(255, 255, 255, 0.95);
   border: 1px solid rgba(124, 92, 255, 0.2);
@@ -1588,8 +1795,31 @@ body.light-theme .win-subtitle { color: #666; }
 body.light-theme .lose-title { color: #666; }
 body.light-theme .lose-subtitle { color: #888; }
 
-/* Адаптивность колеса */
+/* ===== АДАПТИВНОСТЬ ===== */
 @media (max-width: 600px) {
+  header { padding: 15px 20px; }
+  
+  .catalog-header h1 { font-size: 28px; }
+  .catalog-tabs { gap: 8px; }
+  .tab-btn { padding: 10px 16px; font-size: 14px; }
+  
+  .profile-card { padding: 40px 25px; }
+  .big-avatar { width: 110px; height: 110px; }
+  .profile-name { font-size: 26px; }
+  .bonus-calm-amount { font-size: 32px; }
+  .bonus-emoji { font-size: 30px; }
+  
+  .friend-item { flex-direction: column; align-items: flex-start; }
+  .friend-actions { width: 100%; justify-content: flex-end; }
+  
+  .bonus-indicator {
+    padding: 4px 8px;
+    font-size: 12px;
+  }
+  
+  .bonus-indicator .bonus-icon { font-size: 14px; }
+  .bonus-indicator .bonus-value { font-size: 13px; }
+  
   .wheel-container { padding: 30px 20px; }
   .wheel-title { font-size: 32px; }
   
