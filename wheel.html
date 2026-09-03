@@ -21,28 +21,28 @@
         <div class="wheel-pointer">▼</div>
         <div class="wheel" id="wheel">
           <div class="wheel-segment segment-1">
-            <span class="segment-text">50,000 🎁</span>
+            <span class="segment-text">Пусто</span>
           </div>
           <div class="wheel-segment segment-2">
-            <span class="segment-text">50,000 🎁</span>
+            <span class="segment-text">50 🎁</span>
           </div>
           <div class="wheel-segment segment-3">
-            <span class="segment-text">50,000 🎁</span>
+            <span class="segment-text">100 🎁</span>
           </div>
           <div class="wheel-segment segment-4">
-            <span class="segment-text">50,000 🎁</span>
+            <span class="segment-text">500 🎁</span>
           </div>
           <div class="wheel-segment segment-5">
-            <span class="segment-text">50,000 </span>
+            <span class="segment-text">Пусто</span>
           </div>
           <div class="wheel-segment segment-6">
-            <span class="segment-text">50,000 🎁</span>
+            <span class="segment-text">50 🎁</span>
           </div>
           <div class="wheel-segment segment-7">
-            <span class="segment-text">50,000 🎁</span>
+            <span class="segment-text">100 🎁</span>
           </div>
           <div class="wheel-segment segment-8">
-            <span class="segment-text">50,000 🎁</span>
+            <span class="segment-text">7,777,777 🎁</span>
           </div>
         </div>
       </div>
@@ -60,10 +60,18 @@
 
       <!-- Сообщение о выигрыше -->
       <div class="win-message" id="win-message" style="display: none;">
-        <div class="win-icon">🎉</div>
-        <div class="win-text">Поздравляем!</div>
-        <div class="win-amount">+50,000 🎁</div>
+        <div class="win-icon" id="win-icon">🎉</div>
+        <div class="win-text" id="win-text">Поздравляем!</div>
+        <div class="win-amount" id="win-amount">+0 🎁</div>
         <button class="btn-claim" onclick="closeWinMessage()">Забрать</button>
+      </div>
+
+      <!-- Сообщение о пустом выигрыше -->
+      <div class="lose-message" id="lose-message" style="display: none;">
+        <div class="lose-icon"></div>
+        <div class="lose-text">Не повезло...</div>
+        <div class="lose-subtext">Попробуй завтра!</div>
+        <button class="btn-claim" onclick="closeWinMessage()">OK</button>
       </div>
     </div>
   </main>
@@ -77,6 +85,15 @@
     let currentUser = null;
     let isSpinning = false;
     let currentRotation = 0;
+
+    // Призы и их шансы (в процентах)
+    const prizes = [
+      { amount: 0, chance: 40, label: 'Пусто', icon: '😢' },           // 40%
+      { amount: 50, chance: 30, label: '50 бонусов', icon: '🎁' },      // 30%
+      { amount: 100, chance: 20, label: '100 бонусов', icon: '🎁' },    // 20%
+      { amount: 500, chance: 9.997, label: '500 бонусов', icon: '🎁' }, // 9.997%
+      { amount: 7777777, chance: 0.003, label: '7,777,777 бонусов', icon: '🎰' } // 0.003% (ДЖЕКПОТ!)
+    ];
 
     // Проверка авторизации
     async function checkAuth() {
@@ -98,7 +115,6 @@
         .single();
 
       if (!profile || !profile.last_spin_at) {
-        // Можно крутить
         document.getElementById('btn-spin').style.display = 'block';
         document.getElementById('timer-section').style.display = 'none';
         return;
@@ -110,12 +126,10 @@
       const hours24 = 24 * 60 * 60 * 1000;
 
       if (diff < hours24) {
-        // Нельзя крутить, показываем таймер
         document.getElementById('btn-spin').style.display = 'none';
         document.getElementById('timer-section').style.display = 'block';
         startTimer(hours24 - diff);
       } else {
-        // Можно крутить
         document.getElementById('btn-spin').style.display = 'block';
         document.getElementById('timer-section').style.display = 'none';
       }
@@ -144,6 +158,21 @@
       }, 1000);
     }
 
+    // Взвешенный рандомный выбор приза
+    function getRandomPrize() {
+      const random = Math.random() * 100; // 0-100
+      let cumulative = 0;
+      
+      for (const prize of prizes) {
+        cumulative += prize.chance;
+        if (random < cumulative) {
+          return prize;
+        }
+      }
+      
+      return prizes[prizes.length - 1];
+    }
+
     // Вращение колеса
     window.spinWheel = async function() {
       if (isSpinning) return;
@@ -155,9 +184,33 @@
       btnSpin.disabled = true;
       btnSpin.textContent = '🎡 Крутим...';
 
-      // Случайный угол (минимум 5 полных оборотов + случайный сектор)
+      // Выбираем приз по шансам
+      const wonPrize = getRandomPrize();
+      
+      // Определяем индекс сектора (для анимации)
+      // Сектора: 0=Пусто, 1=50, 2=100, 3=500, 4=Пусто, 5=50, 6=100, 7=7777777
+      let segmentIndex;
+      if (wonPrize.amount === 0) {
+        segmentIndex = Math.random() < 0.5 ? 0 : 4; // Пусто (сектор 1 или 5)
+      } else if (wonPrize.amount === 50) {
+        segmentIndex = Math.random() < 0.5 ? 1 : 5; // 50 (сектор 2 или 6)
+      } else if (wonPrize.amount === 100) {
+        segmentIndex = Math.random() < 0.5 ? 2 : 6; // 100 (сектор 3 или 7)
+      } else if (wonPrize.amount === 500) {
+        segmentIndex = 3; // 500 (сектор 4)
+      } else if (wonPrize.amount === 7777777) {
+        segmentIndex = 7; // Джекпот (сектор 8)
+      }
+
+      // Вычисляем угол для остановки на нужном секторе
+      // Каждый сектор = 45 градусов (360/8)
+      // Указатель сверху, поэтому нужно компенсировать
+      const segmentAngle = 45;
+      const targetRotation = (360 - (segmentIndex * segmentAngle)) + (segmentAngle / 2);
+      
+      // Минимум 5 полных оборотов + целевой угол
       const spins = 5 + Math.random() * 3;
-      const rotation = spins * 360;
+      const rotation = spins * 360 + targetRotation;
       currentRotation += rotation;
 
       // Анимация вращения
@@ -166,26 +219,41 @@
 
       // Ждём окончания анимации
       setTimeout(async () => {
-        // Начисляем бонусы
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('bonus_balance')
-          .eq('id', currentUser.id)
-          .single();
+        if (wonPrize.amount > 0) {
+          // Начисляем бонусы
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('bonus_balance')
+            .eq('id', currentUser.id)
+            .single();
 
-        const newBalance = (profile?.bonus_balance || 0) + 50000;
+          const newBalance = (profile?.bonus_balance || 0) + wonPrize.amount;
 
-        // Обновляем баланс и время последнего спина
-        await supabase
-          .from('profiles')
-          .update({
-            bonus_balance: newBalance,
-            last_spin_at: new Date().toISOString()
-          })
-          .eq('id', currentUser.id);
+          // Обновляем баланс и время последнего спина
+          await supabase
+            .from('profiles')
+            .update({
+              bonus_balance: newBalance,
+              last_spin_at: new Date().toISOString()
+            })
+            .eq('id', currentUser.id);
 
-        // Показываем сообщение о выигрыше
-        document.getElementById('win-message').style.display = 'block';
+          // Показываем сообщение о выигрыше
+          document.getElementById('win-icon').textContent = wonPrize.icon;
+          document.getElementById('win-text').textContent = wonPrize.amount === 7777777 ? '🎰 ДЖЕКПОТ! 🎰' : 'Поздравляем!';
+          document.getElementById('win-amount').textContent = `+${wonPrize.amount.toLocaleString('ru-RU')} 🎁`;
+          document.getElementById('win-message').style.display = 'flex';
+        } else {
+          // Пустой выигрыш
+          await supabase
+            .from('profiles')
+            .update({
+              last_spin_at: new Date().toISOString()
+            })
+            .eq('id', currentUser.id);
+          
+          document.getElementById('lose-message').style.display = 'flex';
+        }
         
         isSpinning = false;
         btnSpin.disabled = false;
@@ -198,9 +266,10 @@
       }, 4000);
     };
 
-    // Закрытие сообщения о выигрыше
+    // Закрытие сообщений
     window.closeWinMessage = function() {
       document.getElementById('win-message').style.display = 'none';
+      document.getElementById('lose-message').style.display = 'none';
     };
 
     checkAuth();
