@@ -23,24 +23,30 @@
       <!-- Имя -->
       <h2 id="profile-name" class="profile-name">Загрузка...</h2>
       
-      <!-- Балансы (две колонки) -->
-      <div class="balances-row">
-        <!-- Обычный баланс -->
-        <div class="balance-card balance-main">
-          <div class="balance-label">Ваш баланс</div>
-          <div class="balance-amount" id="profile-balance">0 ₽</div>
-          <button class="btn-topup" onclick="alert('Пополнение скоро будет доступно!')">
-             Пополнить
-          </button>
-        </div>
+      <!-- Балансы -->
+      <div class="balances-container">
+        <div class="balances-title">Ваши балансы</div>
         
-        <!-- Бонусный баланс -->
-        <div class="balance-card balance-bonus">
-          <div class="balance-label">Бонусный баланс</div>
-          <div class="balance-amount" id="profile-bonus-balance">0 ₽</div>
-          <button class="btn-bonus-info" onclick="alert('Бонусы начисляются за покупки и активность!')">
-            ℹ️ Подробнее
-          </button>
+        <div class="balances-row">
+          <!-- Обычный баланс (СЛЕВА) -->
+          <div class="balance-card balance-main">
+            <div class="balance-icon">💳</div>
+            <div class="balance-label">Основной</div>
+            <div class="balance-amount" id="profile-balance">0 ₽</div>
+            <button class="balance-action-btn btn-topup" onclick="alert('Пополнение скоро будет доступно!')">
+              Пополнить
+            </button>
+          </div>
+          
+          <!-- Бонусный баланс (СПРАВА) -->
+          <div class="balance-card balance-bonus">
+            <div class="balance-icon">⭐</div>
+            <div class="balance-label">Бонусный</div>
+            <div class="balance-amount" id="profile-bonus-balance">0 ₽</div>
+            <button class="balance-action-btn btn-bonus-info" onclick="alert('Бонусы начисляются за покупки и активность!')">
+              Подробнее
+            </button>
+          </div>
         </div>
       </div>
       
@@ -98,7 +104,6 @@
     let currentAvatarUrl = '';
     let selectedFileBase64 = null;
 
-    // Загрузка профиля
     async function loadProfile() {
       const { data: { user } } = await supabase.auth.getUser();
       
@@ -109,14 +114,12 @@
       
       currentUser = user;
       
-      // Получаем данные из базы
       const { data: profile } = await supabase
         .from('profiles')
         .select('*')
         .eq('id', user.id)
         .single();
       
-      // Если записи нет — создаём
       if (!profile) {
         const defaultName = user.user_metadata?.full_name || user.user_metadata?.name || user.email || 'Пользователь';
         const defaultAvatar = user.user_metadata?.avatar_url || '';
@@ -146,19 +149,17 @@
       displayProfile(name, currentAvatarUrl, balance, bonusBalance, provider);
     }
     
-    // Отображение данных
     function displayProfile(name, avatar, balance, bonusBalance, provider) {
       document.getElementById('profile-avatar').src = avatar || 'https://via.placeholder.com/120';
       document.getElementById('profile-name').textContent = name;
       document.getElementById('profile-provider').textContent = provider;
-      document.getElementById('profile-balance').textContent = balance + ' ₽';
-      document.getElementById('profile-bonus-balance').textContent = bonusBalance + ' ₽';
+      document.getElementById('profile-balance').textContent = balance.toLocaleString('ru-RU') + ' ₽';
+      document.getElementById('profile-bonus-balance').textContent = bonusBalance.toLocaleString('ru-RU') + ' ₽';
       
       document.getElementById('edit-name').value = name;
       document.getElementById('preview-avatar').src = avatar || 'https://via.placeholder.com/80';
     }
     
-    // Предпросмотр изображения
     window.previewImage = function(input) {
       if (input.files && input.files[0]) {
         const file = input.files[0];
@@ -180,12 +181,10 @@
       }
     }
     
-    // Открытие модального окна
     window.openEditModal = function() {
       document.getElementById('editModal').classList.add('active');
     }
     
-    // Закрытие модального окна
     window.closeEditModal = function() {
       document.getElementById('editModal').classList.remove('active');
       selectedFileBase64 = null;
@@ -193,7 +192,6 @@
       document.getElementById('file-name').textContent = 'Файл не выбран';
     }
     
-    // Сохранение профиля
     window.saveProfile = async function() {
       const newName = document.getElementById('edit-name').value.trim();
       
@@ -227,14 +225,12 @@
       alert('Профиль обновлён! ✅');
     }
     
-    // Закрытие по клику вне модального окна
     document.getElementById('editModal').addEventListener('click', (e) => {
       if (e.target.id === 'editModal') {
         closeEditModal();
       }
     });
     
-    // Загружаем профиль при старте
     loadProfile();
   </script>
 </body>
