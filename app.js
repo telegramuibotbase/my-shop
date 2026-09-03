@@ -7,10 +7,12 @@ const avatarBtn = document.getElementById('avatar-btn');
 const dropdown = document.getElementById('dropdown');
 const userAvatar = document.getElementById('user-avatar');
 const logoutBtn = document.getElementById('logout-btn');
+const headerBonus = document.getElementById('header-bonus');
+const headerBonusValue = document.getElementById('header-bonus-value');
 
 const products = [
-  { id: 1, category: 'soft', icon: '', title: 'Windows Activator', desc: 'Надёжная активация Windows 10/11. Мгновенная доставка ключа.', price: '150 ₽' },
-  { id: 2, category: 'soft', icon: '', title: 'Game Booster Pro', desc: 'Оптимизация системы для максимальной FPS в играх.', price: '250 ₽' },
+  { id: 1, category: 'soft', icon: '💻', title: 'Windows Activator', desc: 'Надёжная активация Windows 10/11. Мгновенная доставка ключа.', price: '150 ₽' },
+  { id: 2, category: 'soft', icon: '🎮', title: 'Game Booster Pro', desc: 'Оптимизация системы для максимальной FPS в играх.', price: '250 ₽' },
   { id: 3, category: 'services', icon: '🛠', title: 'Настройка ПК', desc: 'Удалённая настройка системы, драйверов и программ.', price: '500 ₽' },
   { id: 4, category: 'services', icon: '🛡', title: 'Чистка от вирусов', desc: 'Полная диагностика и удаление вредоносного ПО.', price: '300 ₽' },
   { id: 5, category: 'bonuses', icon: '🎁', title: 'x2 Бонусы', desc: 'Удвой свой бонусный баланс при следующей покупке!', price: 'Бесплатно', isBonus: true },
@@ -53,9 +55,10 @@ async function checkAuth() {
     return;
   }
   
+  // Получаем профиль с бонусным балансом
   const { data: profile } = await supabase
     .from('profiles')
-    .select('avatar_url')
+    .select('avatar_url, bonus_balance')
     .eq('id', user.id)
     .single();
   
@@ -64,14 +67,19 @@ async function checkAuth() {
     await supabase.from('profiles').insert({
       id: user.id,
       name: user.user_metadata?.full_name || user.user_metadata?.name || user.email || 'Пользователь',
-      avatar_url: defaultAvatar
+      avatar_url: defaultAvatar,
+      bonus_balance: 0
     });
     userAvatar.src = defaultAvatar || 'https://via.placeholder.com/40';
+    headerBonusValue.textContent = '0';
   } else {
     userAvatar.src = profile.avatar_url || user.user_metadata?.avatar_url || 'https://via.placeholder.com/40';
+    // Показываем бонусный баланс (просто число, без валюты)
+    headerBonusValue.textContent = profile.bonus_balance || 0;
   }
   
   avatarBtn.style.display = 'block';
+  headerBonus.style.display = 'flex';
   
   renderProducts('all');
 }
