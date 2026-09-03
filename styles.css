@@ -2,13 +2,35 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Segoe UI', Arial, sans-serif;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
 }
 
 body {
-  background: #0f0f14;
+  background: linear-gradient(135deg, #0f0f14 0%, #1a1a2e 100%);
   color: white;
   min-height: 100vh;
+}
+
+/* Шапка */
+header {
+  background: rgba(26, 26, 36, 0.95);
+  backdrop-filter: blur(10px);
+  padding: 15px 30px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  border-bottom: 1px solid rgba(124, 92, 255, 0.2);
+}
+
+.logo {
+  font-size: 20px;
+  font-weight: bold;
+  background: linear-gradient(135deg, #7c5cff 0%, #a855f7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 /* Страница входа */
@@ -17,20 +39,28 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
+  padding: 20px;
 }
 
 .auth-card {
-  background: #1a1a24;
-  padding: 40px;
-  border-radius: 15px;
+  background: rgba(26, 26, 36, 0.8);
+  backdrop-filter: blur(20px);
+  padding: 50px 40px;
+  border-radius: 24px;
   text-align: center;
-  width: 350px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(124, 92, 255, 0.2);
 }
 
 .auth-card h1 {
-  color: #7c5cff;
+  background: linear-gradient(135deg, #7c5cff 0%, #a855f7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   margin-bottom: 10px;
+  font-size: 32px;
 }
 
 .auth-card p {
@@ -42,51 +72,33 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 10px;
   width: 100%;
-  padding: 12px;
+  padding: 14px;
   border: none;
-  border-radius: 8px;
+  border-radius: 12px;
   color: white;
   font-size: 16px;
-  font-weight: bold;
+  font-weight: 600;
   cursor: pointer;
-  transition: transform 0.2s;
+  transition: all 0.3s ease;
+  margin-bottom: 12px;
 }
 
 .auth-btn:hover {
   transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(88, 101, 242, 0.4);
 }
 
 .discord {
-  background: #5865F2;
+  background: linear-gradient(135deg, #5865F2 0%, #4752c4 100%);
 }
 
-/* Шапка сайта */
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px 30px;
-  background: #1a1a24;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 100;
-}
-
-.logo {
-  font-size: 20px;
-  font-weight: bold;
-  color: #7c5cff;
-}
-
-/* Контейнер для аватарки и меню */
+/* Шапка с аватаркой */
 .user-menu {
   position: relative;
 }
 
-/* Круг с аватаркой */
 .avatar-circle {
   width: 45px;
   height: 45px;
@@ -94,11 +106,13 @@ header {
   overflow: hidden;
   cursor: pointer;
   border: 2px solid #7c5cff;
-  transition: transform 0.2s;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 20px rgba(124, 92, 255, 0.3);
 }
 
 .avatar-circle:hover {
   transform: scale(1.1);
+  box-shadow: 0 0 30px rgba(124, 92, 255, 0.5);
 }
 
 .avatar-circle img {
@@ -107,47 +121,51 @@ header {
   object-fit: cover;
 }
 
-/* Выпадающее меню */
 .dropdown {
   display: none;
   position: absolute;
   right: 0;
   top: 55px;
-  background: #1a1a24;
-  border-radius: 10px;
-  padding: 10px;
-  min-width: 200px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-  animation: fadeIn 0.2s ease;
+  background: rgba(26, 26, 36, 0.98);
+  backdrop-filter: blur(20px);
+  border-radius: 16px;
+  padding: 12px;
+  min-width: 220px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(124, 92, 255, 0.3);
+  animation: fadeIn 0.3s ease;
 }
 
 .dropdown.active {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 4px;
 }
 
 .dropdown button {
   background: transparent;
   color: #fff;
   border: none;
-  padding: 10px 15px;
+  padding: 12px 16px;
   text-align: left;
   cursor: pointer;
-  border-radius: 6px;
+  border-radius: 10px;
   font-size: 14px;
-  transition: background 0.2s;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .dropdown button:hover {
-  background: #2a2a3a;
+  background: rgba(124, 92, 255, 0.2);
 }
 
 .dropdown .logout {
   color: #ff5555 !important;
-  border-top: 1px solid #333;
-  margin-top: 5px;
-  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: 8px;
+  padding-top: 12px;
 }
 
 @keyframes fadeIn {
@@ -171,43 +189,291 @@ main {
 .profile-page {
   display: flex;
   justify-content: center;
-  padding-top: 50px;
+  padding: 50px 20px;
 }
 
 .profile-card {
-  background: #1a1a24;
-  padding: 40px;
-  border-radius: 15px;
+  background: rgba(26, 26, 36, 0.8);
+  backdrop-filter: blur(20px);
+  padding: 50px 40px;
+  border-radius: 24px;
   text-align: center;
-  width: 400px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  width: 100%;
+  max-width: 450px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(124, 92, 255, 0.2);
+}
+
+.avatar-wrapper {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 25px;
 }
 
 .big-avatar {
-  width: 120px;
-  height: 120px;
+  width: 130px;
+  height: 130px;
   border-radius: 50%;
+  border: 4px solid #7c5cff;
+  object-fit: cover;
+  box-shadow: 0 10px 40px rgba(124, 92, 255, 0.4);
+}
+
+.avatar-badge {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  background: linear-gradient(135deg, #5865F2 0%, #4752c4 100%);
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  box-shadow: 0 4px 15px rgba(88, 101, 242, 0.4);
+}
+
+.profile-name {
+  font-size: 28px;
+  margin-bottom: 30px;
+  background: linear-gradient(135deg, #fff 0%, #a855f7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Секция баланса */
+.balance-section {
+  background: rgba(124, 92, 255, 0.1);
+  border: 2px solid rgba(124, 92, 255, 0.3);
+  border-radius: 20px;
+  padding: 25px;
+  margin-bottom: 25px;
+  position: relative;
+}
+
+.balance-label {
+  font-size: 14px;
+  color: #888;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.balance-amount {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #7c5cff 0%, #a855f7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 15px;
+}
+
+.btn-topup {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+.btn-topup:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.5);
+}
+
+/* Кнопка редактирования */
+.btn-edit {
+  background: rgba(124, 92, 255, 0.2);
+  color: #7c5cff;
+  border: 2px solid #7c5cff;
+  padding: 14px 28px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.btn-edit:hover {
+  background: rgba(124, 92, 255, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(124, 92, 255, 0.3);
+}
+
+/* Модальное окно */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(5px);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal.active {
+  display: flex;
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+  background: rgba(26, 26, 36, 0.98);
+  border-radius: 24px;
+  width: 100%;
+  max-width: 450px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+  border: 1px solid rgba(124, 92, 255, 0.3);
+  overflow: hidden;
+}
+
+.modal-header {
+  padding: 25px 30px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h3 {
+  font-size: 22px;
+  background: linear-gradient(135deg, #7c5cff 0%, #a855f7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.modal-close {
+  background: transparent;
+  border: none;
+  color: #888;
+  font-size: 32px;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+}
+
+.modal-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.modal-body {
+  padding: 30px;
+}
+
+.form-group {
   margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #888;
+  font-weight: 500;
+}
+
+.form-input {
+  width: 100%;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(124, 92, 255, 0.3);
+  border-radius: 12px;
+  color: white;
+  font-size: 15px;
+  transition: all 0.3s ease;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #7c5cff;
+  box-shadow: 0 0 0 4px rgba(124, 92, 255, 0.1);
+}
+
+.form-input::placeholder {
+  color: #555;
+}
+
+.avatar-preview {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.avatar-preview img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
   border: 3px solid #7c5cff;
   object-fit: cover;
 }
 
-.profile-card h2 {
-  margin-bottom: 15px;
-  font-size: 24px;
+.modal-footer {
+  padding: 20px 30px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  gap: 12px;
 }
 
-.provider-badge {
-  display: inline-block;
-  background: #5865F2;
-  padding: 6px 15px;
-  border-radius: 20px;
-  font-size: 14px;
-  font-weight: bold;
+.btn-cancel, .btn-save {
+  flex: 1;
+  padding: 14px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
 }
 
-.email {
-  color: #888;
-  margin-top: 15px;
-  font-size: 14px;
+.btn-cancel {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.btn-cancel:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.btn-save {
+  background: linear-gradient(135deg, #7c5cff 0%, #a855f7 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(124, 92, 255, 0.4);
+}
+
+.btn-save:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(124, 92, 255, 0.6);
+}
+
+/* Адаптивность */
+@media (max-width: 600px) {
+  .profile-card {
+    padding: 40px 25px;
+  }
+  
+  .big-avatar {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .balance-amount {
+    font-size: 32px;
+  }
 }
