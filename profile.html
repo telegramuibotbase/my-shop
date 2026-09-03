@@ -28,7 +28,7 @@
         <div class="balance-label">Ваш баланс</div>
         <div class="balance-amount" id="profile-balance">0 ₽</div>
         <button class="btn-topup" onclick="alert('Пополнение скоро будет доступно!')">
-           Пополнить
+          💳 Пополнить
         </button>
       </div>
       
@@ -58,7 +58,7 @@
           <div class="file-upload-wrapper">
             <input type="file" id="edit-avatar-file" class="file-input" accept="image/*" onchange="previewImage(this)">
             <label for="edit-avatar-file" class="file-upload-btn">
-               Выбрать файл
+              📁 Выбрать файл
             </label>
             <span class="file-name" id="file-name">Файл не выбран</span>
           </div>
@@ -71,7 +71,7 @@
       
       <div class="modal-footer">
         <button class="btn-cancel" onclick="closeEditModal()">Отмена</button>
-        <button class="btn-save" onclick="saveProfile()"> Сохранить</button>
+        <button class="btn-save" onclick="saveProfile()">💾 Сохранить</button>
       </div>
     </div>
   </div>
@@ -83,7 +83,7 @@
     const supabase = createClient(supabaseConfig.url, supabaseConfig.anonKey);
     
     let currentUser = null;
-    let selectedFile = null;
+    let selectedFileBase64 = null;
 
     // Загрузка данных профиля
     async function loadProfile() {
@@ -96,7 +96,7 @@
       
       currentUser = user;
       
-      // Получаем данные из базы или метаданных
+      // Получаем данные из базы
       const { data: profile } = await supabase
         .from('profiles')
         .select('*')
@@ -118,17 +118,18 @@
       document.getElementById('preview-avatar').src = avatar || 'https://via.placeholder.com/80';
     }
     
-    // Предпросмотр изображения
+    // Предпросмотр изображения и конвертация в base64
     window.previewImage = function(input) {
       if (input.files && input.files[0]) {
-        selectedFile = input.files[0];
-        document.getElementById('file-name').textContent = selectedFile.name;
+        const file = input.files[0];
+        document.getElementById('file-name').textContent = file.name;
         
         const reader = new FileReader();
         reader.onload = function(e) {
+          selectedFileBase64 = e.target.result; // Сохраняем base64
           document.getElementById('preview-avatar').src = e.target.result;
         };
-        reader.readAsDataURL(selectedFile);
+        reader.readAsDataURL(file);
       }
     }
     
@@ -140,7 +141,7 @@
     // Закрытие модального окна
     window.closeEditModal = function() {
       document.getElementById('editModal').classList.remove('active');
-      selectedFile = null;
+      selectedFileBase64 = null;
       document.getElementById('edit-avatar-file').value = '';
       document.getElementById('file-name').textContent = 'Файл не выбран';
     }
@@ -154,47 +155,15 @@
         return;
       }
       
-      let avatarUrl = currentUser.user_metadata?.avatar_url;
+      // Определяем аватарку (новая или старая)
+      const avatarUrl = selectedFileBase64 || document.getElementById('preview-avatar').src;
       
-      // Если выбран новый файл - загружаем его
-      if (selectedFile) {
-        const fileExt = selectedFile.name.split('.').pop();
-        const fileName = `${currentUser.id}.${fileExt}`;
-        const filePath = `avatars/${fileName}`;
-        
-        // Загружаем файл в Supabase Storage
-        const { error: uploadError } = await supabase.storage
-          .from('profile-avatars')
-          .upload(filePath, selectedFile, { upsert: true });
-        
-        if (uploadError) {
-          // Если бакет не существует, создаём публичную ссылку из base64
-          alert('Хранилище ещё не настроено. Используем временное сохранение.');
-          const reader = new FileReader();
-          reader.onloadend = async function() {
-            avatarUrl = reader.result; // base64
-            await updateProfileData(newName, avatarUrl);
-          }
-          reader.readAsDataURL(selectedFile);
-          return;
-        } else {
-          // Получаем публичную ссылку
-          const { data } = supabase.storage.from('profile-avatars').getPublicUrl(filePath);
-          avatarUrl = data.publicUrl;
-        }
-      }
-      
-      await updateProfileData(newName, avatarUrl);
-    }
-    
-    // Обновление данных профиля
-    async function updateProfileData(name, avatarUrl) {
       // Обновляем в базе данных
       const { error: dbError } = await supabase
         .from('profiles')
         .upsert({
           id: currentUser.id,
-          name: name,
+          name: newName,
           avatar_url: avatarUrl,
           updated_at: new Date().toISOString()
         });
@@ -205,25 +174,21 @@
       }
       
       // Обновляем метаданные пользователя
-      const { error: authError } = await supabase.auth.updateUser({
+      await supabase.auth.updateUser({
         data: {
-          name: name,
+          name: newName,
           avatar_url: avatarUrl
         }
       });
       
-      if (authError) {
-        console.error('Ошибка обновления метаданных:', authError);
-      }
-      
       // Обновляем отображение
-      document.getElementById('profile-name').textContent = name;
+      document.getElementById('profile-name').textContent = newName;
       document.getElementById('profile-avatar').src = avatarUrl;
       
       closeEditModal();
       alert('Профиль обновлён! ✅');
       
-      // Перезагружаем страницу для обновления всех данных
+      // Перезагружаем страницу
       setTimeout(() => location.reload(), 500);
     }
     
