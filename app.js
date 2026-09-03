@@ -8,17 +8,15 @@ const dropdown = document.getElementById('dropdown');
 const userAvatar = document.getElementById('user-avatar');
 const logoutBtn = document.getElementById('logout-btn');
 
-// База товаров (заглушка для демонстрации)
 const products = [
-  { id: 1, category: 'soft', icon: '💻', title: 'Windows Activator', desc: 'Надёжная активация Windows 10/11. Мгновенная доставка ключа.', price: '150 ₽' },
-  { id: 2, category: 'soft', icon: '🎮', title: 'Game Booster Pro', desc: 'Оптимизация системы для максимальной FPS в играх.', price: '250 ₽' },
+  { id: 1, category: 'soft', icon: '', title: 'Windows Activator', desc: 'Надёжная активация Windows 10/11. Мгновенная доставка ключа.', price: '150 ₽' },
+  { id: 2, category: 'soft', icon: '', title: 'Game Booster Pro', desc: 'Оптимизация системы для максимальной FPS в играх.', price: '250 ₽' },
   { id: 3, category: 'services', icon: '🛠', title: 'Настройка ПК', desc: 'Удалённая настройка системы, драйверов и программ.', price: '500 ₽' },
   { id: 4, category: 'services', icon: '🛡', title: 'Чистка от вирусов', desc: 'Полная диагностика и удаление вредоносного ПО.', price: '300 ₽' },
   { id: 5, category: 'bonuses', icon: '🎁', title: 'x2 Бонусы', desc: 'Удвой свой бонусный баланс при следующей покупке!', price: 'Бесплатно', isBonus: true },
   { id: 6, category: 'bonuses', icon: '🎟', title: 'Промокод на скидку', desc: 'Скидка 10% на любую услугу в магазине.', price: 'Бесплатно', isBonus: true }
 ];
 
-// Функция отрисовки товаров
 function renderProducts(filter = 'all') {
   const grid = document.getElementById('product-grid');
   if (!grid) return;
@@ -45,9 +43,8 @@ function renderProducts(filter = 'all') {
   });
 }
 
-// Логика авторизации (только для index.html)
 async function checkAuth() {
-  if (!avatarBtn) return; // Мы не на главной странице
+  if (!avatarBtn) return;
   
   const { data: { user } } = await supabase.auth.getUser();
   
@@ -76,23 +73,17 @@ async function checkAuth() {
   
   avatarBtn.style.display = 'block';
   
-  // Отрисовываем товары при загрузке
   renderProducts('all');
 }
 
-// Обработка вкладок каталога
 document.querySelectorAll('.tab-btn').forEach(btn => {
   btn.addEventListener('click', () => {
-    // Убираем активный класс у всех
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    // Добавляем активный класс нажатой
     btn.classList.add('active');
-    // Фильтруем товары
     renderProducts(btn.dataset.category);
   });
 });
 
-// Меню
 avatarBtn?.addEventListener('click', (e) => {
   e.stopPropagation();
   dropdown.classList.toggle('active');
@@ -102,11 +93,9 @@ document.addEventListener('click', () => {
   dropdown.classList.remove('active');
 });
 
-// Выход
 logoutBtn?.addEventListener('click', async () => {
   await supabase.auth.signOut();
   window.location.href = 'login.html';
 });
 
-// Запуск
 checkAuth();
