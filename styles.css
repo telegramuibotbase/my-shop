@@ -1115,7 +1115,7 @@ header {
   50% { opacity: 0.8; }
 }
 
-/* ===== КОЛЕСО БОНУСОВ ===== */
+/* ===== РУЛЕТКА БОНУСОВ ===== */
 .wheel-page {
   display: flex;
   justify-content: center;
@@ -1130,7 +1130,7 @@ header {
   backdrop-filter: blur(30px);
   border-radius: 32px;
   padding: 50px 40px;
-  max-width: 650px;
+  max-width: 900px;
   width: 100%;
   text-align: center;
   box-shadow: 0 25px 80px -12px rgba(0, 0, 0, 0.6),
@@ -1198,123 +1198,139 @@ header {
   text-shadow: 0 0 20px rgba(251, 191, 36, 0.5);
 }
 
-/* Обёртка колеса */
-.wheel-wrapper {
+/* Обёртка рулетки */
+.roulette-wrapper {
   position: relative;
-  width: 420px;
-  height: 420px;
+  width: 100%;
+  max-width: 800px;
   margin: 0 auto 40px auto;
+  padding: 20px 0;
 }
 
-.wheel-glow {
+/* Указатель по центру */
+.roulette-pointer {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 480px;
-  height: 480px;
-  background: radial-gradient(circle, rgba(124, 92, 255, 0.3) 0%, transparent 70%);
-  border-radius: 50%;
-  animation: glowPulse 3s ease-in-out infinite;
-  pointer-events: none;
-  z-index: 0;
-}
-
-@keyframes glowPulse {
-  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
-  50% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.8; }
-}
-
-/* Указатель (НЕ вращается) */
-.wheel-pointer {
-  position: absolute;
-  top: -30px;
+  top: 0;
+  bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 20;
-  filter: drop-shadow(0 4px 12px rgba(251, 191, 36, 0.8));
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  pointer-events: none;
 }
 
-.wheel-pointer svg {
-  width: 40px;
-  height: 50px;
+.pointer-line {
+  width: 3px;
+  height: 100%;
+  background: linear-gradient(180deg, #fbbf24 0%, rgba(251, 191, 36, 0.3) 50%, #fbbf24 100%);
+  box-shadow: 0 0 15px rgba(251, 191, 36, 0.6);
 }
 
-.pointer-glow {
+.pointer-triangle {
   position: absolute;
-  top: 50%;
+  top: -5px;
   left: 50%;
-  transform: translate(-50%, -50%);
-  width: 60px;
-  height: 60px;
-  background: radial-gradient(circle, rgba(251, 191, 36, 0.6) 0%, transparent 70%);
-  border-radius: 50%;
-  animation: pointerGlow 2s ease-in-out infinite;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-top: 20px solid #fbbf24;
+  filter: drop-shadow(0 0 10px rgba(251, 191, 36, 0.8));
+  animation: pointerPulse 1.5s ease-in-out infinite;
 }
 
-@keyframes pointerGlow {
-  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
-  50% { transform: translate(-50%, -50%) scale(1.3); opacity: 1; }
+@keyframes pointerPulse {
+  0%, 100% { transform: translateX(-50%) scale(1); }
+  50% { transform: translateX(-50%) scale(1.1); }
 }
 
-/* Внешнее кольцо с лампочками */
-.wheel-outer-ring {
+/* Viewport рулетки */
+.roulette-viewport {
+  width: 100%;
+  height: 160px;
+  overflow: hidden;
+  position: relative;
+  border-radius: 16px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 2px solid rgba(124, 92, 255, 0.3);
+  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.5),
+              0 0 40px rgba(124, 92, 255, 0.2);
+}
+
+.roulette-viewport::before,
+.roulette-viewport::after {
+  content: '';
   position: absolute;
-  top: -15px;
-  left: -15px;
-  right: -15px;
-  bottom: -15px;
-  border-radius: 50%;
-  background: conic-gradient(from 0deg, #7c5cff, #a855f7, #fbbf24, #10b981, #3b82f6, #ec4899, #7c5cff);
-  padding: 5px;
-  animation: rotateRing 15s linear infinite;
-  box-shadow: 0 0 40px rgba(124, 92, 255, 0.5);
+  top: 0;
+  bottom: 0;
+  width: 100px;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.roulette-viewport::before {
+  left: 0;
+  background: linear-gradient(90deg, rgba(26, 26, 36, 0.95) 0%, transparent 100%);
+}
+
+.roulette-viewport::after {
+  right: 0;
+  background: linear-gradient(270deg, rgba(26, 26, 36, 0.95) 0%, transparent 100%);
+}
+
+/* Лента секторов */
+.roulette-strip {
+  display: flex;
+  height: 100%;
+  will-change: transform;
+}
+
+/* Отдельный сектор */
+.roulette-sector {
+  flex-shrink: 0;
+  width: 140px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-right: 2px solid rgba(255, 255, 255, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.roulette-sector::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.15) 0%, transparent 50%, rgba(0, 0, 0, 0.2) 100%);
+  pointer-events: none;
+}
+
+.sector-icon {
+  font-size: 42px;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.4));
   z-index: 1;
 }
 
-@keyframes rotateRing {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+.sector-label {
+  font-size: 16px;
+  font-weight: 800;
+  color: white;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+  z-index: 1;
+  letter-spacing: 1px;
 }
 
-.ring-light {
-  position: absolute;
-  width: 10px;
-  height: 10px;
-  background: white;
-  border-radius: 50%;
-  box-shadow: 0 0 10px white, 0 0 20px rgba(255, 255, 255, 0.8);
-}
-
-.ring-light:nth-child(1) { top: 0; left: 50%; transform: translateX(-50%); }
-.ring-light:nth-child(2) { top: 8%; right: 22%; }
-.ring-light:nth-child(3) { top: 22%; right: 8%; }
-.ring-light:nth-child(4) { top: 50%; right: 0; transform: translateY(-50%); }
-.ring-light:nth-child(5) { bottom: 22%; right: 8%; }
-.ring-light:nth-child(6) { bottom: 8%; right: 22%; }
-.ring-light:nth-child(7) { bottom: 0; left: 50%; transform: translateX(-50%); }
-.ring-light:nth-child(8) { bottom: 8%; left: 22%; }
-.ring-light:nth-child(9) { bottom: 22%; left: 8%; }
-.ring-light:nth-child(10) { top: 50%; left: 0; transform: translateY(-50%); }
-.ring-light:nth-child(11) { top: 22%; left: 8%; }
-.ring-light:nth-child(12) { top: 8%; left: 22%; }
-.ring-light:nth-child(13) { top: 4%; left: 38%; }
-.ring-light:nth-child(14) { top: 4%; right: 38%; }
-.ring-light:nth-child(15) { bottom: 4%; left: 38%; }
-.ring-light:nth-child(16) { bottom: 4%; right: 38%; }
-
-/* SVG Колесо (вращается ТОЛЬКО этот элемент!) */
-.wheel-svg {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  position: relative;
-  z-index: 2;
-  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.15),
-              0 20px 60px rgba(0, 0, 0, 0.5);
-}
-
-/* Индикатор готовности к вращению */
+/* Индикатор готовности */
 .btn-spin.ready {
   animation: readyPulse 2s ease-in-out infinite;
 }
@@ -1414,7 +1430,7 @@ header {
   letter-spacing: 2px;
 }
 
-/* Сообщения (overlay поверх всего, НЕ вращаются) */
+/* Сообщения */
 .win-overlay, .lose-overlay {
   position: fixed;
   top: 0;
@@ -1778,6 +1794,19 @@ body.light-theme .wheel-title {
 
 body.light-theme .wheel-subtitle { color: #666; }
 
+body.light-theme .roulette-viewport {
+  background: rgba(0, 0, 0, 0.1);
+  border: 2px solid rgba(124, 92, 255, 0.2);
+}
+
+body.light-theme .roulette-viewport::before {
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.95) 0%, transparent 100%);
+}
+
+body.light-theme .roulette-viewport::after {
+  background: linear-gradient(270deg, rgba(255, 255, 255, 0.95) 0%, transparent 100%);
+}
+
 body.light-theme .timer-section {
   background: rgba(124, 92, 255, 0.08);
   border: 1px solid rgba(124, 92, 255, 0.15);
@@ -1823,15 +1852,16 @@ body.light-theme .lose-subtitle { color: #888; }
   .wheel-container { padding: 30px 20px; }
   .wheel-title { font-size: 32px; }
   
-  .wheel-wrapper {
-    width: 320px;
-    height: 320px;
+  .roulette-viewport {
+    height: 130px;
   }
   
-  .wheel-glow {
-    width: 350px;
-    height: 350px;
+  .roulette-sector {
+    width: 110px;
   }
+  
+  .sector-icon { font-size: 32px; }
+  .sector-label { font-size: 13px; }
   
   .btn-spin {
     padding: 16px 40px;
