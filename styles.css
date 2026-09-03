@@ -426,13 +426,14 @@ header {
   font-size: 14px;
   color: #7c5cff;
   font-weight: 600;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
   letter-spacing: 1px;
   background: rgba(124, 92, 255, 0.1);
-  padding: 6px 16px;
+  padding: 8px 20px;
   border-radius: 20px;
   display: inline-block;
   border: 1px solid rgba(124, 92, 255, 0.3);
+  text-align: center;
 }
 
 .profile-name {
@@ -465,94 +466,150 @@ header {
   transform: translateY(-2px);
 }
 
-/* Только бонусный баланс */
+/* Бонусный баланс (улучшенный премиум дизайн) */
 .bonus-only-section {
   margin-bottom: 30px;
   display: flex;
   justify-content: center;
 }
 
-.bonus-card {
-  background: linear-gradient(135deg, rgba(251, 191, 36, 0.15) 0%, rgba(245, 158, 11, 0.08) 100%);
-  border: 1px solid rgba(251, 191, 36, 0.3);
-  border-radius: 24px;
-  padding: 35px 30px;
-  width: 100%;
-  max-width: 400px;
-  text-align: center;
+.bonus-card-premium {
   position: relative;
+  width: 100%;
+  max-width: 450px;
+  border-radius: 32px;
   overflow: hidden;
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%);
+  box-shadow: 0 20px 60px rgba(251, 191, 36, 0.4),
+              0 0 100px rgba(251, 191, 36, 0.2);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 8px 32px rgba(251, 191, 36, 0.15);
 }
 
-.bonus-card::before {
+.bonus-card-premium::before {
   content: '';
   position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-  opacity: 0;
-  transition: opacity 0.4s ease;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.3) 50%, transparent 70%);
+  animation: shimmer 3s infinite;
 }
 
-.bonus-card:hover::before {
-  opacity: 1;
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
 }
 
-.bonus-card:hover {
-  transform: translateY(-5px);
-  border-color: rgba(251, 191, 36, 0.6);
-  box-shadow: 0 12px 40px rgba(251, 191, 36, 0.3);
+.bonus-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+  50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.8; }
+}
+
+.bonus-content {
+  position: relative;
+  z-index: 2;
+  padding: 40px 30px;
+  text-align: center;
+}
+
+.bonus-icon-wrapper {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 15px;
 }
 
 .bonus-icon {
-  font-size: 40px;
-  margin-bottom: 12px;
-  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+  font-size: 56px;
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.3));
+  animation: bounce 2s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.bonus-sparkles {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  font-size: 24px;
+  animation: sparkle 1.5s ease-in-out infinite;
+}
+
+@keyframes sparkle {
+  0%, 100% { opacity: 1; transform: scale(1) rotate(0deg); }
+  50% { opacity: 0.5; transform: scale(1.2) rotate(180deg); }
 }
 
 .bonus-label {
-  font-size: 13px;
-  color: #9ca3af;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.9);
   text-transform: uppercase;
-  letter-spacing: 2px;
+  letter-spacing: 3px;
   margin-bottom: 15px;
-  font-weight: 600;
+  font-weight: 700;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .bonus-amount {
-  font-size: 42px;
-  font-weight: 800;
-  margin-bottom: 20px;
-  letter-spacing: -1px;
-  background: linear-gradient(135deg, #fcd34d 0%, #fbbf24 50%, #f59e0b 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  font-size: 56px;
+  font-weight: 900;
+  margin-bottom: 25px;
+  color: white;
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  letter-spacing: -2px;
 }
 
 .btn-bonus-detail {
-  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-  color: white;
+  background: rgba(255, 255, 255, 0.95);
+  color: #d97706;
   border: none;
-  padding: 12px 24px;
-  border-radius: 14px;
-  font-size: 14px;
-  font-weight: 700;
+  padding: 16px 32px;
+  border-radius: 16px;
+  font-size: 16px;
+  font-weight: 800;
   cursor: pointer;
   transition: all 0.3s ease;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+  letter-spacing: 1px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
   width: 100%;
+  max-width: 280px;
+  margin: 0 auto;
 }
 
 .btn-bonus-detail:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(245, 158, 11, 0.6);
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+  background: white;
+}
+
+.btn-icon {
+  font-size: 20px;
+}
+
+.bonus-card-premium:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 30px 80px rgba(251, 191, 36, 0.5),
+              0 0 120px rgba(251, 191, 36, 0.3);
 }
 
 /* Секции профиля */
