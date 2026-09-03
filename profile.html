@@ -14,28 +14,44 @@
   <!-- Основной контент -->
   <main class="profile-page">
     <div class="profile-card">
+      <!-- Аватарка -->
       <div class="avatar-wrapper">
         <img id="profile-avatar" class="big-avatar" src="" alt="avatar">
         <div class="avatar-badge" id="profile-provider">Discord</div>
       </div>
       
+      <!-- Имя -->
       <h2 id="profile-name" class="profile-name">Загрузка...</h2>
       
-      <div class="balance-section">
-        <div class="balance-label">Ваш баланс</div>
-        <div class="balance-amount" id="profile-balance">0 ₽</div>
-        <button class="btn-topup" onclick="alert('Пополнение скоро будет доступно!')">
-          💳 Пополнить
-        </button>
+      <!-- Балансы (две колонки) -->
+      <div class="balances-row">
+        <!-- Обычный баланс -->
+        <div class="balance-card balance-main">
+          <div class="balance-label">Ваш баланс</div>
+          <div class="balance-amount" id="profile-balance">0 ₽</div>
+          <button class="btn-topup" onclick="alert('Пополнение скоро будет доступно!')">
+             Пополнить
+          </button>
+        </div>
+        
+        <!-- Бонусный баланс -->
+        <div class="balance-card balance-bonus">
+          <div class="balance-label">Бонусный баланс</div>
+          <div class="balance-amount" id="profile-bonus-balance">0 ₽</div>
+          <button class="btn-bonus-info" onclick="alert('Бонусы начисляются за покупки и активность!')">
+            ℹ️ Подробнее
+          </button>
+        </div>
       </div>
       
+      <!-- Кнопка редактирования -->
       <button class="btn-edit" onclick="openEditModal()">
         ✏️ Редактировать профиль
       </button>
     </div>
   </main>
 
-  <!-- Модальное окно -->
+  <!-- Модальное окно редактирования -->
   <div class="modal" id="editModal">
     <div class="modal-content">
       <div class="modal-header">
@@ -54,7 +70,7 @@
           <div class="file-upload-wrapper">
             <input type="file" id="edit-avatar-file" class="file-input" accept="image/*" onchange="previewImage(this)">
             <label for="edit-avatar-file" class="file-upload-btn">
-               Выбрать файл
+              📁 Выбрать файл
             </label>
             <span class="file-name" id="file-name">Файл не выбран</span>
           </div>
@@ -111,28 +127,32 @@
           .insert({
             id: user.id,
             name: defaultName,
-            avatar_url: defaultAvatar
+            avatar_url: defaultAvatar,
+            balance: 0,
+            bonus_balance: 0
           });
         
         currentAvatarUrl = defaultAvatar;
-        displayProfile(defaultName, defaultAvatar, 0, provider);
+        displayProfile(defaultName, defaultAvatar, 0, 0, provider);
         return;
       }
       
       currentAvatarUrl = profile.avatar_url || user.user_metadata?.avatar_url || '';
       const name = profile.name || user.user_metadata?.full_name || user.user_metadata?.name || 'Пользователь';
       const balance = profile.balance || 0;
+      const bonusBalance = profile.bonus_balance || 0;
       const provider = (user.app_metadata?.provider || 'Discord').charAt(0).toUpperCase() + (user.app_metadata?.provider || 'discord').slice(1);
       
-      displayProfile(name, currentAvatarUrl, balance, provider);
+      displayProfile(name, currentAvatarUrl, balance, bonusBalance, provider);
     }
     
     // Отображение данных
-    function displayProfile(name, avatar, balance, provider) {
+    function displayProfile(name, avatar, balance, bonusBalance, provider) {
       document.getElementById('profile-avatar').src = avatar || 'https://via.placeholder.com/120';
       document.getElementById('profile-name').textContent = name;
       document.getElementById('profile-provider').textContent = provider;
       document.getElementById('profile-balance').textContent = balance + ' ₽';
+      document.getElementById('profile-bonus-balance').textContent = bonusBalance + ' ₽';
       
       document.getElementById('edit-name').value = name;
       document.getElementById('preview-avatar').src = avatar || 'https://via.placeholder.com/80';
@@ -182,10 +202,8 @@
         return;
       }
       
-      // Определяем аватарку
       const avatarUrl = selectedFileBase64 || currentAvatarUrl;
       
-      // Обновляем запись в базе (используем update, так как запись уже есть)
       const { error: dbError } = await supabase
         .from('profiles')
         .update({
@@ -200,10 +218,8 @@
         return;
       }
       
-      // Обновляем текущие данные
       currentAvatarUrl = avatarUrl;
       
-      // Обновляем отображение
       document.getElementById('profile-name').textContent = newName;
       document.getElementById('profile-avatar').src = avatarUrl;
       
