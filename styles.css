@@ -183,15 +183,11 @@ main {
   padding: 30px;
 }
 
-/* ========================================== */
-/* СТРАНИЦА ПРОФИЛЯ (Обновлено для центрирования) */
-/* ========================================== */
+/* Страница профиля */
 .profile-page {
   display: flex;
   justify-content: center;
-  align-items: flex-start;
-  padding: 120px 20px 50px 20px; /* Увеличен отступ сверху из-за fixed header */
-  min-height: 100vh;
+  padding: 50px 20px;
 }
 
 .profile-card {
@@ -200,15 +196,13 @@ main {
   -webkit-backdrop-filter: blur(30px);
   padding: 50px 40px;
   border-radius: 32px;
+  text-align: center;
   width: 100%;
   max-width: 650px;
   box-shadow: 0 25px 80px -12px rgba(0, 0, 0, 0.6);
   border: 1px solid rgba(124, 92, 255, 0.15);
   position: relative;
   overflow: visible;
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* Гарантирует центрирование всех дочерних элементов */
 }
 
 .profile-card::before {
@@ -221,34 +215,11 @@ main {
   background: linear-gradient(90deg, transparent, #7c5cff, #a855f7, transparent);
 }
 
-/* НОВЫЙ контейнер для идеального выравнивания ID и Аватарки */
-.profile-header-center {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  margin-bottom: 15px;
-}
-
-/* ID пользователя (теперь идет первым) */
-.user-id {
-  font-size: 14px;
-  color: #7c5cff;
-  font-weight: 600;
-  margin-bottom: 16px; /* Идеальный отступ до аватарки */
-  letter-spacing: 1px;
-  background: rgba(124, 92, 255, 0.1);
-  padding: 6px 16px;
-  border-radius: 20px;
-  display: inline-block;
-  border: 1px solid rgba(124, 92, 255, 0.3);
-}
-
 /* Аватарка */
 .avatar-wrapper {
   position: relative;
   display: inline-block;
+  margin-bottom: 20px;
   padding: 4px;
   background: linear-gradient(135deg, #7c5cff, #a855f7, #c084fc);
   border-radius: 50%;
@@ -277,6 +248,20 @@ main {
   box-shadow: 0 4px 15px rgba(88, 101, 242, 0.4);
   border: 2px solid #1a1a24;
   z-index: 2;
+}
+
+/* ID пользователя */
+.user-id {
+  font-size: 14px;
+  color: #7c5cff;
+  font-weight: 600;
+  margin-bottom: 10px;
+  letter-spacing: 1px;
+  background: rgba(124, 92, 255, 0.1);
+  padding: 6px 16px;
+  border-radius: 20px;
+  display: inline-block;
+  border: 1px solid rgba(124, 92, 255, 0.3);
 }
 
 /* Имя */
@@ -314,7 +299,6 @@ main {
 /* Балансы */
 .balances-container {
   margin-bottom: 30px;
-  width: 100%;
 }
 
 .balances-title {
@@ -324,7 +308,6 @@ main {
   letter-spacing: 2px;
   margin-bottom: 20px;
   font-weight: 600;
-  text-align: center;
 }
 
 .balances-row {
@@ -389,7 +372,6 @@ main {
 .balance-icon {
   font-size: 32px;
   margin-bottom: 8px;
-  text-align: center;
 }
 
 .balance-label {
@@ -399,7 +381,6 @@ main {
   letter-spacing: 1.5px;
   margin-bottom: 12px;
   font-weight: 600;
-  text-align: center;
 }
 
 .balance-amount {
@@ -407,7 +388,6 @@ main {
   font-weight: 800;
   margin-bottom: 18px;
   letter-spacing: -1px;
-  text-align: center;
 }
 
 .balance-main .balance-amount {
@@ -459,14 +439,391 @@ main {
   box-shadow: 0 8px 25px rgba(245, 158, 11, 0.6);
 }
 
+/* Секции */
+.section-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(124, 92, 255, 0.15);
+  border-radius: 20px;
+  padding: 25px;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.section-header h3 {
+  font-size: 18px;
+  color: #fff;
+  margin: 0;
+}
+
+.section-content {
+  color: #9ca3af;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.section-content p {
+  margin-bottom: 10px;
+}
+
+.section-note {
+  font-size: 12px;
+  color: #6b7280;
+  font-style: italic;
+  margin-top: 10px;
+}
+
+.btn-add-friend {
+  background: linear-gradient(135deg, #7c5cff 0%, #a855f7 100%);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-add-friend:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(124, 92, 255, 0.4);
+}
+
+.friends-list {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.empty-state {
+  text-align: center;
+  color: #6b7280;
+  padding: 20px;
+  font-size: 14px;
+}
+
+.friend-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  margin-bottom: 10px;
+  transition: all 0.3s ease;
+}
+
+.friend-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.friend-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(124, 92, 255, 0.3);
+}
+
+.friend-info {
+  flex: 1;
+}
+
+.friend-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 2px;
+}
+
+.friend-id {
+  font-size: 12px;
+  color: #7c5cff;
+}
+
+.friend-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-friend-action {
+  background: rgba(124, 92, 255, 0.1);
+  color: #c4b5fd;
+  border: 1px solid rgba(124, 92, 255, 0.3);
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-friend-action:hover {
+  background: rgba(124, 92, 255, 0.2);
+  border-color: rgba(124, 92, 255, 0.6);
+}
+
+.referral-code {
+  background: rgba(124, 92, 255, 0.1);
+  border: 1px solid rgba(124, 92, 255, 0.3);
+  padding: 12px;
+  border-radius: 10px;
+  font-family: monospace;
+  font-size: 14px;
+  color: #7c5cff;
+  margin: 15px 0;
+  text-align: center;
+}
+
+.btn-copy {
+  background: rgba(124, 92, 255, 0.2);
+  color: #c4b5fd;
+  border: 1px solid rgba(124, 92, 255, 0.3);
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.btn-copy:hover {
+  background: rgba(124, 92, 255, 0.3);
+  border-color: rgba(124, 92, 255, 0.6);
+}
+
+.support-links {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.support-link {
+  color: #7c5cff;
+  text-decoration: none;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.support-link:hover {
+  color: #a855f7;
+  text-decoration: underline;
+}
+
+/* Модальное окно */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal.active {
+  display: flex;
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+  background: rgba(26, 26, 36, 0.98);
+  border-radius: 24px;
+  width: 100%;
+  max-width: 450px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+  border: 1px solid rgba(124, 92, 255, 0.3);
+  overflow: hidden;
+}
+
+.modal-header {
+  padding: 25px 30px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h3 {
+  font-size: 22px;
+  background: linear-gradient(135deg, #7c5cff 0%, #a855f7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.modal-close {
+  background: transparent;
+  border: none;
+  color: #888;
+  font-size: 32px;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+}
+
+.modal-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.modal-body {
+  padding: 30px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #888;
+  font-weight: 500;
+  text-align: left;
+}
+
+.form-input {
+  width: 100%;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(124, 92, 255, 0.3);
+  border-radius: 12px;
+  color: white;
+  font-size: 15px;
+  transition: all 0.3s ease;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #7c5cff;
+  box-shadow: 0 0 0 4px rgba(124, 92, 255, 0.1);
+}
+
+.form-input::placeholder {
+  color: #555;
+}
+
+.file-upload-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.file-input {
+  display: none;
+}
+
+.file-upload-btn {
+  background: rgba(124, 92, 255, 0.1);
+  border: 2px dashed rgba(124, 92, 255, 0.4);
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  color: #c4b5fd;
+}
+
+.file-upload-btn:hover {
+  background: rgba(124, 92, 255, 0.2);
+  border-color: #7c5cff;
+}
+
+.file-name {
+  color: #888;
+  font-size: 14px;
+  text-align: center;
+}
+
+.avatar-preview {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.avatar-preview img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 3px solid #7c5cff;
+  object-fit: cover;
+}
+
+.modal-footer {
+  padding: 20px 30px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  gap: 12px;
+}
+
+.btn-cancel, .btn-save {
+  flex: 1;
+  padding: 14px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.btn-cancel {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.btn-cancel:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.btn-save {
+  background: linear-gradient(135deg, #7c5cff 0%, #a855f7 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(124, 92, 255, 0.4);
+}
+
+.btn-save:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(124, 92, 255, 0.6);
+}
+
 /* Адаптивность */
 @media (max-width: 600px) {
   header { padding: 15px 20px; }
-  .profile-page { padding-top: 100px; }
+  
   .profile-card { padding: 40px 25px; }
+  
   .big-avatar { width: 110px; height: 110px; }
+  
   .profile-name { font-size: 26px; }
+  
   .balances-row { flex-direction: column; align-items: center; }
+  
   .balance-card { max-width: 100%; }
+  
   .balance-amount { font-size: 32px; }
+  
+  .friend-item { flex-direction: column; align-items: flex-start; }
+  
+  .friend-actions { width: 100%; justify-content: flex-end; }
 }
