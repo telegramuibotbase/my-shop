@@ -220,36 +220,39 @@ main {
   background: linear-gradient(90deg, transparent, #7c5cff, #a855f7, transparent);
 }
 
+/* Аватарка с градиентной рамкой (ИСПРАВЛЕНО) */
 .avatar-wrapper {
   position: relative;
   display: inline-block;
   margin-bottom: 25px;
+  padding: 4px;
+  background: linear-gradient(135deg, #7c5cff, #a855f7, #c084fc);
+  border-radius: 50%;
+  box-shadow: 0 10px 50px rgba(124, 92, 255, 0.5);
 }
 
 .big-avatar {
   width: 140px;
   height: 140px;
   border-radius: 50%;
-  border: 4px solid transparent;
-  background: linear-gradient(135deg, #7c5cff, #a855f7) border-box;
-  -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
+  border: 4px solid #1a1a24;
   object-fit: cover;
-  box-shadow: 0 10px 50px rgba(124, 92, 255, 0.5);
+  display: block;
+  background: #1a1a24;
 }
 
 .avatar-badge {
   position: absolute;
-  bottom: 5px;
-  right: 5px;
+  bottom: 8px;
+  right: 8px;
   background: linear-gradient(135deg, #5865F2 0%, #4752c4 100%);
   padding: 6px 12px;
   border-radius: 20px;
   font-size: 12px;
   font-weight: 700;
   box-shadow: 0 4px 15px rgba(88, 101, 242, 0.4);
-  border: 2px solid rgba(26, 26, 36, 0.9);
+  border: 2px solid #1a1a24;
+  z-index: 2;
 }
 
 .profile-name {
@@ -371,7 +374,6 @@ main {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  text-shadow: 0 0 40px rgba(124, 92, 255, 0.3);
 }
 
 .balance-bonus .balance-amount {
@@ -379,7 +381,6 @@ main {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  text-shadow: 0 0 40px rgba(251, 191, 36, 0.3);
 }
 
 .balance-action-btn {
