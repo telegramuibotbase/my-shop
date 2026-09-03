@@ -1,261 +1,64 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Профиль</title>
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль - My Shop</title>
+    <link rel="stylesheet" href="styles.css">
+    <script type="module" src="app.js"></script>
 </head>
 <body>
-  <header>
-    <a href="index.html" class="logo">← Назад</a>
-  </header>
+    <!-- Шапка сайта -->
+    <header>
+        <a href="index.html" class="logo">My Shop</a>
+        <div class="user-menu" id="avatar-btn" style="display: none;">
+            <div class="avatar-circle">
+                <img id="user-avatar" src="https://via.placeholder.com/40" alt="Avatar">
+            </div>
+            <div class="dropdown" id="dropdown">
+                <button onclick="window.location.href='profile.html'">👤 Мой профиль</button>
+                <button class="logout" id="logout-btn">🚪 Выйти</button>
+            </div>
+        </div>
+    </header>
 
-  <main class="profile-page">
-    <div class="profile-card">
-      <div class="avatar-wrapper">
-        <img id="profile-avatar" class="big-avatar" src="" alt="avatar">
-        <div class="avatar-badge" id="profile-provider">Discord</div>
-      </div>
-      
-      <div class="user-id" id="profile-user-id">ID #000000</div>
-      
-      <h2 id="profile-name" class="profile-name">Загрузка...</h2>
-      
-      <button class="btn-edit-small" onclick="openEditModal()">✏️ Редактировать</button>
-      
-      <div class="balances-container">
-        <div class="balances-title">Ваши балансы</div>
-        <div class="balances-row">
-          <div class="balance-card balance-main">
-            <div class="balance-icon">💳</div>
-            <div class="balance-label">Основной</div>
-            <div class="balance-amount" id="profile-balance">0 ₽</div>
-            <button class="balance-action-btn btn-topup" onclick="alert('Пополнение скоро будет доступно!')">Пополнить</button>
-          </div>
-          <div class="balance-card balance-bonus">
-            <div class="balance-icon">⭐</div>
-            <div class="balance-label">Бонусный</div>
-            <div class="balance-amount" id="profile-bonus-balance">0 ₽</div>
-            <button class="balance-action-btn btn-bonus-info" onclick="alert('Бонусы начисляются за покупки и активность!')">Подробнее</button>
-          </div>
-        </div>
-      </div>
-      
-      <div class="section-card">
-        <div class="section-header">
-          <h3>👥 Друзья</h3>
-          <button class="btn-add-friend" onclick="openAddFriendModal()">+ Добавить</button>
-        </div>
-        <div class="friends-list" id="friends-list">
-          <div class="empty-state">У вас пока нет друзей</div>
-        </div>
-      </div>
-      
-      <div class="section-card">
-        <div class="section-header">
-          <h3>🎁 Реферальная система</h3>
-        </div>
-        <div class="section-content">
-          <p>Приглашайте друзей и получайте бонусы!</p>
-          <div class="referral-code" id="referral-code">Ваш код: загрузка...</div>
-          <button class="btn-copy" onclick="copyReferralCode()">📋 Скопировать</button>
-          <p class="section-note">Скоро: начисление бонусов за каждого приглашённого друга</p>
-        </div>
-      </div>
-      
-      <div class="section-card">
-        <div class="section-header">
-          <h3>️ Настройки</h3>
-        </div>
-        <div class="section-content">
-          <p>Здесь будут настройки вашего аккаунта</p>
-          <p class="section-note">Скоро: уведомления, приватность, безопасность</p>
-        </div>
-      </div>
-      
-      <div class="section-card">
-        <div class="section-header">
-          <h3>💬 Поддержка</h3>
-        </div>
-        <div class="section-content">
-          <p>Нужна помощь? Свяжитесь с нами!</p>
-          <div class="support-links">
-            <a href="#" class="support-link">📧 Email: support@myshop.com</a>
-            <a href="#" class="support-link">💬 Telegram: @myshop_support</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </main>
+    <!-- Основной контент профиля -->
+    <main class="profile-page">
+        <div class="profile-card">
+            
+            <!-- Контейнер для идеального центрирования ID и Аватарки -->
+            <div class="profile-header-center">
+                <div class="user-id" id="display-user-id">ID: Загрузка...</div>
+                
+                <div class="avatar-wrapper">
+                    <img id="profile-big-avatar" class="big-avatar" src="https://via.placeholder.com/140" alt="Profile Avatar">
+                    <div class="avatar-badge">DISCORD</div>
+                </div>
+            </div>
 
-  <div class="modal" id="editModal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3>Редактировать профиль</h3>
-        <button class="modal-close" onclick="closeEditModal()">×</button>
-      </div>
-      <div class="modal-body">
-        <div class="form-group">
-          <label>Ваше имя</label>
-          <input type="text" id="edit-name" class="form-input" placeholder="Введите имя">
-        </div>
-        <div class="form-group">
-          <label>Новая аватарка</label>
-          <div class="file-upload-wrapper">
-            <input type="file" id="edit-avatar-file" class="file-input" accept="image/*" onchange="previewImage(this)">
-            <label for="edit-avatar-file" class="file-upload-btn">📁 Выбрать файл</label>
-            <span class="file-name" id="file-name">Файл не выбран</span>
-          </div>
-        </div>
-        <div class="avatar-preview">
-          <img id="preview-avatar" src="" alt="preview">
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn-cancel" onclick="closeEditModal()">Отмена</button>
-        <button class="btn-save" onclick="saveProfile()">💾 Сохранить</button>
-      </div>
-    </div>
-  </div>
+            <h1 class="profile-name" id="display-user-name">Загрузка...</h1>
+            <button class="btn-edit-small" id="btn-edit-profile">✏️ Редактировать профиль</button>
 
-  <div class="modal" id="addFriendModal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3>Добавить друга</h3>
-        <button class="modal-close" onclick="closeAddFriendModal()">×</button>
-      </div>
-      <div class="modal-body">
-        <div class="form-group">
-          <label>ID друга</label>
-          <input type="text" id="friend-id-input" class="form-input" placeholder="Введите ID (например: 100001)">
+            <!-- Балансы (стиль сохранен) -->
+            <div class="balances-container">
+                <div class="balances-title">Ваши балансы</div>
+                <div class="balances-row">
+                    <div class="balance-card balance-main">
+                        <div class="balance-icon">💎</div>
+                        <div class="balance-label">Основной баланс</div>
+                        <div class="balance-amount">0 ₽</div>
+                        <button class="balance-action-btn btn-topup">Пополнить</button>
+                    </div>
+                    <div class="balance-card balance-bonus">
+                        <div class="balance-icon">🎁</div>
+                        <div class="balance-label">Бонусный баланс</div>
+                        <div class="balance-amount">0 ₽</div>
+                        <button class="balance-action-btn btn-bonus-info">Подробнее</button>
+                    </div>
+                </div>
+            </div>
+
         </div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn-cancel" onclick="closeAddFriendModal()">Отмена</button>
-        <button class="btn-save" onclick="addFriend()">➕ Добавить</button>
-      </div>
-    </div>
-  </div>
-
-  <script type="module">
-    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
-    import { supabaseConfig } from './supabase-config.js';
-
-    const supabase = createClient(supabaseConfig.url, supabaseConfig.anonKey);
-    
-    let currentUser = null;
-    let currentAvatarUrl = '';
-    let selectedFileBase64 = null;
-    let currentUserId = null;
-
-    async function loadProfile() {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) { window.location.href = 'login.html'; return; }
-      
-      currentUser = user;
-      
-      const { data: profile } = await supabase.from('profiles').select('*').eq('id', user.id).single();
-      
-      if (!profile) {
-        const defaultName = user.user_metadata?.full_name || user.user_metadata?.name || user.email || 'Пользователь';
-        const defaultAvatar = user.user_metadata?.avatar_url || '';
-        const provider = (user.app_metadata?.provider || 'Discord').charAt(0).toUpperCase() + (user.app_metadata?.provider || 'discord').slice(1);
-        
-        const { data: newProfile } = await supabase.from('profiles').insert({ id: user.id, name: defaultName, avatar_url: defaultAvatar, balance: 0, bonus_balance: 0 }).select().single();
-        
-        currentUserId = newProfile?.user_id;
-        currentAvatarUrl = defaultAvatar;
-        displayProfile(defaultName, defaultAvatar, 0, 0, provider, newProfile?.user_id);
-        loadFriends();
-        return;
-      }
-      
-      currentUserId = profile.user_id;
-      currentAvatarUrl = profile.avatar_url || user.user_metadata?.avatar_url || '';
-      const name = profile.name || user.user_metadata?.full_name || user.user_metadata?.name || 'Пользователь';
-      const balance = profile.balance || 0;
-      const bonusBalance = profile.bonus_balance || 0;
-      const provider = (user.app_metadata?.provider || 'Discord').charAt(0).toUpperCase() + (user.app_metadata?.provider || 'discord').slice(1);
-      
-      displayProfile(name, currentAvatarUrl, balance, bonusBalance, provider, profile.user_id);
-      loadFriends();
-    }
-    
-    function displayProfile(name, avatar, balance, bonusBalance, provider, userId) {
-      document.getElementById('profile-avatar').src = avatar || 'https://via.placeholder.com/120';
-      document.getElementById('profile-name').textContent = name;
-      document.getElementById('profile-provider').textContent = provider;
-      document.getElementById('profile-balance').textContent = balance.toLocaleString('ru-RU') + ' ₽';
-      document.getElementById('profile-bonus-balance').textContent = bonusBalance.toLocaleString('ru-RU') + ' ₽';
-      document.getElementById('profile-user-id').textContent = 'ID #' + (userId || '000000');
-      document.getElementById('referral-code').textContent = 'Ваш код: REF-' + (userId || '000000');
-      document.getElementById('edit-name').value = name;
-      document.getElementById('preview-avatar').src = avatar || 'https://via.placeholder.com/80';
-    }
-    
-    async function loadFriends() {
-      const { data: friends } = await supabase.from('friends').select('*, profiles!friend_id(name, avatar_url, user_id)').eq('user_id', currentUser.id).eq('status', 'accepted');
-      const friendsList = document.getElementById('friends-list');
-      if (!friends || friends.length === 0) { friendsList.innerHTML = '<div class="empty-state">У вас пока нет друзей</div>'; return; }
-      friendsList.innerHTML = friends.map(friend => `<div class="friend-item"><img src="${friend.profiles.avatar_url || 'https://via.placeholder.com/40'}" class="friend-avatar"><div class="friend-info"><div class="friend-name">${friend.profiles.name}</div><div class="friend-id">ID #${friend.profiles.user_id}</div></div><div class="friend-actions"><button class="btn-friend-action" onclick="sendMessage('${friend.friend_id}')">💬 Написать</button><button class="btn-friend-action" onclick="sendBonus('${friend.friend_id}')">⭐ Бонус</button></div></div>`).join('');
-    }
-    
-    window.previewImage = function(input) {
-      if (input.files && input.files[0]) {
-        const file = input.files[0];
-        if (file.size > 500000) { alert('Файл слишком большой! Максимум 500 КБ.'); input.value = ''; return; }
-        document.getElementById('file-name').textContent = file.name;
-        const reader = new FileReader();
-        reader.onload = function(e) { selectedFileBase64 = e.target.result; document.getElementById('preview-avatar').src = e.target.result; };
-        reader.readAsDataURL(file);
-      }
-    }
-    
-    window.openEditModal = function() { document.getElementById('editModal').classList.add('active'); }
-    window.closeEditModal = function() { document.getElementById('editModal').classList.remove('active'); selectedFileBase64 = null; document.getElementById('edit-avatar-file').value = ''; document.getElementById('file-name').textContent = 'Файл не выбран'; }
-    
-    window.saveProfile = async function() {
-      const newName = document.getElementById('edit-name').value.trim();
-      if (!newName) { alert('Введите имя!'); return; }
-      const avatarUrl = selectedFileBase64 || currentAvatarUrl;
-      const { error } = await supabase.from('profiles').update({ name: newName, avatar_url: avatarUrl, updated_at: new Date().toISOString() }).eq('id', currentUser.id);
-      if (error) { alert('Ошибка: ' + error.message); return; }
-      currentAvatarUrl = avatarUrl;
-      document.getElementById('profile-name').textContent = newName;
-      document.getElementById('profile-avatar').src = avatarUrl;
-      closeEditModal();
-      alert('Профиль обновлён! ✅');
-    }
-    
-    window.openAddFriendModal = function() { document.getElementById('addFriendModal').classList.add('active'); }
-    window.closeAddFriendModal = function() { document.getElementById('addFriendModal').classList.remove('active'); document.getElementById('friend-id-input').value = ''; }
-    
-    window.addFriend = async function() {
-      const friendId = document.getElementById('friend-id-input').value.trim();
-      if (!friendId) { alert('Введите ID друга!'); return; }
-      const { data: friendProfile } = await supabase.from('profiles').select('id').eq('user_id', parseInt(friendId)).single();
-      if (!friendProfile) { alert('Пользователь с таким ID не найден!'); return; }
-      if (friendProfile.id === currentUser.id) { alert('Нельзя добавить себя!'); return; }
-      const { error } = await supabase.from('friends').insert({ user_id: currentUser.id, friend_id: friendProfile.id, status: 'accepted' });
-      if (error) { alert('Ошибка: ' + error.message); return; }
-      alert('Друг добавлен! ✅');
-      closeAddFriendModal();
-      loadFriends();
-    }
-    
-    window.sendMessage = function(id) { alert('Сообщения скоро будут доступны!'); }
-    window.sendBonus = function(id) { alert('Передача бонусов скоро будет доступна!'); }
-    
-    window.copyReferralCode = function() {
-      const code = document.getElementById('referral-code').textContent;
-      navigator.clipboard.writeText(code).then(() => alert('Код скопирован! '));
-    }
-    
-    document.getElementById('editModal').addEventListener('click', (e) => { if (e.target.id === 'editModal') closeEditModal(); });
-    document.getElementById('addFriendModal').addEventListener('click', (e) => { if (e.target.id === 'addFriendModal') closeAddFriendModal(); });
-    
-    loadProfile();
-  </script>
+    </main>
 </body>
 </html>
