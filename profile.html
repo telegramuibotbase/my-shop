@@ -58,7 +58,7 @@
           <div class="file-upload-wrapper">
             <input type="file" id="edit-avatar-file" class="file-input" accept="image/*" onchange="previewImage(this)">
             <label for="edit-avatar-file" class="file-upload-btn">
-              📁 Выбрать файл
+               Выбрать файл
             </label>
             <span class="file-name" id="file-name">Файл не выбран</span>
           </div>
@@ -103,9 +103,33 @@
         .eq('id', user.id)
         .single();
       
-      const name = profile?.name || user.user_metadata?.full_name || user.user_metadata?.name || 'Пользователь';
-      const avatar = profile?.avatar_url || user.user_metadata?.avatar_url || '';
-      const balance = profile?.balance || 0;
+      // Если записи нет — создаём
+      if (!profile) {
+        const defaultName = user.user_metadata?.full_name || user.user_metadata?.name || user.email || 'Пользователь';
+        const defaultAvatar = user.user_metadata?.avatar_url || '';
+        const provider = (user.app_metadata?.provider || 'Discord').charAt(0).toUpperCase() + (user.app_metadata?.provider || 'discord').slice(1);
+        
+        await supabase
+          .from('profiles')
+          .insert({
+            id: user.id,
+            name: defaultName,
+            avatar_url: defaultAvatar
+          });
+        
+        document.getElementById('profile-avatar').src = defaultAvatar || 'https://via.placeholder.com/120';
+        document.getElementById('profile-name').textContent = defaultName;
+        document.getElementById('profile-provider').textContent = provider;
+        document.getElementById('profile-balance').textContent = '0 ₽';
+        
+        document.getElementById('edit-name').value = defaultName;
+        document.getElementById('preview-avatar').src = defaultAvatar || 'https://via.placeholder.com/80';
+        return;
+      }
+      
+      const name = profile.name || user.user_metadata?.full_name || user.user_metadata?.name || 'Пользователь';
+      const avatar = profile.avatar_url || user.user_metadata?.avatar_url || '';
+      const balance = profile.balance || 0;
       const provider = (user.app_metadata?.provider || 'Discord').charAt(0).toUpperCase() + (user.app_metadata?.provider || 'discord').slice(1);
       
       document.getElementById('profile-avatar').src = avatar || 'https://via.placeholder.com/120';
@@ -113,7 +137,6 @@
       document.getElementById('profile-provider').textContent = provider;
       document.getElementById('profile-balance').textContent = balance + ' ₽';
       
-      // Заполняем поля редактирования
       document.getElementById('edit-name').value = name;
       document.getElementById('preview-avatar').src = avatar || 'https://via.placeholder.com/80';
     }
@@ -122,11 +145,19 @@
     window.previewImage = function(input) {
       if (input.files && input.files[0]) {
         const file = input.files[0];
+        
+        // Проверяем размер (base64 увеличивает размер на ~33%)
+        if (file.size > 500000) {
+          alert('Файл слишком большой! Максимум 500 КБ.');
+          input.value = '';
+          return;
+        }
+        
         document.getElementById('file-name').textContent = file.name;
         
         const reader = new FileReader();
         reader.onload = function(e) {
-          selectedFileBase64 = e.target.result; // Сохраняем base64
+          selectedFileBase64 = e.target.result;
           document.getElementById('preview-avatar').src = e.target.result;
         };
         reader.readAsDataURL(file);
@@ -155,8 +186,19 @@
         return;
       }
       
-      // Определяем аватарку (новая или старая)
-      const avatarUrl = selectedFileBase64 || document.getElementById('preview-avatar').src;
+      // Если файл не выбран — оставляем текущую аватарку из базы
+      let avatarUrl;
+      if (selectedFileBase64) {
+        avatarUrl = selectedFileBase64;
+      } else {
+        // Берём текущую из профиля
+        const { data: currentProfile } = await supabase
+          .from('profiles')
+          .select('avatar_url')
+          .eq('id', currentUser.id)
+          .single();
+        avatarUrl = currentProfile?.avatar_url || '';
+      }
       
       // Обновляем в базе данных
       const { error: dbError } = await supabase
@@ -173,23 +215,12 @@
         return;
       }
       
-      // Обновляем метаданные пользователя
-      await supabase.auth.updateUser({
-        data: {
-          name: newName,
-          avatar_url: avatarUrl
-        }
-      });
-      
       // Обновляем отображение
       document.getElementById('profile-name').textContent = newName;
       document.getElementById('profile-avatar').src = avatarUrl;
       
       closeEditModal();
       alert('Профиль обновлён! ✅');
-      
-      // Перезагружаем страницу
-      setTimeout(() => location.reload(), 500);
     }
     
     // Закрытие по клику вне модального окна
