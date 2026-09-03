@@ -22,16 +22,14 @@
       
       <h2 id="profile-name" class="profile-name">Загрузка...</h2>
       
-      <button class="btn-edit-small" onclick="openEditModal()">️ Редактировать профиль</button>
+      <button class="btn-edit-small" onclick="openEditModal()">✏️ Редактировать профиль</button>
       
-      <!-- Бонусный баланс (БЕЗ валюты, только число + 🎁) -->
+      <!-- Бонусный баланс -->
       <div class="bonus-calm-section">
         <div class="bonus-calm-card">
-          <div class="bonus-calm-icon"></div>
           <div class="bonus-calm-label" data-i18n="bonusBalance">Бонусный баланс</div>
           <div class="bonus-calm-amount">
-            <span id="profile-bonus-balance">0</span>
-            <span class="bonus-currency-icon">🎁</span>
+            <span id="profile-bonus-balance">0</span> <span class="bonus-emoji">🎁</span>
           </div>
           <button class="btn-bonus-calm" onclick="alert('Бонусы начисляются за покупки и активность!')">
             Подробнее
@@ -69,7 +67,7 @@
         
         <!-- Безопасность -->
         <div class="settings-block">
-          <h4 class="settings-block-title"> Безопасность</h4>
+          <h4 class="settings-block-title">🔒 Безопасность</h4>
           
           <div class="setting-row">
             <div class="setting-info">
@@ -101,8 +99,8 @@
               <div class="setting-label" data-i18n="theme">Тема</div>
             </div>
             <div class="toggle-group">
-              <button class="toggle-btn active" id="theme-dark" onclick="setTheme('dark')"> Тёмная</button>
-              <button class="toggle-btn" id="theme-light" onclick="setTheme('light')">☀️ Светлая</button>
+              <button class="toggle-btn active" id="theme-dark" onclick="setTheme('dark')">🌙 Тёмная</button>
+              <button class="toggle-btn" id="theme-light" onclick="setTheme('light')">️ Светлая</button>
             </div>
           </div>
         </div>
@@ -116,7 +114,7 @@
               <div class="setting-label" data-i18n="selectLanguage">Выберите язык</div>
             </div>
             <div class="toggle-group">
-              <button class="toggle-btn active" id="lang-ru" onclick="setLanguage('ru')">🇷 Русский</button>
+              <button class="toggle-btn active" id="lang-ru" onclick="setLanguage('ru')">🇷🇺 Русский</button>
               <button class="toggle-btn" id="lang-en" onclick="setLanguage('en')">🇬🇧 English</button>
             </div>
           </div>
@@ -230,7 +228,7 @@
   <div class="modal" id="telegramModal">
     <div class="modal-content">
       <div class="modal-header">
-        <h3>💬 Привязать Telegram</h3>
+        <h3> Привязать Telegram</h3>
         <button class="modal-close" onclick="closeTelegramModal()">×</button>
       </div>
       <div class="modal-body">
@@ -264,7 +262,7 @@
         email: 'Почта',
         appearance: '🎨 Внешний вид',
         theme: 'Тема',
-        language: ' Язык',
+        language: '🌐 Язык',
         selectLanguage: 'Выберите язык',
         currency: '💱 Валюта',
         selectCurrency: 'Отображение цен',
@@ -280,7 +278,7 @@
         email: 'Email',
         appearance: '🎨 Appearance',
         theme: 'Theme',
-        language: '🌐 Language',
+        language: ' Language',
         selectLanguage: 'Select language',
         currency: '💱 Currency',
         selectCurrency: 'Price display',
@@ -434,7 +432,6 @@
       document.getElementById('profile-avatar').src = avatar || 'https://via.placeholder.com/120';
       document.getElementById('profile-name').textContent = name;
       document.getElementById('profile-provider').textContent = provider;
-      // Бонусы БЕЗ валюты, только число
       document.getElementById('profile-bonus-balance').textContent = bonusBalance || 0;
       document.getElementById('profile-user-id').textContent = 'ID #' + (userId || '000000');
       document.getElementById('referral-code').textContent = 'Ваш код: REF-' + (userId || '000000');
