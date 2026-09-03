@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Профиль</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Шапка -->
+  <header>
+    <a href="index.html" class="logo" style="text-decoration: none;">← Назад в магазин</a>
+  </header>
+
+  <!-- Основной контент -->
+  <main class="profile-page">
+    <div class="profile-card">
+      <img id="profile-avatar" class="big-avatar" src="" alt="avatar">
+      <h2 id="profile-name">Загрузка...</h2>
+      <div class="provider-badge" id="profile-provider">Через: ...</div>
+      <p class="email" id="profile-email"></p>
+    </div>
+  </main>
+
+  <script>
+    // Читаем данные, сохранённые при входе
+    const data = JSON.parse(localStorage.getItem('userData') || '{}');
+    
+    document.getElementById('profile-avatar').src = data.avatar || 'https://via.placeholder.com/120';
+    document.getElementById('profile-name').textContent = data.name || 'Пользователь';
+    document.getElementById('profile-provider').textContent = 'Аккаунт через: ' + (data.provider || 'Неизвестно');
+    document.getElementById('profile-email').textContent = data.email || '';
+  </script>
+</body>
+</html>
