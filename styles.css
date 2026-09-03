@@ -22,6 +22,9 @@ header {
   right: 0;
   z-index: 100;
   border-bottom: 1px solid rgba(124, 92, 255, 0.2);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .logo {
@@ -33,70 +36,10 @@ header {
   background-clip: text;
 }
 
-/* Страница входа */
-.login-page {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  padding: 20px;
-}
-
-.auth-card {
-  background: rgba(26, 26, 36, 0.8);
-  backdrop-filter: blur(20px);
-  padding: 50px 40px;
-  border-radius: 24px;
-  text-align: center;
-  width: 100%;
-  max-width: 400px;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-  border: 1px solid rgba(124, 92, 255, 0.2);
-}
-
-.auth-card h1 {
-  background: linear-gradient(135deg, #7c5cff 0%, #a855f7 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  margin-bottom: 10px;
-  font-size: 32px;
-}
-
-.auth-card p {
-  color: #888;
-  margin-bottom: 30px;
-}
-
-.auth-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  width: 100%;
-  padding: 14px;
-  border: none;
-  border-radius: 12px;
-  color: white;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  margin-bottom: 12px;
-}
-
-.auth-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(88, 101, 242, 0.4);
-}
-
-.discord {
-  background: linear-gradient(135deg, #5865F2 0%, #4752c4 100%);
-}
-
-/* Шапка с аватаркой */
+/* Аватарка СПРАВА */
 .user-menu {
   position: relative;
+  margin-left: auto;
 }
 
 .avatar-circle {
@@ -177,6 +120,67 @@ header {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* Страница входа */
+.login-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.auth-card {
+  background: rgba(26, 26, 36, 0.8);
+  backdrop-filter: blur(20px);
+  padding: 50px 40px;
+  border-radius: 24px;
+  text-align: center;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(124, 92, 255, 0.2);
+}
+
+.auth-card h1 {
+  background: linear-gradient(135deg, #7c5cff 0%, #a855f7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 10px;
+  font-size: 32px;
+}
+
+.auth-card p {
+  color: #888;
+  margin-bottom: 30px;
+}
+
+.auth-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 12px;
+}
+
+.auth-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(88, 101, 242, 0.4);
+}
+
+.discord {
+  background: linear-gradient(135deg, #5865F2 0%, #4752c4 100%);
 }
 
 /* Основной контент */
@@ -410,6 +414,40 @@ main {
   color: #555;
 }
 
+/* Загрузка файла */
+.file-upload-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.file-input {
+  display: none;
+}
+
+.file-upload-btn {
+  background: rgba(124, 92, 255, 0.2);
+  border: 2px dashed #7c5cff;
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  color: #7c5cff;
+}
+
+.file-upload-btn:hover {
+  background: rgba(124, 92, 255, 0.3);
+  border-color: #a855f7;
+}
+
+.file-name {
+  color: #888;
+  font-size: 14px;
+  text-align: center;
+}
+
 .avatar-preview {
   display: flex;
   justify-content: center;
@@ -464,6 +502,10 @@ main {
 
 /* Адаптивность */
 @media (max-width: 600px) {
+  header {
+    padding: 15px 20px;
+  }
+  
   .profile-card {
     padding: 40px 25px;
   }
