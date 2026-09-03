@@ -17,149 +17,41 @@
   <main class="wheel-page">
     <div class="wheel-container">
       <div class="wheel-header">
-        <div class="wheel-badge">🎰 DAILY SPIN</div>
-        <h1 class="wheel-title">Колесо Бонусов</h1>
+        <div class="wheel-badge"> DAILY SPIN</div>
+        <h1 class="wheel-title">Рулетка Бонусов</h1>
         <p class="wheel-subtitle">Испытай удачу и выиграй до <span class="highlight">7,777,777</span> бонусов!</p>
       </div>
       
-      <!-- Колесо -->
-      <div class="wheel-wrapper">
-        <div class="wheel-glow"></div>
+      <!-- Рулетка -->
+      <div class="roulette-wrapper">
+        <!-- Указатель по центру -->
+        <div class="roulette-pointer">
+          <div class="pointer-line"></div>
+          <div class="pointer-triangle"></div>
+        </div>
         
-        <!-- Указатель сверху (НЕ вращается) -->
-        <div class="wheel-pointer">
-          <div class="pointer-glow"></div>
-          <svg viewBox="0 0 40 50" fill="none">
-            <path d="M20 0L35 40L20 32L5 40L20 0Z" fill="url(#pointerGrad)"/>
-            <defs>
-              <linearGradient id="pointerGrad" x1="20" y1="0" x2="20" y2="40">
-                <stop stop-color="#fcd34d"/>
-                <stop offset="1" stop-color="#f59e0b"/>
-              </linearGradient>
-            </defs>
-          </svg>
+        <!-- Лента с секторами -->
+        <div class="roulette-viewport">
+          <div class="roulette-strip" id="roulette-strip">
+            <!-- Сектора генерируются через JS -->
+          </div>
         </div>
-
-        <!-- Внешнее кольцо с лампочками (НЕ вращается) -->
-        <div class="wheel-outer-ring">
-          <div class="ring-light"></div>
-          <div class="ring-light"></div>
-          <div class="ring-light"></div>
-          <div class="ring-light"></div>
-          <div class="ring-light"></div>
-          <div class="ring-light"></div>
-          <div class="ring-light"></div>
-          <div class="ring-light"></div>
-          <div class="ring-light"></div>
-          <div class="ring-light"></div>
-          <div class="ring-light"></div>
-          <div class="ring-light"></div>
-          <div class="ring-light"></div>
-          ......<</
-        </div>
-
-        <!-- SVG Колесо (вращается ТОЛЬКО этот элемент) -->
-        <svg class="wheel-svg" id="wheel" viewBox="0 0 420 420" style="transform-origin: 210px 210px;">
-          <defs>
-            <clipPath id="wheelClip">
-              <circle cx="210" cy="210" r="200"/>
-            </clipPath>
-            <linearGradient id="centerGrad" x1="165" y1="165" x2="255" y2="255">
-              <stop stop-color="#7c5cff"/>
-              <stop offset="1" stop-color="#a855f7"/>
-            </linearGradient>
-          </defs>
-          
-          <!-- Сектора колеса -->
-          <g clip-path="url(#wheelClip)">
-            <!-- Сектор 1: Пусто (серый) - верх-право -->
-            <path d="M210,210 L210,10 A200,200 0 0,1 351.4,68.6 Z" fill="#4b5563" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
-            <!-- Сектор 2: 50 (зелёный) - право-верх -->
-            <path d="M210,210 L351.4,68.6 A200,200 0 0,1 410,210 Z" fill="#10b981" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
-            <!-- Сектор 3: 100 (синий) - право-низ -->
-            <path d="M210,210 L410,210 A200,200 0 0,1 351.4,351.4 Z" fill="#3b82f6" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
-            <!-- Сектор 4: 500 (оранжевый) - низ-право -->
-            <path d="M210,210 L351.4,351.4 A200,200 0 0,1 210,410 Z" fill="#f59e0b" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
-            <!-- Сектор 5: Пусто (серый) - низ-лево -->
-            <path d="M210,210 L210,410 A200,200 0 0,1 68.6,351.4 Z" fill="#4b5563" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
-            <!-- Сектор 6: 50 (зелёный) - лево-низ -->
-            <path d="M210,210 L68.6,351.4 A200,200 0 0,1 10,210 Z" fill="#10b981" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
-            <!-- Сектор 7: 100 (синий) - лево-верх -->
-            <path d="M210,210 L10,210 A200,200 0 0,1 68.6,68.6 Z" fill="#3b82f6" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
-            <!-- Сектор 8: 7.7M ДЖЕКПОТ (красный) - верх-лево -->
-            <path d="M210,210 L68.6,68.6 A200,200 0 0,1 210,10 Z" fill="#dc2626" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
-          </g>
-
-          <!-- Иконки и текст по центру каждого сектора (точно рассчитанные позиции) -->
-          <!-- Сектор 1: Пусто (угол -67.5°, радиус 140) -->
-          <g transform="translate(263.6, 80.7) rotate(22.5)">
-            <text x="0" y="-8" text-anchor="middle" dominant-baseline="central" fill="white" font-size="28" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.5))">😢</text>
-            <text x="0" y="18" text-anchor="middle" dominant-baseline="central" fill="white" font-size="14" font-weight="800" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.5))">Пусто</text>
-          </g>
-
-          <!-- Сектор 2: 50 (угол -22.5°) -->
-          <g transform="translate(339.3, 156.4) rotate(67.5)">
-            <text x="0" y="-8" text-anchor="middle" dominant-baseline="central" fill="white" font-size="28" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.5))">🎁</text>
-            <text x="0" y="18" text-anchor="middle" dominant-baseline="central" fill="white" font-size="16" font-weight="800" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.5))">50</text>
-          </g>
-
-          <!-- Сектор 3: 100 (угол 22.5°) -->
-          <g transform="translate(339.3, 263.6) rotate(112.5)">
-            <text x="0" y="-8" text-anchor="middle" dominant-baseline="central" fill="white" font-size="28" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.5))">💎</text>
-            <text x="0" y="18" text-anchor="middle" dominant-baseline="central" fill="white" font-size="16" font-weight="800" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.5))">100</text>
-          </g>
-
-          <!-- Сектор 4: 500 (угол 67.5°) -->
-          <g transform="translate(263.6, 339.3) rotate(157.5)">
-            <text x="0" y="-8" text-anchor="middle" dominant-baseline="central" fill="white" font-size="28" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.5))">🔥</text>
-            <text x="0" y="18" text-anchor="middle" dominant-baseline="central" fill="white" font-size="16" font-weight="800" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.5))">500</text>
-          </g>
-
-          <!-- Сектор 5: Пусто (угол 112.5°) -->
-          <g transform="translate(156.4, 339.3) rotate(202.5)">
-            <text x="0" y="-8" text-anchor="middle" dominant-baseline="central" fill="white" font-size="28" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.5))">😢</text>
-            <text x="0" y="18" text-anchor="middle" dominant-baseline="central" fill="white" font-size="14" font-weight="800" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.5))">Пусто</text>
-          </g>
-
-          <!-- Сектор 6: 50 (угол 157.5°) -->
-          <g transform="translate(80.7, 263.6) rotate(247.5)">
-            <text x="0" y="-8" text-anchor="middle" dominant-baseline="central" fill="white" font-size="28" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.5))">🎁</text>
-            <text x="0" y="18" text-anchor="middle" dominant-baseline="central" fill="white" font-size="16" font-weight="800" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.5))">50</text>
-          </g>
-
-          <!-- Сектор 7: 100 (угол 202.5°) -->
-          <g transform="translate(80.7, 156.4) rotate(292.5)">
-            <text x="0" y="-8" text-anchor="middle" dominant-baseline="central" fill="white" font-size="28" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.5))">💎</text>
-            <text x="0" y="18" text-anchor="middle" dominant-baseline="central" fill="white" font-size="16" font-weight="800" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.5))">100</text>
-          </g>
-
-          <!-- Сектор 8: 7.7M ДЖЕКПОТ (угол 247.5°) -->
-          <g transform="translate(156.4, 80.7) rotate(337.5)">
-            <text x="0" y="-8" text-anchor="middle" dominant-baseline="central" fill="#fbbf24" font-size="28" filter="drop-shadow(0 0 10px rgba(255,215,0,0.8))">👑</text>
-            <text x="0" y="18" text-anchor="middle" dominant-baseline="central" fill="#fbbf24" font-size="14" font-weight="800" filter="drop-shadow(0 0 10px rgba(255,215,0,0.8))">7.7M</text>
-          </g>
-
-          <!-- Центральный круг SPIN -->
-          <circle cx="210" cy="210" r="45" fill="url(#centerGrad)" stroke="rgba(255,255,255,0.3)" stroke-width="3"/>
-          <circle cx="210" cy="210" r="45" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="2"/>
-          <text x="210" y="210" text-anchor="middle" dominant-baseline="central" fill="white" font-size="14" font-weight="900" letter-spacing="2">SPIN</text>
-        </svg>
       </div>
 
-      <!-- Кнопка крутить (НЕ внутри wheel-wrapper, НЕ вращается) -->
-      <button class="btn-spin ready" id="btn-spin" onclick="spinWheel()">
+      <!-- Кнопка крутить -->
+      <button class="btn-spin ready" id="btn-spin" onclick="spinRoulette()">
         <span class="btn-shine"></span>
-        <span class="btn-text">🎯 КРУТИТЬ КОЛЕСО</span>
+        <span class="btn-text">🎯 КРУТИТЬ РУЛЕТКУ</span>
       </button>
 
-      <!-- Таймер (НЕ вращается) -->
+      <!-- Таймер -->
       <div class="timer-section" id="timer-section" style="display: none;">
-        <div class="timer-icon">⏳</div>
+        <div class="timer-icon"></div>
         <div class="timer-label">Следующее вращение через:</div>
         <div class="timer-display" id="timer-display">00:00:00</div>
       </div>
 
-      <!-- Сообщение о выигрыше (overlay, НЕ вращается) -->
+      <!-- Сообщение о выигрыше -->
       <div class="win-overlay" id="win-message" style="display: none;">
         <div class="confetti-container" id="confetti"></div>
         <div class="win-card">
@@ -175,7 +67,7 @@
         </div>
       </div>
 
-      <!-- Сообщение о проигрыше (overlay, НЕ вращается) -->
+      <!-- Сообщение о проигрыше -->
       <div class="lose-overlay" id="lose-message" style="display: none;">
         <div class="lose-card">
           <div class="lose-icon">😔</div>
@@ -195,21 +87,67 @@
 
     let currentUser = null;
     let isSpinning = false;
-    let currentRotation = 0;
 
+    // Призы и их шансы
     const prizes = [
-      { amount: 0, chance: 40, label: 'Пусто', icon: '😢' },
-      { amount: 50, chance: 30, label: '50 бонусов', icon: '' },
-      { amount: 100, chance: 20, label: '100 бонусов', icon: '' },
-      { amount: 500, chance: 9.997, label: '500 бонусов', icon: '' },
-      { amount: 7777777, chance: 0.003, label: '7,777,777 бонусов', icon: '' }
+      { amount: 0, chance: 40, label: 'Пусто', icon: '😢', color: '#4b5563' },
+      { amount: 50, chance: 30, label: '50', icon: '🎁', color: '#10b981' },
+      { amount: 100, chance: 20, label: '100', icon: '💎', color: '#3b82f6' },
+      { amount: 500, chance: 9.997, label: '500', icon: '🔥', color: '#f59e0b' },
+      { amount: 7777777, chance: 0.003, label: '7.7M', icon: '👑', color: '#dc2626' }
     ];
+
+    // Размеры сектора
+    const SECTOR_WIDTH = 140; // ширина одного сектора в пикселях
+    const TOTAL_SECTORS = 60; // всего секторов в ленте
+    const WINNER_INDEX = 50; // индекс выигрышного сектора (ближе к концу)
 
     async function checkAuth() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) { window.location.href = 'login.html'; return; }
       currentUser = user;
+      generateStrip(); // Генерируем ленту при загрузке
       checkSpinAvailability();
+    }
+
+    // Генерация ленты секторов
+    function generateStrip() {
+      const strip = document.getElementById('roulette-strip');
+      strip.innerHTML = '';
+      
+      for (let i = 0; i < TOTAL_SECTORS; i++) {
+        const prize = getRandomPrizeForStrip();
+        const sector = document.createElement('div');
+        sector.className = 'roulette-sector';
+        sector.style.backgroundColor = prize.color;
+        sector.innerHTML = `
+          <div class="sector-icon">${prize.icon}</div>
+          <div class="sector-label">${prize.label}</div>
+        `;
+        strip.appendChild(sector);
+      }
+    }
+
+    // Рандомный приз для заполнения ленты (по шансам)
+    function getRandomPrizeForStrip() {
+      const random = Math.random() * 100;
+      let cumulative = 0;
+      for (const prize of prizes) {
+        cumulative += prize.chance;
+        if (random < cumulative) return prize;
+      }
+      return prizes[0];
+    }
+
+    // Выбор выигрышного приза
+    function getWinningPrize() {
+      const random = Math.random() * 100;
+      let cumulative = 0;
+      for (const prize of prizes) {
+        cumulative += prize.chance;
+        if (random < cumulative) return prize;
+      }
+      return prizes[prizes.length - 1];
     }
 
     async function checkSpinAvailability() {
@@ -254,16 +192,6 @@
       }, 1000);
     }
 
-    function getRandomPrize() {
-      const random = Math.random() * 100;
-      let cumulative = 0;
-      for (const prize of prizes) {
-        cumulative += prize.chance;
-        if (random < cumulative) return prize;
-      }
-      return prizes[prizes.length - 1];
-    }
-
     function createConfetti() {
       const container = document.getElementById('confetti');
       container.innerHTML = '';
@@ -279,39 +207,57 @@
       }
     }
 
-    window.spinWheel = async function() {
+    window.spinRoulette = async function() {
       if (isSpinning) return;
       isSpinning = true;
 
-      const wheel = document.getElementById('wheel');
+      const strip = document.getElementById('roulette-strip');
       const btnSpin = document.getElementById('btn-spin');
       
-      // Убираем класс ready при начале вращения
       btnSpin.classList.remove('ready');
       btnSpin.disabled = true;
       btnSpin.querySelector('.btn-text').textContent = '🎡 КРУТИМ...';
 
-      const wonPrize = getRandomPrize();
+      // Выбираем выигрышный приз
+      const wonPrize = getWinningPrize();
+
+      // Перегенерируем ленту, чтобы выигрышный сектор был на позиции WINNER_INDEX
+      generateStrip();
       
-      // Определяем индекс сектора (0-7)
-      let segmentIndex;
-      if (wonPrize.amount === 0) segmentIndex = Math.random() < 0.5 ? 0 : 4;
-      else if (wonPrize.amount === 50) segmentIndex = Math.random() < 0.5 ? 1 : 5;
-      else if (wonPrize.amount === 100) segmentIndex = Math.random() < 0.5 ? 2 : 6;
-      else if (wonPrize.amount === 500) segmentIndex = 3;
-      else if (wonPrize.amount === 7777777) segmentIndex = 7;
+      // Заменяем сектор на выигрышной позиции
+      const sectors = strip.children;
+      const winnerSector = sectors[WINNER_INDEX];
+      winnerSector.style.backgroundColor = wonPrize.color;
+      winnerSector.innerHTML = `
+        <div class="sector-icon">${wonPrize.icon}</div>
+        <div class="sector-label">${wonPrize.label}</div>
+      `;
 
-      // Вычисляем угол остановки
-      // Сектор 0 начинается с -90deg (верх), каждый сектор = 45deg
-      const segmentAngle = 45;
-      const targetAngle = -90 - (segmentIndex * segmentAngle) - (segmentAngle / 2);
-      const spins = 5 + Math.random() * 3;
-      const rotation = spins * 360 + (targetAngle - (currentRotation % 360));
-      currentRotation += rotation;
+      // Вычисляем смещение для остановки на выигрышном секторе
+      // Центр viewport = ширина viewport / 2
+      const viewport = document.querySelector('.roulette-viewport');
+      const viewportWidth = viewport.offsetWidth;
+      const centerOffset = viewportWidth / 2;
+      
+      // Позиция выигрышного сектора (его центр)
+      const winnerCenter = (WINNER_INDEX * SECTOR_WIDTH) + (SECTOR_WIDTH / 2);
+      
+      // Добавляем случайное смещение внутри сектора (±40% ширины)
+      const randomOffset = (Math.random() - 0.5) * SECTOR_WIDTH * 0.8;
+      
+      // Итоговое смещение ленты
+      const targetTranslate = -(winnerCenter - centerOffset + randomOffset);
 
-      // Вращаем ТОЛЬКО SVG элемент #wheel
-      wheel.style.transition = 'transform 5s cubic-bezier(0.17, 0.67, 0.12, 0.99)';
-      wheel.style.transform = `rotate(${currentRotation}deg)`;
+      // Сбрасываем позицию
+      strip.style.transition = 'none';
+      strip.style.transform = 'translateX(0)';
+      
+      // Принудительный reflow
+      strip.offsetHeight;
+
+      // Запускаем анимацию
+      strip.style.transition = 'transform 6s cubic-bezier(0.15, 0.85, 0.25, 1)';
+      strip.style.transform = `translateX(${targetTranslate}px)`;
 
       setTimeout(async () => {
         if (wonPrize.amount > 0) {
@@ -332,11 +278,11 @@
         
         isSpinning = false;
         btnSpin.disabled = false;
-        btnSpin.querySelector('.btn-text').textContent = '🎯 КРУТИТЬ КОЛЕСО';
+        btnSpin.querySelector('.btn-text').textContent = '🎯 КРУТИТЬ РУЛЕТКУ';
         btnSpin.style.display = 'none';
         document.getElementById('timer-section').style.display = 'block';
         startTimer(24 * 60 * 60 * 1000);
-      }, 5000);
+      }, 6000);
     };
 
     window.closeWinMessage = function() {
