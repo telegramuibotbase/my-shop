@@ -166,3 +166,48 @@ main {
   margin-top: 80px;
   padding: 30px;
 }
+
+/* Страница профиля */
+.profile-page {
+  display: flex;
+  justify-content: center;
+  padding-top: 50px;
+}
+
+.profile-card {
+  background: #1a1a24;
+  padding: 40px;
+  border-radius: 15px;
+  text-align: center;
+  width: 400px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.big-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  margin-bottom: 20px;
+  border: 3px solid #7c5cff;
+  object-fit: cover;
+}
+
+.profile-card h2 {
+  margin-bottom: 15px;
+  font-size: 24px;
+}
+
+.provider-badge {
+  display: inline-block;
+  background: #5865F2;
+  padding: 6px 15px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.email {
+  color: #888;
+  margin-top: 15px;
+  font-size: 14px;
+}
