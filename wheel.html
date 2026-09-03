@@ -17,7 +17,7 @@
   <main class="wheel-page">
     <div class="wheel-container">
       <div class="wheel-header">
-        <div class="wheel-badge"> DAILY SPIN</div>
+        <div class="wheel-badge">🎰 DAILY SPIN</div>
         <h1 class="wheel-title">Рулетка Бонусов</h1>
         <p class="wheel-subtitle">Испытай удачу и выиграй до <span class="highlight">7,777,777</span> бонусов!</p>
       </div>
@@ -97,26 +97,30 @@
       { amount: 7777777, chance: 0.003, label: '7.7M', icon: '👑', color: '#dc2626' }
     ];
 
-    // Размеры сектора
-    const SECTOR_WIDTH = 140; // ширина одного сектора в пикселях
-    const TOTAL_SECTORS = 60; // всего секторов в ленте
-    const WINNER_INDEX = 50; // индекс выигрышного сектора (ближе к концу)
+    const TOTAL_SECTORS = 60;
+    const WINNER_INDEX = 50;
 
     async function checkAuth() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) { window.location.href = 'login.html'; return; }
       currentUser = user;
-      generateStrip(); // Генерируем ленту при загрузке
+      generateStrip(null); // Генерируем ленту при загрузке (без выигрышного)
       checkSpinAvailability();
     }
 
     // Генерация ленты секторов
-    function generateStrip() {
+    // Если wonPrize передан — ставим его на позицию WINNER_INDEX
+    function generateStrip(wonPrize) {
       const strip = document.getElementById('roulette-strip');
       strip.innerHTML = '';
       
       for (let i = 0; i < TOTAL_SECTORS; i++) {
-        const prize = getRandomPrizeForStrip();
+        let prize;
+        if (i === WINNER_INDEX && wonPrize) {
+          prize = wonPrize;
+        } else {
+          prize = getRandomPrizeForStrip();
+        }
         const sector = document.createElement('div');
         sector.className = 'roulette-sector';
         sector.style.backgroundColor = prize.color;
@@ -218,47 +222,46 @@
       btnSpin.disabled = true;
       btnSpin.querySelector('.btn-text').textContent = '🎡 КРУТИМ...';
 
-      // Выбираем выигрышный приз
+      // 1. Сначала выбираем выигрышный приз
       const wonPrize = getWinningPrize();
 
-      // Перегенерируем ленту, чтобы выигрышный сектор был на позиции WINNER_INDEX
-      generateStrip();
+      // 2. Генерируем ленту СРАЗУ с выигрышным сектором на позиции WINNER_INDEX
+      generateStrip(wonPrize);
       
-      // Заменяем сектор на выигрышной позиции
-      const sectors = strip.children;
-      const winnerSector = sectors[WINNER_INDEX];
-      winnerSector.style.backgroundColor = wonPrize.color;
-      winnerSector.innerHTML = `
-        <div class="sector-icon">${wonPrize.icon}</div>
-        <div class="sector-label">${wonPrize.label}</div>
-      `;
+      // 3. Ждём, пока браузер отрендерит новую ленту
+      await new Promise(resolve => requestAnimationFrame(resolve));
+      await new Promise(resolve => requestAnimationFrame(resolve));
 
-      // Вычисляем смещение для остановки на выигрышном секторе
-      // Центр viewport = ширина viewport / 2
+      // 4. Получаем РЕАЛЬНУЮ ширину сектора из DOM (а не хардкод)
+      const firstSector = strip.children[0];
+      const SECTOR_WIDTH = firstSector.offsetWidth;
+      
+      // 5. Вычисляем смещение
       const viewport = document.querySelector('.roulette-viewport');
       const viewportWidth = viewport.offsetWidth;
       const centerOffset = viewportWidth / 2;
       
-      // Позиция выигрышного сектора (его центр)
+      // Центр выигрышного сектора
       const winnerCenter = (WINNER_INDEX * SECTOR_WIDTH) + (SECTOR_WIDTH / 2);
       
-      // Добавляем случайное смещение внутри сектора (±40% ширины)
-      const randomOffset = (Math.random() - 0.5) * SECTOR_WIDTH * 0.8;
+      // Маленькое случайное смещение внутри сектора (±20% вместо ±40%)
+      const randomOffset = (Math.random() - 0.5) * SECTOR_WIDTH * 0.4;
       
       // Итоговое смещение ленты
       const targetTranslate = -(winnerCenter - centerOffset + randomOffset);
 
-      // Сбрасываем позицию
+      // 6. Сбрасываем позицию ленты в начало
       strip.style.transition = 'none';
       strip.style.transform = 'translateX(0)';
       
       // Принудительный reflow
-      strip.offsetHeight;
+      void strip.offsetHeight;
 
-      // Запускаем анимацию
+      // 7. Запускаем анимацию
       strip.style.transition = 'transform 6s cubic-bezier(0.15, 0.85, 0.25, 1)';
       strip.style.transform = `translateX(${targetTranslate}px)`;
 
+      // 8. Ждём окончания анимации
       setTimeout(async () => {
         if (wonPrize.amount > 0) {
           const { data: profile } = await supabase.from('profiles').select('bonus_balance').eq('id', currentUser.id).single();
@@ -266,8 +269,8 @@
           await supabase.from('profiles').update({ bonus_balance: newBalance, last_spin_at: new Date().toISOString() }).eq('id', currentUser.id);
 
           document.getElementById('win-icon').textContent = wonPrize.icon;
-          document.getElementById('win-title').textContent = wonPrize.amount === 7777777 ? '🎰 ДЖЕКПОТ! 🎰' : 'ПОЗДРАВЛЯЕМ!';
-          document.getElementById('win-amount').textContent = `+${wonPrize.amount.toLocaleString('ru-RU')} 🎁`;
+          document.getElementById('win-title').textContent = wonPrize.amount === 7777777 ? ' ДЖЕКПОТ! 🎰' : 'ПОЗДРАВЛЯЕМ!';
+          document.getElementById('win-amount').textContent = `+${wonPrize.amount.toLocaleString('ru-RU')} `;
           document.getElementById('win-message').style.display = 'flex';
           
           if (wonPrize.amount >= 500) createConfetti();
