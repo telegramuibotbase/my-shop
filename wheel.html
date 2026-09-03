@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Колесо Бонусов</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <a href="index.html" class="logo">← Назад</a>
+  </header>
+
+  <main class="wheel-page">
+    <div class="wheel-container">
+      <h1 class="wheel-title">🎡 Колесо Бонусов</h1>
+      <p class="wheel-subtitle">Крути колесо и получай бонусы! Можно крутить раз в день.</p>
+      
+      <!-- Колесо -->
+      <div class="wheel-wrapper">
+        <div class="wheel-pointer">▼</div>
+        <div class="wheel" id="wheel">
+          <div class="wheel-segment segment-1">
+            <span class="segment-text">50,000 🎁</span>
+          </div>
+          <div class="wheel-segment segment-2">
+            <span class="segment-text">50,000 🎁</span>
+          </div>
+          <div class="wheel-segment segment-3">
+            <span class="segment-text">50,000 🎁</span>
+          </div>
+          <div class="wheel-segment segment-4">
+            <span class="segment-text">50,000 🎁</span>
+          </div>
+          <div class="wheel-segment segment-5">
+            <span class="segment-text">50,000 </span>
+          </div>
+          <div class="wheel-segment segment-6">
+            <span class="segment-text">50,000 🎁</span>
+          </div>
+          <div class="wheel-segment segment-7">
+            <span class="segment-text">50,000 🎁</span>
+          </div>
+          <div class="wheel-segment segment-8">
+            <span class="segment-text">50,000 🎁</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Кнопка крутить -->
+      <button class="btn-spin" id="btn-spin" onclick="spinWheel()">
+        🎯 КРУТИТЬ
+      </button>
+
+      <!-- Таймер -->
+      <div class="timer-section" id="timer-section" style="display: none;">
+        <div class="timer-label">Следующее вращение через:</div>
+        <div class="timer-display" id="timer-display">00:00:00</div>
+      </div>
+
+      <!-- Сообщение о выигрыше -->
+      <div class="win-message" id="win-message" style="display: none;">
+        <div class="win-icon">🎉</div>
+        <div class="win-text">Поздравляем!</div>
+        <div class="win-amount">+50,000 🎁</div>
+        <button class="btn-claim" onclick="closeWinMessage()">Забрать</button>
+      </div>
+    </div>
+  </main>
+
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+    import { supabaseConfig } from './supabase-config.js';
+
+    const supabase = createClient(supabaseConfig.url, supabaseConfig.anonKey);
+
+    let currentUser = null;
+    let isSpinning = false;
+    let currentRotation = 0;
+
+    // Проверка авторизации
+    async function checkAuth() {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        window.location.href = 'login.html';
+        return;
+      }
+      currentUser = user;
+      checkSpinAvailability();
+    }
+
+    // Проверка, можно ли крутить
+    async function checkSpinAvailability() {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('last_spin_at')
+        .eq('id', currentUser.id)
+        .single();
+
+      if (!profile || !profile.last_spin_at) {
+        // Можно крутить
+        document.getElementById('btn-spin').style.display = 'block';
+        document.getElementById('timer-section').style.display = 'none';
+        return;
+      }
+
+      const lastSpin = new Date(profile.last_spin_at);
+      const now = new Date();
+      const diff = now - lastSpin;
+      const hours24 = 24 * 60 * 60 * 1000;
+
+      if (diff < hours24) {
+        // Нельзя крутить, показываем таймер
+        document.getElementById('btn-spin').style.display = 'none';
+        document.getElementById('timer-section').style.display = 'block';
+        startTimer(hours24 - diff);
+      } else {
+        // Можно крутить
+        document.getElementById('btn-spin').style.display = 'block';
+        document.getElementById('timer-section').style.display = 'none';
+      }
+    }
+
+    // Таймер обратного отсчёта
+    function startTimer(remainingMs) {
+      const timerDisplay = document.getElementById('timer-display');
+      
+      const interval = setInterval(() => {
+        remainingMs -= 1000;
+        
+        if (remainingMs <= 0) {
+          clearInterval(interval);
+          document.getElementById('btn-spin').style.display = 'block';
+          document.getElementById('timer-section').style.display = 'none';
+          return;
+        }
+
+        const hours = Math.floor(remainingMs / (1000 * 60 * 60));
+        const minutes = Math.floor((remainingMs % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((remainingMs % (1000 * 60)) / 1000);
+
+        timerDisplay.textContent = 
+          `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+      }, 1000);
+    }
+
+    // Вращение колеса
+    window.spinWheel = async function() {
+      if (isSpinning) return;
+      isSpinning = true;
+
+      const wheel = document.getElementById('wheel');
+      const btnSpin = document.getElementById('btn-spin');
+      
+      btnSpin.disabled = true;
+      btnSpin.textContent = '🎡 Крутим...';
+
+      // Случайный угол (минимум 5 полных оборотов + случайный сектор)
+      const spins = 5 + Math.random() * 3;
+      const rotation = spins * 360;
+      currentRotation += rotation;
+
+      // Анимация вращения
+      wheel.style.transition = 'transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99)';
+      wheel.style.transform = `rotate(${currentRotation}deg)`;
+
+      // Ждём окончания анимации
+      setTimeout(async () => {
+        // Начисляем бонусы
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('bonus_balance')
+          .eq('id', currentUser.id)
+          .single();
+
+        const newBalance = (profile?.bonus_balance || 0) + 50000;
+
+        // Обновляем баланс и время последнего спина
+        await supabase
+          .from('profiles')
+          .update({
+            bonus_balance: newBalance,
+            last_spin_at: new Date().toISOString()
+          })
+          .eq('id', currentUser.id);
+
+        // Показываем сообщение о выигрыше
+        document.getElementById('win-message').style.display = 'block';
+        
+        isSpinning = false;
+        btnSpin.disabled = false;
+        btnSpin.textContent = '🎯 КРУТИТЬ';
+        
+        // Скрываем кнопку и показываем таймер
+        btnSpin.style.display = 'none';
+        document.getElementById('timer-section').style.display = 'block';
+        startTimer(24 * 60 * 60 * 1000);
+      }, 4000);
+    };
+
+    // Закрытие сообщения о выигрыше
+    window.closeWinMessage = function() {
+      document.getElementById('win-message').style.display = 'none';
+    };
+
+    checkAuth();
+  </script>
+</body>
+</html>
