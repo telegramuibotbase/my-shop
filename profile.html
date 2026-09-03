@@ -26,7 +26,7 @@
       
       <div class="bonus-calm-section">
         <div class="bonus-calm-card">
-          <div class="bonus-calm-icon">🎁</div>
+          <div class="bonus-calm-icon"></div>
           <div class="bonus-calm-label" data-i18n="bonusBalance">Бонусный баланс</div>
           <div class="bonus-calm-amount" id="profile-bonus-balance">0 ₽</div>
           <button class="btn-bonus-calm" onclick="alert('Бонусы начисляются за покупки и активность!')">
@@ -57,13 +57,82 @@
         </div>
       </div>
       
-      <div class="section-card clickable" onclick="openSettingsModal()">
+      <!-- НАСТРОЙКИ ПРЯМО НА СТРАНИЦЕ -->
+      <div class="section-card settings-section-inline" id="settings-section">
         <div class="section-header">
           <h3>⚙️ Настройки</h3>
-          <span class="section-arrow">→</span>
         </div>
-        <div class="section-content">
-          <p>Тема, язык, валюта, привязка аккаунтов</p>
+        
+        <!-- Безопасность -->
+        <div class="settings-block">
+          <h4 class="settings-block-title">🔒 Безопасность</h4>
+          
+          <div class="setting-row">
+            <div class="setting-info">
+              <div class="setting-label" data-i18n="email">Почта</div>
+              <div class="setting-value" id="current-email">Не привязана</div>
+            </div>
+            <button class="btn-setting" onclick="openEmailModal()">
+              <span id="email-btn-text">Привязать</span>
+            </button>
+          </div>
+          
+          <div class="setting-row">
+            <div class="setting-info">
+              <div class="setting-label">Telegram</div>
+              <div class="setting-value" id="current-telegram">Не привязан</div>
+            </div>
+            <button class="btn-setting" onclick="openTelegramModal()">
+              <span id="telegram-btn-text">Привязать</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Внешний вид -->
+        <div class="settings-block">
+          <h4 class="settings-block-title" data-i18n="appearance">🎨 Внешний вид</h4>
+          
+          <div class="setting-row">
+            <div class="setting-info">
+              <div class="setting-label" data-i18n="theme">Тема</div>
+            </div>
+            <div class="toggle-group">
+              <button class="toggle-btn active" id="theme-dark" onclick="setTheme('dark')">🌙 Тёмная</button>
+              <button class="toggle-btn" id="theme-light" onclick="setTheme('light')">☀️ Светлая</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Язык -->
+        <div class="settings-block">
+          <h4 class="settings-block-title" data-i18n="language">🌐 Язык</h4>
+          
+          <div class="setting-row">
+            <div class="setting-info">
+              <div class="setting-label" data-i18n="selectLanguage">Выберите язык</div>
+            </div>
+            <div class="toggle-group">
+              <button class="toggle-btn active" id="lang-ru" onclick="setLanguage('ru')">🇷🇺 Русский</button>
+              <button class="toggle-btn" id="lang-en" onclick="setLanguage('en')">🇬🇧 English</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Валюта -->
+        <div class="settings-block">
+          <h4 class="settings-block-title" data-i18n="currency">💱 Валюта</h4>
+          
+          <div class="setting-row">
+            <div class="setting-info">
+              <div class="setting-label" data-i18n="selectCurrency">Отображение цен</div>
+            </div>
+            <select class="currency-select" id="currency-select" onchange="setCurrency(this.value)">
+              <option value="RUB">🇷🇺 RUB (Рубль)</option>
+              <option value="USD">🇺 USD (Доллар)</option>
+              <option value="EUR">🇪 EUR (Евро)</option>
+              <option value="BYN">🇧🇾 BYN (Бел. рубль)</option>
+            </select>
+          </div>
         </div>
       </div>
       
@@ -128,95 +197,7 @@
       </div>
       <div class="modal-footer">
         <button class="btn-cancel" onclick="closeAddFriendModal()">Отмена</button>
-        <button class="btn-save" onclick="addFriend()">➕ Добавить</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Модальное окно НАСТРОЕК -->
-  <div class="modal" id="settingsModal">
-    <div class="modal-content settings-modal">
-      <div class="modal-header">
-        <h3>⚙️ Настройки</h3>
-        <button class="modal-close" onclick="closeSettingsModal()">×</button>
-      </div>
-      <div class="modal-body settings-body">
-        
-        <!-- Безопасность -->
-        <div class="settings-section">
-          <h4 class="settings-section-title"> Безопасность</h4>
-          
-          <div class="setting-item">
-            <div class="setting-info">
-              <div class="setting-label" data-i18n="email">Почта</div>
-              <div class="setting-value" id="current-email">Не привязана</div>
-            </div>
-            <button class="btn-setting" onclick="openEmailModal()">
-              <span id="email-btn-text">Привязать</span>
-            </button>
-          </div>
-          
-          <div class="setting-item">
-            <div class="setting-info">
-              <div class="setting-label">Telegram</div>
-              <div class="setting-value" id="current-telegram">Не привязан</div>
-            </div>
-            <button class="btn-setting" onclick="openTelegramModal()">
-              <span id="telegram-btn-text">Привязать</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- Внешний вид -->
-        <div class="settings-section">
-          <h4 class="settings-section-title" data-i18n="appearance">🎨 Внешний вид</h4>
-          
-          <div class="setting-item">
-            <div class="setting-info">
-              <div class="setting-label" data-i18n="theme">Тема</div>
-            </div>
-            <div class="theme-toggle">
-              <button class="theme-btn active" id="theme-dark" onclick="setTheme('dark')">🌙 Тёмная</button>
-              <button class="theme-btn" id="theme-light" onclick="setTheme('light')">️ Светлая</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Язык -->
-        <div class="settings-section">
-          <h4 class="settings-section-title" data-i18n="language">🌐 Язык</h4>
-          
-          <div class="setting-item">
-            <div class="setting-info">
-              <div class="setting-label" data-i18n="selectLanguage">Выберите язык</div>
-            </div>
-            <div class="language-toggle">
-              <button class="lang-btn active" id="lang-ru" onclick="setLanguage('ru')">🇷🇺 Русский</button>
-              <button class="lang-btn" id="lang-en" onclick="setLanguage('en')">🇬🇧 English</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Валюта -->
-        <div class="settings-section">
-          <h4 class="settings-section-title" data-i18n="currency">💱 Валюта</h4>
-          
-          <div class="setting-item">
-            <div class="setting-info">
-              <div class="setting-label" data-i18n="selectCurrency">Отображение цен</div>
-            </div>
-            <select class="currency-select" id="currency-select" onchange="setCurrency(this.value)">
-              <option value="RUB">🇷🇺 RUB (Рубль)</option>
-              <option value="USD">🇺🇸 USD (Доллар)</option>
-              <option value="EUR">🇪🇺 EUR (Евро)</option>
-              <option value="BYN">🇧🇾 BYN (Бел. рубль)</option>
-            </select>
-          </div>
-        </div>
-
-      </div>
-      <div class="modal-footer">
-        <button class="btn-cancel" onclick="closeSettingsModal()">Закрыть</button>
+        <button class="btn-save" onclick="addFriend()"> Добавить</button>
       </div>
     </div>
   </div>
@@ -280,7 +261,7 @@
         email: 'Почта',
         appearance: '🎨 Внешний вид',
         theme: 'Тема',
-        language: '🌐 Язык',
+        language: ' Язык',
         selectLanguage: 'Выберите язык',
         currency: '💱 Валюта',
         selectCurrency: 'Отображение цен',
@@ -288,23 +269,8 @@
         notLinkedTg: 'Не привязан',
         link: 'Привязать',
         change: 'Изменить',
-        dark: '🌙 Тёмная',
-        light: '☀️ Светлая',
         noFriends: 'У вас пока нет друзей',
-        referralTitle: '🎁 Реферальная система',
-        referralDesc: 'Приглашайте друзей и получайте бонусы!',
-        referralNote: 'Скоро: начисление бонусов за каждого приглашённого друга',
-        settingsTitle: '⚙️ Настройки',
-        settingsDesc: 'Тема, язык, валюта, привязка аккаунтов',
-        supportTitle: '💬 Поддержка',
-        supportDesc: 'Нужна помощь? Свяжитесь с нами!',
-        friendsTitle: '👥 Друзья',
-        addFriend: '+ Добавить',
-        copy: '📋 Скопировать',
-        yourCode: 'Ваш код: ',
-        editProfile: '✏️ Редактировать профиль',
-        details: 'Подробнее',
-        back: '← Назад'
+        yourCode: 'Ваш код: '
       },
       en: {
         bonusBalance: 'Bonus Balance',
@@ -319,27 +285,12 @@
         notLinkedTg: 'Not linked',
         link: 'Link',
         change: 'Change',
-        dark: '🌙 Dark',
-        light: '☀️ Light',
         noFriends: 'You have no friends yet',
-        referralTitle: '🎁 Referral System',
-        referralDesc: 'Invite friends and earn bonuses!',
-        referralNote: 'Coming soon: bonuses for each invited friend',
-        settingsTitle: '⚙️ Settings',
-        settingsDesc: 'Theme, language, currency, account linking',
-        supportTitle: '💬 Support',
-        supportDesc: 'Need help? Contact us!',
-        friendsTitle: '👥 Friends',
-        addFriend: '+ Add',
-        copy: '📋 Copy',
-        yourCode: 'Your code: ',
-        editProfile: '️ Edit Profile',
-        details: 'Details',
-        back: '← Back'
+        yourCode: 'Your code: '
       }
     };
 
-    // ===== КУРСЫ ВАЛЮТ (относительно RUB) =====
+    // ===== КУРСЫ ВАЛЮТ =====
     const currencyRates = {
       RUB: { rate: 1, symbol: '₽', name: 'RUB' },
       USD: { rate: 0.011, symbol: '$', name: 'USD' },
@@ -354,17 +305,14 @@
       const lang = settings.lang || 'ru';
       const currency = settings.currency || 'RUB';
       
-      // Применяем тему
       document.body.classList.toggle('light-theme', theme === 'light');
       document.getElementById('theme-dark').classList.toggle('active', theme === 'dark');
       document.getElementById('theme-light').classList.toggle('active', theme === 'light');
       
-      // Применяем язык
       document.getElementById('lang-ru').classList.toggle('active', lang === 'ru');
       document.getElementById('lang-en').classList.toggle('active', lang === 'en');
       applyTranslations(lang);
       
-      // Применяем валюту
       document.getElementById('currency-select').value = currency;
     }
 
@@ -376,7 +324,6 @@
         if (t[key]) el.textContent = t[key];
       });
       
-      // Обновляем специфичные элементы
       const emailBtn = document.getElementById('email-btn-text');
       const telegramBtn = document.getElementById('telegram-btn-text');
       const currentEmail = document.getElementById('current-email');
@@ -425,15 +372,6 @@
     };
 
     // ===== МОДАЛЬНЫЕ ОКНА =====
-    window.openSettingsModal = function() {
-      loadSettings();
-      document.getElementById('settingsModal').classList.add('active');
-    };
-    
-    window.closeSettingsModal = function() {
-      document.getElementById('settingsModal').classList.remove('active');
-    };
-
     window.openEmailModal = function() {
       document.getElementById('emailModal').classList.add('active');
     };
@@ -451,7 +389,7 @@
     };
 
     // ===== СОХРАНЕНИЕ ПОЧТЫ =====
-    window.saveEmail = async function() {
+    window.saveEmail = function() {
       const email = document.getElementById('email-input').value.trim();
       
       if (!email || !email.includes('@')) {
@@ -459,12 +397,10 @@
         return;
       }
       
-      // Сохраняем в localStorage (привязка к Supabase требует подтверждения по почте)
       const settings = JSON.parse(localStorage.getItem('userSettings') || '{}');
       settings.email = email;
       localStorage.setItem('userSettings', JSON.stringify(settings));
       
-      // Обновляем отображение
       const currentEmail = document.getElementById('current-email');
       currentEmail.textContent = email;
       currentEmail.dataset.linked = 'true';
@@ -485,7 +421,6 @@
         return;
       }
       
-      // Добавляем @ если нет
       if (!username.startsWith('@')) {
         username = '@' + username;
       }
@@ -548,7 +483,6 @@
       document.getElementById('edit-name').value = name;
       document.getElementById('preview-avatar').src = avatar || 'https://via.placeholder.com/80';
       
-      // Загружаем привязанные данные
       const settings = JSON.parse(localStorage.getItem('userSettings') || '{}');
       
       if (userEmail) {
@@ -565,8 +499,17 @@
         document.getElementById('telegram-btn-text').textContent = translations[settings.lang || 'ru'].change;
       }
       
-      // Загружаем настройки
       loadSettings();
+      
+      // Автопрокрутка к настройкам если есть якорь
+      if (window.location.hash === '#settings') {
+        setTimeout(() => {
+          const settingsSection = document.getElementById('settings-section');
+          if (settingsSection) {
+            settingsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }, 500);
+      }
     }
     
     async function loadFriends() {
@@ -635,7 +578,6 @@
     
     document.getElementById('editModal').addEventListener('click', (e) => { if (e.target.id === 'editModal') closeEditModal(); });
     document.getElementById('addFriendModal').addEventListener('click', (e) => { if (e.target.id === 'addFriendModal') closeAddFriendModal(); });
-    document.getElementById('settingsModal').addEventListener('click', (e) => { if (e.target.id === 'settingsModal') closeSettingsModal(); });
     document.getElementById('emailModal').addEventListener('click', (e) => { if (e.target.id === 'emailModal') closeEmailModal(); });
     document.getElementById('telegramModal').addEventListener('click', (e) => { if (e.target.id === 'telegramModal') closeTelegramModal(); });
     
