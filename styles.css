@@ -206,7 +206,6 @@ header {
   font-size: 16px;
 }
 
-/* Вкладки категорий */
 .catalog-tabs {
   display: flex;
   justify-content: center;
@@ -243,14 +242,12 @@ header {
   box-shadow: 0 8px 25px rgba(124, 92, 255, 0.4);
 }
 
-/* Сетка товаров */
 .product-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 24px;
 }
 
-/* Карточка товара */
 .product-card {
   background: rgba(26, 26, 36, 0.6);
   backdrop-filter: blur(20px);
@@ -359,12 +356,7 @@ header {
   box-shadow: 0 8px 25px rgba(245, 158, 11, 0.5);
 }
 
-/* Скрытие товаров при фильтрации */
-.product-card.hidden {
-  display: none;
-}
-
-/* ================= ПРОФИЛЬ (сохранено) ================= */
+/* ================= ПРОФИЛЬ ================= */
 .profile-page {
   display: flex;
   justify-content: center;
@@ -473,37 +465,28 @@ header {
   transform: translateY(-2px);
 }
 
-.balances-container {
+/* Только бонусный баланс */
+.bonus-only-section {
   margin-bottom: 30px;
-}
-
-.balances-title {
-  font-size: 14px;
-  color: #888;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  margin-bottom: 20px;
-  font-weight: 600;
-}
-
-.balances-row {
   display: flex;
-  gap: 20px;
   justify-content: center;
 }
 
-.balance-card {
-  flex: 1;
-  max-width: 300px;
+.bonus-card {
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.15) 0%, rgba(245, 158, 11, 0.08) 100%);
+  border: 1px solid rgba(251, 191, 36, 0.3);
   border-radius: 24px;
-  padding: 28px 24px;
+  padding: 35px 30px;
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
   position: relative;
   overflow: hidden;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  cursor: default;
+  box-shadow: 0 8px 32px rgba(251, 191, 36, 0.15);
 }
 
-.balance-card::before {
+.bonus-card::before {
   content: '';
   position: absolute;
   top: -50%;
@@ -515,98 +498,64 @@ header {
   transition: opacity 0.4s ease;
 }
 
-.balance-card:hover::before { opacity: 1; }
-.balance-card:hover { transform: translateY(-5px); }
-
-.balance-main {
-  background: linear-gradient(135deg, rgba(124, 92, 255, 0.15) 0%, rgba(168, 85, 247, 0.08) 100%);
-  border: 1px solid rgba(124, 92, 255, 0.3);
-  box-shadow: 0 8px 32px rgba(124, 92, 255, 0.15);
+.bonus-card:hover::before {
+  opacity: 1;
 }
 
-.balance-main:hover {
-  border-color: rgba(124, 92, 255, 0.6);
-  box-shadow: 0 12px 40px rgba(124, 92, 255, 0.3);
-}
-
-.balance-bonus {
-  background: linear-gradient(135deg, rgba(251, 191, 36, 0.15) 0%, rgba(245, 158, 11, 0.08) 100%);
-  border: 1px solid rgba(251, 191, 36, 0.3);
-  box-shadow: 0 8px 32px rgba(251, 191, 36, 0.15);
-}
-
-.balance-bonus:hover {
+.bonus-card:hover {
+  transform: translateY(-5px);
   border-color: rgba(251, 191, 36, 0.6);
   box-shadow: 0 12px 40px rgba(251, 191, 36, 0.3);
 }
 
-.balance-icon { font-size: 32px; margin-bottom: 8px; }
+.bonus-icon {
+  font-size: 40px;
+  margin-bottom: 12px;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+}
 
-.balance-label {
-  font-size: 12px;
+.bonus-label {
+  font-size: 13px;
   color: #9ca3af;
   text-transform: uppercase;
-  letter-spacing: 1.5px;
-  margin-bottom: 12px;
+  letter-spacing: 2px;
+  margin-bottom: 15px;
   font-weight: 600;
 }
 
-.balance-amount {
-  font-size: 38px;
+.bonus-amount {
+  font-size: 42px;
   font-weight: 800;
-  margin-bottom: 18px;
+  margin-bottom: 20px;
   letter-spacing: -1px;
-}
-
-.balance-main .balance-amount {
-  background: linear-gradient(135deg, #a78bfa 0%, #7c5cff 50%, #c084fc 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.balance-bonus .balance-amount {
   background: linear-gradient(135deg, #fcd34d 0%, #fbbf24 50%, #f59e0b 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-.balance-action-btn {
-  width: 100%;
-  padding: 12px 20px;
+.btn-bonus-detail {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: white;
   border: none;
+  padding: 12px 24px;
   border-radius: 14px;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-}
-
-.btn-topup {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-  color: white;
-  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
-}
-
-.btn-topup:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.6);
-}
-
-.btn-bonus-info {
-  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-  color: white;
   box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+  width: 100%;
 }
 
-.btn-bonus-info:hover {
+.btn-bonus-detail:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(245, 158, 11, 0.6);
 }
 
+/* Секции профиля */
 .section-card {
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(124, 92, 255, 0.15);
@@ -635,7 +584,9 @@ header {
   line-height: 1.6;
 }
 
-.section-content p { margin-bottom: 10px; }
+.section-content p {
+  margin-bottom: 10px;
+}
 
 .section-note {
   font-size: 12px;
@@ -661,7 +612,10 @@ header {
   box-shadow: 0 4px 15px rgba(124, 92, 255, 0.4);
 }
 
-.friends-list { max-height: 300px; overflow-y: auto; }
+.friends-list {
+  max-height: 300px;
+  overflow-y: auto;
+}
 
 .empty-state {
   text-align: center;
@@ -681,7 +635,9 @@ header {
   transition: all 0.3s ease;
 }
 
-.friend-item:hover { background: rgba(255, 255, 255, 0.06); }
+.friend-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
 
 .friend-avatar {
   width: 40px;
@@ -691,7 +647,9 @@ header {
   border: 2px solid rgba(124, 92, 255, 0.3);
 }
 
-.friend-info { flex: 1; }
+.friend-info {
+  flex: 1;
+}
 
 .friend-name {
   font-size: 14px;
@@ -705,7 +663,10 @@ header {
   color: #7c5cff;
 }
 
-.friend-actions { display: flex; gap: 8px; }
+.friend-actions {
+  display: flex;
+  gap: 8px;
+}
 
 .btn-friend-action {
   background: rgba(124, 92, 255, 0.1);
@@ -839,9 +800,13 @@ header {
   color: white;
 }
 
-.modal-body { padding: 30px; }
+.modal-body {
+  padding: 30px;
+}
 
-.form-group { margin-bottom: 20px; }
+.form-group {
+  margin-bottom: 20px;
+}
 
 .form-group label {
   display: block;
@@ -869,7 +834,9 @@ header {
   box-shadow: 0 0 0 4px rgba(124, 92, 255, 0.1);
 }
 
-.form-input::placeholder { color: #555; }
+.form-input::placeholder {
+  color: #555;
+}
 
 .file-upload-wrapper {
   display: flex;
@@ -877,7 +844,9 @@ header {
   gap: 10px;
 }
 
-.file-input { display: none; }
+.file-input {
+  display: none;
+}
 
 .file-upload-btn {
   background: rgba(124, 92, 255, 0.1);
@@ -939,7 +908,9 @@ header {
   color: white;
 }
 
-.btn-cancel:hover { background: rgba(255, 255, 255, 0.2); }
+.btn-cancel:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
 
 .btn-save {
   background: linear-gradient(135deg, #7c5cff 0%, #a855f7 100%);
@@ -955,15 +926,16 @@ header {
 /* Адаптивность */
 @media (max-width: 600px) {
   header { padding: 15px 20px; }
+  
   .catalog-header h1 { font-size: 28px; }
   .catalog-tabs { gap: 8px; }
   .tab-btn { padding: 10px 16px; font-size: 14px; }
+  
   .profile-card { padding: 40px 25px; }
   .big-avatar { width: 110px; height: 110px; }
   .profile-name { font-size: 26px; }
-  .balances-row { flex-direction: column; align-items: center; }
-  .balance-card { max-width: 100%; }
-  .balance-amount { font-size: 32px; }
+  .bonus-amount { font-size: 32px; }
+  
   .friend-item { flex-direction: column; align-items: flex-start; }
   .friend-actions { width: 100%; justify-content: flex-end; }
 }
