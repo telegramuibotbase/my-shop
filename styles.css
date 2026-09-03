@@ -1351,3 +1351,180 @@ body.light-theme .auth-card p {
 .settings-modal::-webkit-scrollbar-thumb:hover {
   background: rgba(124, 92, 255, 0.5);
 }
+
+/* ===== НАСТРОЙКИ ПРЯМО НА СТРАНИЦЕ ===== */
+.settings-section-inline {
+  text-align: left;
+}
+
+.settings-block {
+  margin-bottom: 25px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.settings-block:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.settings-block-title {
+  font-size: 16px;
+  color: #fff;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+.setting-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.setting-info {
+  flex: 1;
+  min-width: 150px;
+}
+
+.setting-label {
+  font-size: 14px;
+  color: #9ca3af;
+  margin-bottom: 4px;
+}
+
+.setting-value {
+  font-size: 14px;
+  color: #fff;
+  font-weight: 500;
+  word-break: break-all;
+}
+
+.setting-hint {
+  font-size: 12px;
+  color: #6b7280;
+  margin-top: 8px;
+  font-style: italic;
+}
+
+.btn-setting {
+  background: rgba(124, 92, 255, 0.15);
+  color: #c4b5fd;
+  border: 1px solid rgba(124, 92, 255, 0.3);
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.btn-setting:hover {
+  background: rgba(124, 92, 255, 0.25);
+  border-color: rgba(124, 92, 255, 0.5);
+  transform: translateY(-1px);
+}
+
+.toggle-group {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.toggle-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(124, 92, 255, 0.2);
+  color: #9ca3af;
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.toggle-btn:hover {
+  background: rgba(124, 92, 255, 0.1);
+  border-color: rgba(124, 92, 255, 0.4);
+}
+
+.toggle-btn.active {
+  background: linear-gradient(135deg, #7c5cff 0%, #a855f7 100%);
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 4px 12px rgba(124, 92, 255, 0.3);
+}
+
+.currency-select {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(124, 92, 255, 0.3);
+  color: white;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 180px;
+}
+
+.currency-select:hover {
+  border-color: rgba(124, 92, 255, 0.5);
+}
+
+.currency-select:focus {
+  outline: none;
+  border-color: #7c5cff;
+  box-shadow: 0 0 0 3px rgba(124, 92, 255, 0.1);
+}
+
+.currency-select option {
+  background: #1a1a24;
+  color: white;
+}
+
+/* Светлая тема для настроек */
+body.light-theme .settings-block-title {
+  color: #1a1a24;
+}
+
+body.light-theme .setting-label {
+  color: #666;
+}
+
+body.light-theme .setting-value {
+  color: #1a1a24;
+}
+
+body.light-theme .btn-setting {
+  background: rgba(124, 92, 255, 0.1);
+  color: #7c5cff;
+  border: 1px solid rgba(124, 92, 255, 0.3);
+}
+
+body.light-theme .toggle-btn {
+  background: rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(124, 92, 255, 0.2);
+  color: #555;
+}
+
+body.light-theme .toggle-btn:hover {
+  background: rgba(124, 92, 255, 0.08);
+}
+
+body.light-theme .currency-select {
+  background: rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(124, 92, 255, 0.2);
+  color: #1a1a24;
+}
+
+body.light-theme .currency-select option {
+  background: white;
+  color: #1a1a24;
+}
+
+body.light-theme .setting-hint {
+  color: #888;
+}
