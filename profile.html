@@ -474,43 +474,43 @@
     }
     
     function displayProfile(name, avatar, bonusBalance, provider, userId, userEmail) {
-      document.getElementById('profile-avatar').src = avatar || 'https://via.placeholder.com/120';
-      document.getElementById('profile-name').textContent = name;
-      document.getElementById('profile-provider').textContent = provider;
-      document.getElementById('profile-bonus-balance').textContent = window.convertPrice(bonusBalance);
-      document.getElementById('profile-user-id').textContent = 'ID #' + (userId || '000000');
-      document.getElementById('referral-code').textContent = 'Ваш код: REF-' + (userId || '000000');
-      document.getElementById('edit-name').value = name;
-      document.getElementById('preview-avatar').src = avatar || 'https://via.placeholder.com/80';
-      
-      const settings = JSON.parse(localStorage.getItem('userSettings') || '{}');
-      
-      if (userEmail) {
-        const currentEmail = document.getElementById('current-email');
-        currentEmail.textContent = userEmail;
-        currentEmail.dataset.linked = 'true';
-        document.getElementById('email-btn-text').textContent = translations[settings.lang || 'ru'].change;
+  document.getElementById('profile-avatar').src = avatar || 'https://via.placeholder.com/120';
+  document.getElementById('profile-name').textContent = name;
+  document.getElementById('profile-provider').textContent = provider;
+  // Показываем просто число бонусов (без ₽)
+  document.getElementById('profile-bonus-balance').textContent = bonusBalance || 0;
+  document.getElementById('profile-user-id').textContent = 'ID #' + (userId || '000000');
+  document.getElementById('referral-code').textContent = 'Ваш код: REF-' + (userId || '000000');
+  document.getElementById('edit-name').value = name;
+  document.getElementById('preview-avatar').src = avatar || 'https://via.placeholder.com/80';
+  
+  const settings = JSON.parse(localStorage.getItem('userSettings') || '{}');
+  
+  if (userEmail) {
+    const currentEmail = document.getElementById('current-email');
+    currentEmail.textContent = userEmail;
+    currentEmail.dataset.linked = 'true';
+    document.getElementById('email-btn-text').textContent = translations[settings.lang || 'ru'].change;
+  }
+  
+  if (settings.telegram) {
+    const currentTelegram = document.getElementById('current-telegram');
+    currentTelegram.textContent = settings.telegram;
+    currentTelegram.dataset.linked = 'true';
+    document.getElementById('telegram-btn-text').textContent = translations[settings.lang || 'ru'].change;
+  }
+  
+  loadSettings();
+  
+  if (window.location.hash === '#settings') {
+    setTimeout(() => {
+      const settingsSection = document.getElementById('settings-section');
+      if (settingsSection) {
+        settingsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
-      
-      if (settings.telegram) {
-        const currentTelegram = document.getElementById('current-telegram');
-        currentTelegram.textContent = settings.telegram;
-        currentTelegram.dataset.linked = 'true';
-        document.getElementById('telegram-btn-text').textContent = translations[settings.lang || 'ru'].change;
-      }
-      
-      loadSettings();
-      
-      // Автопрокрутка к настройкам если есть якорь
-      if (window.location.hash === '#settings') {
-        setTimeout(() => {
-          const settingsSection = document.getElementById('settings-section');
-          if (settingsSection) {
-            settingsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }
-        }, 500);
-      }
-    }
+    }, 500);
+  }
+}
     
     async function loadFriends() {
       const { data: friends } = await supabase.from('friends').select('*, profiles!friend_id(name, avatar_url, user_id)').eq('user_id', currentUser.id).eq('status', 'accepted');
