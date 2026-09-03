@@ -3,21 +3,37 @@
 <head>
   <meta charset="UTF-8">
   <title>Мой магазин</title>
-  <style>
-    body {
-      background: #0f0f14;
-      color: white;
-      font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-    }
-    h1 { color: #7c5cff; }
-  </style>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <h1>🎉 Привет! Сайт работает!</h1>
+  <!-- Шапка с аватаркой -->
+  <header>
+    <div class="logo">🛍 Мой Магазин</div>
+    
+    <div class="user-menu" id="user-menu">
+      <!-- Круг с аватаркой (пока скрыт) -->
+      <div class="avatar-circle" id="avatar-btn" style="display: none;">
+        <img id="user-avatar" src="" alt="avatar">
+      </div>
+      
+      <!-- Выпадающее меню (пока скрыто) -->
+      <div class="dropdown" id="dropdown">
+        <button onclick="location.href='profile.html'">👤 Профиль</button>
+        <button onclick="alert('Баланс: 0 ₽')">💰 Баланс</button>
+        <button onclick="alert('Настройки')">⚙️ Настройки</button>
+        <button onclick="alert('Поддержка: @support')">💬 Поддержка</button>
+        <button id="logout-btn" class="logout"> Выйти</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Основной контент -->
+  <main>
+    <h2 style="color: #7c5cff;">Добро пожаловать в магазин!</h2>
+    <p>Здесь скоро появятся товары...</p>
+  </main>
+
+  <!-- Подключаем скрипт -->
+  <script type="module" src="app.js"></script>
 </body>
 </html>
