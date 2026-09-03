@@ -7,71 +7,143 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <div class="stars"></div>
+  <div class="stars2"></div>
+  <div class="stars3"></div>
+
   <header>
     <a href="index.html" class="logo">← Назад</a>
   </header>
 
   <main class="wheel-page">
     <div class="wheel-container">
-      <h1 class="wheel-title">🎡 Колесо Бонусов</h1>
-      <p class="wheel-subtitle">Крути колесо и получай бонусы! Можно крутить раз в день.</p>
+      <div class="wheel-header">
+        <div class="wheel-badge">🎰 DAILY SPIN</div>
+        <h1 class="wheel-title">Колесо Бонусов</h1>
+        <p class="wheel-subtitle">Испытай удачу и выиграй до <span class="highlight">7,777,777</span> бонусов!</p>
+      </div>
       
       <!-- Колесо -->
       <div class="wheel-wrapper">
-        <div class="wheel-pointer">▼</div>
+        <div class="wheel-glow"></div>
+        <div class="wheel-outer-ring">
+          <div class="ring-light"></div>
+          <div class="ring-light"></div>
+          <div class="ring-light"></div>
+          <div class="ring-light"></div>
+          <div class="ring-light"></div>
+          <div class="ring-light"></div>
+          <div class="ring-light"></div>
+          <div class="ring-light"></div>
+        </div>
+        <div class="wheel-pointer">
+          <div class="pointer-glow"></div>
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2L14 8H10L12 2Z" fill="#fbbf24"/>
+            <path d="M12 2L14 8H10L12 2Z" fill="url(#pointerGrad)"/>
+            <defs>
+              <linearGradient id="pointerGrad" x1="12" y1="2" x2="12" y2="8">
+                <stop stop-color="#fcd34d"/>
+                <stop offset="1" stop-color="#f59e0b"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
         <div class="wheel" id="wheel">
+          <div class="wheel-center">
+            <div class="center-glow"></div>
+            <div class="center-text">SPIN</div>
+          </div>
           <div class="wheel-segment segment-1">
-            <span class="segment-text">Пусто</span>
+            <div class="segment-content">
+              <span class="segment-icon">😢</span>
+              <span class="segment-value">Пусто</span>
+            </div>
           </div>
           <div class="wheel-segment segment-2">
-            <span class="segment-text">50 🎁</span>
+            <div class="segment-content">
+              <span class="segment-icon">🎁</span>
+              <span class="segment-value">50</span>
+            </div>
           </div>
           <div class="wheel-segment segment-3">
-            <span class="segment-text">100 🎁</span>
+            <div class="segment-content">
+              <span class="segment-icon"></span>
+              <span class="segment-value">100</span>
+            </div>
           </div>
           <div class="wheel-segment segment-4">
-            <span class="segment-text">500 🎁</span>
+            <div class="segment-content">
+              <span class="segment-icon">🔥</span>
+              <span class="segment-value">500</span>
+            </div>
           </div>
           <div class="wheel-segment segment-5">
-            <span class="segment-text">Пусто</span>
+            <div class="segment-content">
+              <span class="segment-icon">😢</span>
+              <span class="segment-value">Пусто</span>
+            </div>
           </div>
           <div class="wheel-segment segment-6">
-            <span class="segment-text">50 🎁</span>
+            <div class="segment-content">
+              <span class="segment-icon">🎁</span>
+              <span class="segment-value">50</span>
+            </div>
           </div>
           <div class="wheel-segment segment-7">
-            <span class="segment-text">100 🎁</span>
+            <div class="segment-content">
+              <span class="segment-icon">💎</span>
+              <span class="segment-value">100</span>
+            </div>
           </div>
           <div class="wheel-segment segment-8">
-            <span class="segment-text">7,777,777 🎁</span>
+            <div class="segment-content">
+              <span class="segment-icon">👑</span>
+              <span class="segment-value">7.7M</span>
+            </div>
           </div>
         </div>
       </div>
 
       <!-- Кнопка крутить -->
       <button class="btn-spin" id="btn-spin" onclick="spinWheel()">
-        🎯 КРУТИТЬ
+        <span class="btn-shine"></span>
+        <span class="btn-text">🎯 КРУТИТЬ КОЛЕСО</span>
       </button>
 
       <!-- Таймер -->
       <div class="timer-section" id="timer-section" style="display: none;">
+        <div class="timer-icon"></div>
         <div class="timer-label">Следующее вращение через:</div>
         <div class="timer-display" id="timer-display">00:00:00</div>
       </div>
 
       <!-- Сообщение о выигрыше -->
-      <div class="win-message" id="win-message" style="display: none;">
-        <div class="win-icon" id="win-icon">🎉</div>
-        <div class="win-text" id="win-text">Поздравляем!</div>
-        <div class="win-amount" id="win-amount">+0 🎁</div>
-        <button class="btn-claim" onclick="closeWinMessage()">Забрать</button>
+      <div class="win-overlay" id="win-message" style="display: none;">
+        <div class="confetti-container" id="confetti"></div>
+        <div class="win-card">
+          <div class="win-sparkles">✨</div>
+          <div class="win-icon" id="win-icon">🎉</div>
+          <div class="win-title" id="win-title">ПОЗДРАВЛЯЕМ!</div>
+          <div class="win-subtitle">Ты выиграл:</div>
+          <div class="win-amount" id="win-amount">+0 🎁</div>
+          <button class="btn-claim" onclick="closeWinMessage()">
+            <span class="btn-shine"></span>
+            ЗАБРАТЬ
+          </button>
+        </div>
       </div>
 
-      <!-- Сообщение о пустом выигрыше -->
-      <div class="lose-message" id="lose-message" style="display: none;">
-        <div class="lose-icon"></div>
-        <div class="lose-text">Не повезло...</div>
-        <div class="lose-subtext">Попробуй завтра!</div>
-        <button class="btn-claim" onclick="closeWinMessage()">OK</button>
+      <!-- Сообщение о проигрыше -->
+      <div class="lose-overlay" id="lose-message" style="display: none;">
+        <div class="lose-card">
+          <div class="lose-icon">😔</div>
+          <div class="lose-title">Не повезло...</div>
+          <div class="lose-subtitle">Попробуй завтра!</div>
+          <button class="btn-claim lose-btn" onclick="closeWinMessage()">
+            OK
+          </button>
+        </div>
       </div>
     </div>
   </main>
@@ -86,45 +158,32 @@
     let isSpinning = false;
     let currentRotation = 0;
 
-    // Призы и их шансы (в процентах)
     const prizes = [
-      { amount: 0, chance: 40, label: 'Пусто', icon: '😢' },           // 40%
-      { amount: 50, chance: 30, label: '50 бонусов', icon: '🎁' },      // 30%
-      { amount: 100, chance: 20, label: '100 бонусов', icon: '🎁' },    // 20%
-      { amount: 500, chance: 9.997, label: '500 бонусов', icon: '🎁' }, // 9.997%
-      { amount: 7777777, chance: 0.003, label: '7,777,777 бонусов', icon: '🎰' } // 0.003% (ДЖЕКПОТ!)
+      { amount: 0, chance: 40, label: 'Пусто', icon: '😢' },
+      { amount: 50, chance: 30, label: '50 бонусов', icon: '🎁' },
+      { amount: 100, chance: 20, label: '100 бонусов', icon: '💎' },
+      { amount: 500, chance: 9.997, label: '500 бонусов', icon: '🔥' },
+      { amount: 7777777, chance: 0.003, label: '7,777,777 бонусов', icon: '👑' }
     ];
 
-    // Проверка авторизации
     async function checkAuth() {
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
-        window.location.href = 'login.html';
-        return;
-      }
+      if (!user) { window.location.href = 'login.html'; return; }
       currentUser = user;
       checkSpinAvailability();
     }
 
-    // Проверка, можно ли крутить
     async function checkSpinAvailability() {
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('last_spin_at')
-        .eq('id', currentUser.id)
-        .single();
-
+      const { data: profile } = await supabase.from('profiles').select('last_spin_at').eq('id', currentUser.id).single();
       if (!profile || !profile.last_spin_at) {
         document.getElementById('btn-spin').style.display = 'block';
         document.getElementById('timer-section').style.display = 'none';
         return;
       }
-
       const lastSpin = new Date(profile.last_spin_at);
       const now = new Date();
       const diff = now - lastSpin;
       const hours24 = 24 * 60 * 60 * 1000;
-
       if (diff < hours24) {
         document.getElementById('btn-spin').style.display = 'none';
         document.getElementById('timer-section').style.display = 'block';
@@ -135,138 +194,101 @@
       }
     }
 
-    // Таймер обратного отсчёта
     function startTimer(remainingMs) {
       const timerDisplay = document.getElementById('timer-display');
-      
       const interval = setInterval(() => {
         remainingMs -= 1000;
-        
         if (remainingMs <= 0) {
           clearInterval(interval);
           document.getElementById('btn-spin').style.display = 'block';
           document.getElementById('timer-section').style.display = 'none';
           return;
         }
-
         const hours = Math.floor(remainingMs / (1000 * 60 * 60));
         const minutes = Math.floor((remainingMs % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((remainingMs % (1000 * 60)) / 1000);
-
-        timerDisplay.textContent = 
-          `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        timerDisplay.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
       }, 1000);
     }
 
-    // Взвешенный рандомный выбор приза
     function getRandomPrize() {
-      const random = Math.random() * 100; // 0-100
+      const random = Math.random() * 100;
       let cumulative = 0;
-      
       for (const prize of prizes) {
         cumulative += prize.chance;
-        if (random < cumulative) {
-          return prize;
-        }
+        if (random < cumulative) return prize;
       }
-      
       return prizes[prizes.length - 1];
     }
 
-    // Вращение колеса
+    function createConfetti() {
+      const container = document.getElementById('confetti');
+      container.innerHTML = '';
+      const colors = ['#fbbf24', '#f59e0b', '#ef4444', '#10b981', '#3b82f6', '#ec4899', '#8b5cf6'];
+      for (let i = 0; i < 100; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti-piece';
+        confetti.style.left = Math.random() * 100 + '%';
+        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.animationDelay = Math.random() * 3 + 's';
+        confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+        container.appendChild(confetti);
+      }
+    }
+
     window.spinWheel = async function() {
       if (isSpinning) return;
       isSpinning = true;
 
       const wheel = document.getElementById('wheel');
       const btnSpin = document.getElementById('btn-spin');
-      
       btnSpin.disabled = true;
-      btnSpin.textContent = '🎡 Крутим...';
+      btnSpin.querySelector('.btn-text').textContent = ' КРУТИМ...';
 
-      // Выбираем приз по шансам
       const wonPrize = getRandomPrize();
       
-      // Определяем индекс сектора (для анимации)
-      // Сектора: 0=Пусто, 1=50, 2=100, 3=500, 4=Пусто, 5=50, 6=100, 7=7777777
       let segmentIndex;
-      if (wonPrize.amount === 0) {
-        segmentIndex = Math.random() < 0.5 ? 0 : 4; // Пусто (сектор 1 или 5)
-      } else if (wonPrize.amount === 50) {
-        segmentIndex = Math.random() < 0.5 ? 1 : 5; // 50 (сектор 2 или 6)
-      } else if (wonPrize.amount === 100) {
-        segmentIndex = Math.random() < 0.5 ? 2 : 6; // 100 (сектор 3 или 7)
-      } else if (wonPrize.amount === 500) {
-        segmentIndex = 3; // 500 (сектор 4)
-      } else if (wonPrize.amount === 7777777) {
-        segmentIndex = 7; // Джекпот (сектор 8)
-      }
+      if (wonPrize.amount === 0) segmentIndex = Math.random() < 0.5 ? 0 : 4;
+      else if (wonPrize.amount === 50) segmentIndex = Math.random() < 0.5 ? 1 : 5;
+      else if (wonPrize.amount === 100) segmentIndex = Math.random() < 0.5 ? 2 : 6;
+      else if (wonPrize.amount === 500) segmentIndex = 3;
+      else if (wonPrize.amount === 7777777) segmentIndex = 7;
 
-      // Вычисляем угол для остановки на нужном секторе
-      // Каждый сектор = 45 градусов (360/8)
-      // Указатель сверху, поэтому нужно компенсировать
       const segmentAngle = 45;
       const targetRotation = (360 - (segmentIndex * segmentAngle)) + (segmentAngle / 2);
-      
-      // Минимум 5 полных оборотов + целевой угол
       const spins = 5 + Math.random() * 3;
       const rotation = spins * 360 + targetRotation;
       currentRotation += rotation;
 
-      // Анимация вращения
-      wheel.style.transition = 'transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99)';
+      wheel.style.transition = 'transform 5s cubic-bezier(0.17, 0.67, 0.12, 0.99)';
       wheel.style.transform = `rotate(${currentRotation}deg)`;
 
-      // Ждём окончания анимации
       setTimeout(async () => {
         if (wonPrize.amount > 0) {
-          // Начисляем бонусы
-          const { data: profile } = await supabase
-            .from('profiles')
-            .select('bonus_balance')
-            .eq('id', currentUser.id)
-            .single();
-
+          const { data: profile } = await supabase.from('profiles').select('bonus_balance').eq('id', currentUser.id).single();
           const newBalance = (profile?.bonus_balance || 0) + wonPrize.amount;
+          await supabase.from('profiles').update({ bonus_balance: newBalance, last_spin_at: new Date().toISOString() }).eq('id', currentUser.id);
 
-          // Обновляем баланс и время последнего спина
-          await supabase
-            .from('profiles')
-            .update({
-              bonus_balance: newBalance,
-              last_spin_at: new Date().toISOString()
-            })
-            .eq('id', currentUser.id);
-
-          // Показываем сообщение о выигрыше
           document.getElementById('win-icon').textContent = wonPrize.icon;
-          document.getElementById('win-text').textContent = wonPrize.amount === 7777777 ? '🎰 ДЖЕКПОТ! 🎰' : 'Поздравляем!';
+          document.getElementById('win-title').textContent = wonPrize.amount === 7777777 ? '🎰 ДЖЕКПОТ! 🎰' : 'ПОЗДРАВЛЯЕМ!';
           document.getElementById('win-amount').textContent = `+${wonPrize.amount.toLocaleString('ru-RU')} 🎁`;
           document.getElementById('win-message').style.display = 'flex';
-        } else {
-          // Пустой выигрыш
-          await supabase
-            .from('profiles')
-            .update({
-              last_spin_at: new Date().toISOString()
-            })
-            .eq('id', currentUser.id);
           
+          if (wonPrize.amount >= 500) createConfetti();
+        } else {
+          await supabase.from('profiles').update({ last_spin_at: new Date().toISOString() }).eq('id', currentUser.id);
           document.getElementById('lose-message').style.display = 'flex';
         }
         
         isSpinning = false;
         btnSpin.disabled = false;
-        btnSpin.textContent = '🎯 КРУТИТЬ';
-        
-        // Скрываем кнопку и показываем таймер
+        btnSpin.querySelector('.btn-text').textContent = '🎯 КРУТИТЬ КОЛЕСО';
         btnSpin.style.display = 'none';
         document.getElementById('timer-section').style.display = 'block';
         startTimer(24 * 60 * 60 * 1000);
-      }, 4000);
+      }, 5000);
     };
 
-    // Закрытие сообщений
     window.closeWinMessage = function() {
       document.getElementById('win-message').style.display = 'none';
       document.getElementById('lose-message').style.display = 'none';
