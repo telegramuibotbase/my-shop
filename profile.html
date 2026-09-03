@@ -14,10 +14,10 @@
   <main class="profile-page">
     <div class="profile-card">
       <!-- ID по центру НАД аватаркой -->
-      <div class="user-id-center" id="profile-user-id">ID #000000</div>
+      <div class="user-id-top" id="profile-user-id">ID #000000</div>
       
       <!-- Аватарка по центру -->
-      <div class="avatar-wrapper-center">
+      <div class="avatar-center-wrapper">
         <img id="profile-avatar" class="big-avatar" src="" alt="avatar">
         <div class="avatar-badge" id="profile-provider">Discord</div>
       </div>
@@ -27,14 +27,14 @@
       
       <button class="btn-edit-small" onclick="openEditModal()">✏️ Редактировать профиль</button>
       
-      <!-- Бонусный баланс (спокойный дизайн) -->
-      <div class="bonus-section-calm">
-        <div class="bonus-card-calm">
-          <div class="bonus-icon-calm"></div>
-          <div class="bonus-label-calm">Бонусный баланс</div>
-          <div class="bonus-amount-calm" id="profile-bonus-balance">0 ₽</div>
+      <!-- Бонусный баланс -->
+      <div class="bonus-calm-section">
+        <div class="bonus-calm-card">
+          <div class="bonus-calm-icon">🎁</div>
+          <div class="bonus-calm-label">Бонусный баланс</div>
+          <div class="bonus-calm-amount" id="profile-bonus-balance">0 ₽</div>
           <button class="btn-bonus-calm" onclick="alert('Бонусы начисляются за покупки и активность!')">
-             Подробнее
+            Подробнее
           </button>
         </div>
       </div>
@@ -101,7 +101,7 @@
           <label>Новая аватарка</label>
           <div class="file-upload-wrapper">
             <input type="file" id="edit-avatar-file" class="file-input" accept="image/*" onchange="previewImage(this)">
-            <label for="edit-avatar-file" class="file-upload-btn">📁 Выбрать файл</label>
+            <label for="edit-avatar-file" class="file-upload-btn"> Выбрать файл</label>
             <span class="file-name" id="file-name">Файл не выбран</span>
           </div>
         </div>
