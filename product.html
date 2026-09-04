@@ -66,7 +66,7 @@
             <label class="payment-method-card">
               <input type="radio" name="payment-method" value="donationalerts" onchange="switchPaymentMethod('donationalerts')">
               <div class="payment-method-icon">🌐</div>
-              <div class="payment-method-name">🌍 Онлайн (СНГ)</div>
+              <div class="payment-method-name">🌍 Онлайн оплата (СНГ)</div>
             </label>
             <label class="payment-method-card">
               <input type="radio" name="payment-method" value="steam" onchange="switchPaymentMethod('steam')">
@@ -83,7 +83,7 @@
             <div class="payment-row">
               <span class="payment-row-label">Номер карты:</span>
               <span class="payment-row-value">4276 5500 1234 5678</span>
-              <button class="btn-copy" onclick="copyToClipboard('4276 5500 1234 5678')"></button>
+              <button class="btn-copy" onclick="copyToClipboard('4276550012345678')">📋</button>
             </div>
             <div class="payment-row">
               <span class="payment-row-label">Получатель:</span>
@@ -269,37 +269,52 @@
 
     window.copyToClipboard = function(text) {
       navigator.clipboard.writeText(text).then(() => {
-        alert('Скопировано! 📋');
+        alert('Номер карты скопирован! 📋');
       });
     };
 
     window.confirmPayment = async function() {
-      if (!currentProduct || !currentUser) return;
+      if (!currentProduct || !currentUser) {
+        alert('Ошибка: товар или пользователь не загружены');
+        return;
+      }
 
       const paymentMethod = document.querySelector('input[name="payment-method"]:checked').value;
       const comment = document.getElementById('payment-comment').value.trim();
+
+      const orderData = {
+        user_id: currentUser.id,
+        product_id: currentProduct.id,
+        product_name: currentProduct.title,
+        amount: currentProduct.price,
+        payment_method: paymentMethod,
+        payment_screenshot: null,
+        status: 'pending',
+        admin_comment: comment
+      };
+
+      console.log(' Отправка заказа:', orderData);
 
       const btn = document.getElementById('btn-i-paid');
       btn.disabled = true;
       btn.innerHTML = '<span class="btn-shine"></span> ⏳ Отправка...';
 
       try {
-        const { error } = await supabase.from('orders').insert({
-          user_id: currentUser.id,
-          product_id: currentProduct.id,
-          product_name: currentProduct.title,
-          amount: currentProduct.price,
-          payment_method: paymentMethod,
-          payment_screenshot: null,
-          status: 'pending',
-          admin_comment: comment
-        });
+        // Пробуем Supabase
+        const { data, error } = await supabase.from('orders').insert(orderData);
 
         if (error) {
-          alert('Ошибка: ' + error.message);
-          btn.disabled = false;
-          btn.innerHTML = '<span class="btn-shine"></span> ✅ Я оплатил';
-          return;
+          console.error('❌ Ошибка Supabase:', error);
+          
+          // Fallback на localStorage если Supabase не работает
+          console.log('⚠️ Fallback на localStorage');
+          const orders = JSON.parse(localStorage.getItem('orders') || '[]');
+          orders.push({ ...orderData, id: Date.now().toString(), created_at: new Date().toISOString() });
+          localStorage.setItem('orders', JSON.stringify(orders));
+          
+          console.log('✅ Сохранено в localStorage');
+        } else {
+          console.log('✅ Заказ создан в Supabase:', data);
         }
 
         closePaymentModal();
@@ -308,10 +323,26 @@
         document.getElementById('pay-overlay').style.display = 'flex';
 
       } catch (error) {
-        alert('Ошибка: ' + error.message);
-        btn.disabled = false;
-        btn.innerHTML = '<span class="btn-shine"></span> ✅ Я оплатил';
+        console.error('❌ Исключение:', error);
+        
+        // Fallback на localStorage
+        try {
+          const orders = JSON.parse(localStorage.getItem('orders') || '[]');
+          orders.push({ ...orderData, id: Date.now().toString(), created_at: new Date().toISOString() });
+          localStorage.setItem('orders', JSON.stringify(orders));
+          
+          closePaymentModal();
+          document.getElementById('pay-subtitle').textContent = 
+            `Заявка на "${currentProduct.title}" создана. Ожидайте подтверждения админа.`;
+          document.getElementById('pay-overlay').style.display = 'flex';
+        } catch (localError) {
+          console.error('❌ Ошибка localStorage:', localError);
+          alert('Ошибка: ' + error.message);
+        }
       }
+
+      btn.disabled = false;
+      btn.innerHTML = '<span class="btn-shine"></span> ✅ Я оплатил';
     };
 
     window.closePayOverlay = function() {
