@@ -31,7 +31,7 @@
 
         <div class="product-action">
           <div class="product-detail-price" id="product-price">0 ₽</div>
-          <button class="btn-pay" id="btn-pay" onclick="payProduct()">
+          <button class="btn-pay" id="btn-pay" onclick="openPaymentModal()">
             <span class="btn-shine"></span>
             <span id="btn-pay-text">💳 Оплатить</span>
           </button>
@@ -40,11 +40,126 @@
     </div>
   </main>
 
+  <!-- Модальное окно оплаты -->
+  <div class="payment-modal" id="payment-modal" style="display: none;">
+    <div class="payment-modal-content">
+      <div class="payment-modal-header">
+        <h3>💳 Оплата товара</h3>
+        <button class="modal-close" onclick="closePaymentModal()">×</button>
+      </div>
+      
+      <div class="payment-modal-body">
+        <div class="payment-product-info">
+          <div class="payment-product-name" id="payment-product-name">Товар</div>
+          <div class="payment-product-amount" id="payment-product-amount">0 ₽</div>
+        </div>
+
+        <!-- Выбор способа оплаты -->
+        <div class="payment-methods">
+          <label class="payment-method-label">Выберите способ оплаты:</label>
+          <div class="payment-method-options">
+            <label class="payment-method-card">
+              <input type="radio" name="payment-method" value="card" checked onchange="switchPaymentMethod('card')">
+              <div class="payment-method-icon">💳</div>
+              <div class="payment-method-name">🇧🇾 Перевод на карту (BY)</div>
+            </label>
+            <label class="payment-method-card">
+              <input type="radio" name="payment-method" value="donationalerts" onchange="switchPaymentMethod('donationalerts')">
+              <div class="payment-method-icon">🌐</div>
+              <div class="payment-method-name">🌍 Онлайн (СНГ)</div>
+            </label>
+            <label class="payment-method-card">
+              <input type="radio" name="payment-method" value="steam" onchange="switchPaymentMethod('steam')">
+              <div class="payment-method-icon">🎮</div>
+              <div class="payment-method-name">Steam скины</div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Способ 1: Карта BY -->
+        <div class="payment-details" id="payment-details-card">
+          <div class="payment-details-title">Реквизиты для перевода:</div>
+          <div class="payment-card-info">
+            <div class="payment-row">
+              <span class="payment-row-label">Номер карты:</span>
+              <span class="payment-row-value">4276 5500 1234 5678</span>
+              <button class="btn-copy" onclick="copyToClipboard('4276 5500 1234 5678')"></button>
+            </div>
+            <div class="payment-row">
+              <span class="payment-row-label">Получатель:</span>
+              <span class="payment-row-value">Иван И.</span>
+            </div>
+            <div class="payment-row">
+              <span class="payment-row-label">Банк:</span>
+              <span class="payment-row-value">Беларусбанк</span>
+            </div>
+          </div>
+          <div class="payment-instruction">
+            💡 Переведите точную сумму на карту. После перевода нажмите кнопку "Я оплатил" ниже.
+          </div>
+        </div>
+
+        <!-- Способ 2: DonationAlerts -->
+        <div class="payment-details" id="payment-details-donationalerts" style="display: none;">
+          <div class="payment-details-title">Онлайн оплата через DonationAlerts:</div>
+          <div class="donationalerts-box">
+            <div class="donationalerts-link">
+              <a href="https://www.donationalerts.com/r/your_username" target="_blank" class="donationalerts-btn">
+                🌐 Перейти к оплате
+              </a>
+            </div>
+            <div class="payment-row">
+              <span class="payment-row-label">Сумма к оплате:</span>
+              <span class="payment-row-value" id="da-amount">0 ₽</span>
+            </div>
+          </div>
+          <div class="payment-instruction">
+            💡 Перейдите по ссылке, введите сумму и оплатите. После оплаты вернитесь и нажмите "Я оплатил".
+          </div>
+        </div>
+
+        <!-- Способ 3: Steam -->
+        <div class="payment-details" id="payment-details-steam" style="display: none;">
+          <div class="payment-details-title">Оплата Steam скинами:</div>
+          <div class="steam-box">
+            <div class="steam-link">
+              <a href="https://steamcommunity.com/tradeoffer/new/?partner=YOUR_STEAM_ID&token=YOUR_TOKEN" target="_blank" class="steam-btn">
+                🎮 Отправить трейд
+              </a>
+            </div>
+            <div class="payment-row">
+              <span class="payment-row-label">Сумма скинов:</span>
+              <span class="payment-row-value" id="steam-amount">0 ₽</span>
+            </div>
+            <div class="steam-note">
+              💡 Отправьте трейд со скинами на указанную сумму. После отправки нажмите "Я оплатил".
+            </div>
+          </div>
+        </div>
+
+        <!-- Комментарий -->
+        <div class="payment-comment">
+          <label class="comment-label">💬 Комментарий (необязательно):</label>
+          <textarea id="payment-comment" class="comment-input" placeholder="Ваш email для доставки, Steam ID и т.д."></textarea>
+        </div>
+
+        <!-- Кнопка "Я оплатил" -->
+        <div class="payment-confirm">
+          <button class="btn-i-paid" id="btn-i-paid" onclick="confirmPayment()">
+            <span class="btn-shine"></span>
+            ✅ Я оплатил
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Сообщение об успешной отправке -->
   <div class="pay-overlay" id="pay-overlay" style="display: none;">
     <div class="pay-card">
-      <div class="pay-icon">✅</div>
-      <div class="pay-title">Оплата успешна!</div>
-      <div class="pay-subtitle" id="pay-subtitle">Товар активирован</div>
+      <div class="pay-icon">⏳</div>
+      <div class="pay-title">Заявка отправлена!</div>
+      <div class="pay-subtitle" id="pay-subtitle">Ожидает подтверждения админа</div>
       <button class="btn-claim" onclick="closePayOverlay()">
         <span class="btn-shine"></span>
         В КАТАЛОГ
@@ -80,6 +195,9 @@
       document.getElementById('product-category').textContent = getCategoryName(currentProduct.category);
       document.getElementById('product-price').textContent = currentProduct.isBonus ? 'Бесплатно' : currentProduct.price + ' ₽';
       document.getElementById('btn-pay-text').textContent = currentProduct.isBonus ? '🎁 Получить' : '💳 Оплатить';
+      
+      document.getElementById('da-amount').textContent = currentProduct.price + ' ₽';
+      document.getElementById('steam-amount').textContent = currentProduct.price + ' ₽';
 
       const galleryImage = document.getElementById('gallery-image');
       const galleryThumbs = document.getElementById('gallery-thumbs');
@@ -108,7 +226,7 @@
     }
 
     function getCategoryName(category) {
-      const names = { soft: '💻 Софт', services: '🛠 Услуги', bonuses: ' Бонусы' };
+      const names = { soft: '💻 Софт', services: ' Услуги', bonuses: '🎁 Бонусы' };
       return names[category] || category;
     }
 
@@ -130,38 +248,70 @@
       switchImage(prev);
     };
 
-    window.payProduct = async function() {
-      if (!currentProduct || !currentUser) return;
+    window.openPaymentModal = function() {
+      if (!currentProduct) return;
       
-      const btnPay = document.getElementById('btn-pay');
-      btnPay.disabled = true;
-      document.getElementById('btn-pay-text').textContent = ' Обработка...';
+      document.getElementById('payment-product-name').textContent = currentProduct.title;
+      document.getElementById('payment-product-amount').textContent = currentProduct.isBonus ? 'Бесплатно' : currentProduct.price + ' ₽';
+      document.getElementById('payment-modal').style.display = 'flex';
+    };
 
-      // Сохраняем покупку в базу
-      const { error } = await supabase.from('purchases').insert({
-        user_id: currentUser.id,
-        product_id: currentProduct.id,
-        product_name: currentProduct.title,
-        product_category: currentProduct.category,
-        amount: currentProduct.price,
-        status: 'completed'
+    window.closePaymentModal = function() {
+      document.getElementById('payment-modal').style.display = 'none';
+      document.getElementById('payment-comment').value = '';
+    };
+
+    window.switchPaymentMethod = function(method) {
+      document.getElementById('payment-details-card').style.display = method === 'card' ? 'block' : 'none';
+      document.getElementById('payment-details-donationalerts').style.display = method === 'donationalerts' ? 'block' : 'none';
+      document.getElementById('payment-details-steam').style.display = method === 'steam' ? 'block' : 'none';
+    };
+
+    window.copyToClipboard = function(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        alert('Скопировано! 📋');
       });
+    };
 
-      if (error) {
+    window.confirmPayment = async function() {
+      if (!currentProduct || !currentUser) return;
+
+      const paymentMethod = document.querySelector('input[name="payment-method"]:checked').value;
+      const comment = document.getElementById('payment-comment').value.trim();
+
+      const btn = document.getElementById('btn-i-paid');
+      btn.disabled = true;
+      btn.innerHTML = '<span class="btn-shine"></span> ⏳ Отправка...';
+
+      try {
+        const { error } = await supabase.from('orders').insert({
+          user_id: currentUser.id,
+          product_id: currentProduct.id,
+          product_name: currentProduct.title,
+          amount: currentProduct.price,
+          payment_method: paymentMethod,
+          payment_screenshot: null,
+          status: 'pending',
+          admin_comment: comment
+        });
+
+        if (error) {
+          alert('Ошибка: ' + error.message);
+          btn.disabled = false;
+          btn.innerHTML = '<span class="btn-shine"></span> ✅ Я оплатил';
+          return;
+        }
+
+        closePaymentModal();
+        document.getElementById('pay-subtitle').textContent = 
+          `Заявка на "${currentProduct.title}" создана. Ожидайте подтверждения админа.`;
+        document.getElementById('pay-overlay').style.display = 'flex';
+
+      } catch (error) {
         alert('Ошибка: ' + error.message);
-        btnPay.disabled = false;
-        document.getElementById('btn-pay-text').textContent = currentProduct.isBonus ? '🎁 Получить' : '💳 Оплатить';
-        return;
+        btn.disabled = false;
+        btn.innerHTML = '<span class="btn-shine"></span> ✅ Я оплатил';
       }
-
-      await new Promise(r => setTimeout(r, 1500));
-
-      document.getElementById('pay-subtitle').textContent = 
-        currentProduct.isBonus ? 'Бонус активирован!' : `${currentProduct.title} оплачен!`;
-      document.getElementById('pay-overlay').style.display = 'flex';
-
-      btnPay.disabled = false;
-      document.getElementById('btn-pay-text').textContent = currentProduct.isBonus ? '🎁 Получить' : ' Оплатить';
     };
 
     window.closePayOverlay = function() {
