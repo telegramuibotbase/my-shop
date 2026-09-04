@@ -2398,3 +2398,79 @@ body.light-theme .product-short-desc {
     font-size: 13px;
   }
 }
+/* История покупок */
+.purchases-list {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.purchase-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  margin-bottom: 10px;
+  transition: all 0.3s ease;
+}
+
+.purchase-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.purchase-info {
+  flex: 1;
+}
+
+.purchase-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.purchase-date {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.purchase-amount {
+  font-size: 16px;
+  font-weight: 700;
+  color: #fbbf24;
+  min-width: 80px;
+  text-align: right;
+}
+
+.purchase-amount.free {
+  color: #10b981;
+}
+
+.purchase-status {
+  font-size: 20px;
+  min-width: 30px;
+  text-align: center;
+}
+
+body.light-theme .purchase-item {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+body.light-theme .purchase-name {
+  color: #1a1a24;
+}
+
+body.light-theme .purchase-date {
+  color: #888;
+}
+
+@media (max-width: 600px) {
+  .purchase-item {
+    flex-wrap: wrap;
+  }
+  
+  .purchase-amount {
+    min-width: auto;
+  }
+}
