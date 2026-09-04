@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Товар</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <a href="index.html" class="logo">← Назад в каталог</a>
+  </header>
+
+  <main class="product-page">
+    <div class="product-detail-container">
+      <!-- Галерея -->
+      <div class="product-gallery">
+        <div class="gallery-main" id="gallery-main">
+          <div class="gallery-image" id="gallery-image">💻</div>
+        </div>
+        <div class="gallery-thumbs" id="gallery-thumbs">
+          <!-- Миниатюры генерируются через JS -->
+        </div>
+      </div>
+
+      <!-- Информация о товаре -->
+      <div class="product-info">
+        <div class="product-category-badge" id="product-category">💻 Софт</div>
+        <h1 class="product-detail-title" id="product-title">Название товара</h1>
+        <p class="product-detail-desc" id="product-desc">Описание товара</p>
+
+        <!-- Характеристики -->
+        <div class="product-features" id="product-features">
+          <!-- Генерируются через JS -->
+        </div>
+
+        <!-- Цена и кнопка -->
+        <div class="product-action">
+          <div class="product-detail-price" id="product-price">0 ₽</div>
+          <button class="btn-pay" id="btn-pay" onclick="payProduct()">
+            <span class="btn-shine"></span>
+            <span id="btn-pay-text">💳 Оплатить</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Сообщение об оплате -->
+  <div class="pay-overlay" id="pay-overlay" style="display: none;">
+    <div class="pay-card">
+      <div class="pay-icon">✅</div>
+      <div class="pay-title">Оплата успешна!</div>
+      <div class="pay-subtitle" id="pay-subtitle">Товар активирован</div>
+      <button class="btn-claim" onclick="closePayOverlay()">
+        <span class="btn-shine"></span>
+        В КАТАЛОГ
+      </button>
+    </div>
+  </div>
+
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+    import { supabaseConfig } from './supabase-config.js';
+
+    const supabase = createClient(supabaseConfig.url, supabaseConfig.anonKey);
+
+    let currentProduct = null;
+    let currentImageIndex = 0;
+
+    // Загрузка товара
+    function loadProduct() {
+      const productData = localStorage.getItem('currentProduct');
+      if (!productData) {
+        window.location.href = 'index.html';
+        return;
+      }
+      
+      currentProduct = JSON.parse(productData);
+      
+      // Заполняем данные
+      document.getElementById('product-title').textContent = currentProduct.title;
+      document.getElementById('product-desc').textContent = currentProduct.fullDesc;
+      document.getElementById('product-category').textContent = getCategoryName(currentProduct.category);
+      document.getElementById('product-price').textContent = currentProduct.isBonus ? 'Бесплатно' : currentProduct.price + ' ₽';
+      document.getElementById('btn-pay-text').textContent = currentProduct.isBonus ? ' Получить' : '💳 Оплатить';
+
+      // Галерея
+      const galleryImage = document.getElementById('gallery-image');
+      const galleryThumbs = document.getElementById('gallery-thumbs');
+      
+      galleryImage.textContent = currentProduct.images[0];
+      
+      galleryThumbs.innerHTML = '';
+      currentProduct.images.forEach((img, index) => {
+        const thumb = document.createElement('div');
+        thumb.className = 'gallery-thumb' + (index === 0 ? ' active' : '');
+        thumb.textContent = img;
+        thumb.onclick = () => switchImage(index);
+        galleryThumbs.appendChild(thumb);
+      });
+
+      // Характеристики
+      const featuresContainer = document.getElementById('product-features');
+      featuresContainer.innerHTML = '';
+      if (currentProduct.features) {
+        currentProduct.features.forEach(feature => {
+          const featureEl = document.createElement('div');
+          featureEl.className = 'feature-item';
+          featureEl.innerHTML = `<span class="feature-check">✅</span><span>${feature}</span>`;
+          featuresContainer.appendChild(featureEl);
+        });
+      }
+    }
+
+    function getCategoryName(category) {
+      const names = {
+        soft: ' Софт',
+        services: '🛠 Услуги',
+        bonuses: '🎁 Бонусы'
+      };
+      return names[category] || category;
+    }
+
+    // Переключение изображения
+    window.switchImage = function(index) {
+      currentImageIndex = index;
+      document.getElementById('gallery-image').textContent = currentProduct.images[index];
+      
+      document.querySelectorAll('.gallery-thumb').forEach((thumb, i) => {
+        thumb.classList.toggle('active', i === index);
+      });
+    };
+
+    // Следующее изображение
+    window.nextImage = function() {
+      const next = (currentImageIndex + 1) % currentProduct.images.length;
+      switchImage(next);
+    };
+
+    // Предыдущее изображение
+    window.prevImage = function() {
+      const prev = (currentImageIndex - 1 + currentProduct.images.length) % currentProduct.images.length;
+      switchImage(prev);
+    };
+
+    // Оплата
+    window.payProduct = async function() {
+      if (!currentProduct) return;
+      
+      const btnPay = document.getElementById('btn-pay');
+      btnPay.disabled = true;
+      document.getElementById('btn-pay-text').textContent = '⏳ Обработка...';
+
+      // Симуляция оплаты (здесь будет реальная интеграция)
+      await new Promise(r => setTimeout(r, 1500));
+
+      // Показываем сообщение об успехе
+      document.getElementById('pay-subtitle').textContent = 
+        currentProduct.isBonus ? 'Бонус активирован!' : `${currentProduct.title} оплачен!`;
+      document.getElementById('pay-overlay').style.display = 'flex';
+
+      btnPay.disabled = false;
+      document.getElementById('btn-pay-text').textContent = currentProduct.isBonus ? '🎁 Получить' : '💳 Оплатить';
+    };
+
+    window.closePayOverlay = function() {
+      document.getElementById('pay-overlay').style.display = 'none';
+      window.location.href = 'index.html';
+    };
+
+    loadProduct();
+  </script>
+</body>
+</html>
