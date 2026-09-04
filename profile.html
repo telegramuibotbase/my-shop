@@ -37,6 +37,17 @@
         </div>
       </div>
       
+      <!-- История покупок -->
+      <div class="section-card">
+        <div class="section-header">
+          <h3>🛍️ История покупок</h3>
+        </div>
+        <div class="purchases-list" id="purchases-list">
+          <div class="empty-state">Загрузка...</div>
+        </div>
+      </div>
+      
+      <!-- Друзья -->
       <div class="section-card">
         <div class="section-header">
           <h3>👥 Друзья</h3>
@@ -47,6 +58,7 @@
         </div>
       </div>
       
+      <!-- Реферальная система -->
       <div class="section-card">
         <div class="section-header">
           <h3>🎁 Реферальная система</h3>
@@ -59,7 +71,7 @@
         </div>
       </div>
       
-      <!-- НАСТРОЙКИ ПРЯМО НА СТРАНИЦЕ -->
+      <!-- Настройки -->
       <div class="section-card settings-section-inline" id="settings-section">
         <div class="section-header">
           <h3>⚙️ Настройки</h3>
@@ -100,7 +112,7 @@
             </div>
             <div class="toggle-group">
               <button class="toggle-btn active" id="theme-dark" onclick="setTheme('dark')">🌙 Тёмная</button>
-              <button class="toggle-btn" id="theme-light" onclick="setTheme('light')">️ Светлая</button>
+              <button class="toggle-btn" id="theme-light" onclick="setTheme('light')">☀️ Светлая</button>
             </div>
           </div>
         </div>
@@ -138,14 +150,15 @@
         </div>
       </div>
       
+      <!-- Поддержка -->
       <div class="section-card">
         <div class="section-header">
-          <h3>💬 Поддержка</h3>
+          <h3> Поддержка</h3>
         </div>
         <div class="section-content">
           <p>Нужна помощь? Свяжитесь с нами!</p>
           <div class="support-links">
-            <a href="#" class="support-link">📧 Email: support@myshop.com</a>
+            <a href="#" class="support-link"> Email: support@myshop.com</a>
             <a href="#" class="support-link">💬 Telegram: @myshop_support</a>
           </div>
         </div>
@@ -169,7 +182,7 @@
           <label>Новая аватарка</label>
           <div class="file-upload-wrapper">
             <input type="file" id="edit-avatar-file" class="file-input" accept="image/*" onchange="previewImage(this)">
-            <label for="edit-avatar-file" class="file-upload-btn">📁 Выбрать файл</label>
+            <label for="edit-avatar-file" class="file-upload-btn"> Выбрать файл</label>
             <span class="file-name" id="file-name">Файл не выбран</span>
           </div>
         </div>
@@ -183,16 +196,6 @@
       </div>
     </div>
   </div>
-
-  <!-- История покупок -->
-<div class="section-card">
-  <div class="section-header">
-    <h3> История покупок</h3>
-  </div>
-  <div class="purchases-list" id="purchases-list">
-    <div class="empty-state">Загрузка...</div>
-  </div>
-</div>
 
   <!-- Модальное окно добавления друга -->
   <div class="modal" id="addFriendModal">
@@ -238,7 +241,7 @@
   <div class="modal" id="telegramModal">
     <div class="modal-content">
       <div class="modal-header">
-        <h3> Привязать Telegram</h3>
+        <h3>💬 Привязать Telegram</h3>
         <button class="modal-close" onclick="closeTelegramModal()">×</button>
       </div>
       <div class="modal-body">
@@ -250,7 +253,7 @@
       </div>
       <div class="modal-footer">
         <button class="btn-cancel" onclick="closeTelegramModal()">Отмена</button>
-        <button class="btn-save" onclick="saveTelegram()">💾 Сохранить</button>
+        <button class="btn-save" onclick="saveTelegram()"> Сохранить</button>
       </div>
     </div>
   </div>
@@ -288,7 +291,7 @@
         email: 'Email',
         appearance: '🎨 Appearance',
         theme: 'Theme',
-        language: ' Language',
+        language: '🌐 Language',
         selectLanguage: 'Select language',
         currency: '💱 Currency',
         selectCurrency: 'Price display',
@@ -426,6 +429,7 @@
         currentAvatarUrl = defaultAvatar;
         displayProfile(defaultName, defaultAvatar, 0, provider, newProfile?.user_id, user.email);
         loadFriends();
+        loadPurchases();
         return;
       }
       
@@ -436,6 +440,7 @@
       const provider = (user.app_metadata?.provider || 'Discord').charAt(0).toUpperCase() + (user.app_metadata?.provider || 'discord').slice(1);
       displayProfile(name, currentAvatarUrl, bonusBalance, provider, profile.user_id, user.email);
       loadFriends();
+      loadPurchases();
     }
     
     function displayProfile(name, avatar, bonusBalance, provider, userId, userEmail) {
@@ -471,6 +476,35 @@
       }
     }
     
+    // Загрузка истории покупок
+    async function loadPurchases() {
+      const { data: purchases, error } = await supabase
+        .from('purchases')
+        .select('*')
+        .eq('user_id', currentUser.id)
+        .order('created_at', { ascending: false });
+
+      const purchasesList = document.getElementById('purchases-list');
+
+      if (error || !purchases || purchases.length === 0) {
+        purchasesList.innerHTML = '<div class="empty-state">У вас пока нет покупок</div>';
+        return;
+      }
+
+      purchasesList.innerHTML = purchases.map(p => `
+        <div class="purchase-item">
+          <div class="purchase-info">
+            <div class="purchase-name">${p.product_name}</div>
+            <div class="purchase-date">${new Date(p.created_at).toLocaleDateString('ru-RU')} в ${new Date(p.created_at).toLocaleTimeString('ru-RU', {hour: '2-digit', minute:'2-digit'})}</div>
+          </div>
+          <div class="purchase-amount ${p.amount === 0 ? 'free' : ''}">
+            ${p.amount === 0 ? 'Бесплатно' : p.amount + ' ₽'}
+          </div>
+          <div class="purchase-status">${p.status === 'completed' ? '✅' : '⏳'}</div>
+        </div>
+      `).join('');
+    }
+
     async function loadFriends() {
       const { data: friends } = await supabase.from('friends').select('*, profiles!friend_id(name, avatar_url, user_id)').eq('user_id', currentUser.id).eq('status', 'accepted');
       const friendsList = document.getElementById('friends-list');
