@@ -13,28 +13,22 @@
 
   <main class="product-page">
     <div class="product-detail-container">
-      <!-- Галерея -->
       <div class="product-gallery">
         <div class="gallery-main" id="gallery-main">
           <div class="gallery-image" id="gallery-image">💻</div>
+          <button class="gallery-nav prev" onclick="prevImage()">‹</button>
+          <button class="gallery-nav next" onclick="nextImage()">›</button>
         </div>
-        <div class="gallery-thumbs" id="gallery-thumbs">
-          <!-- Миниатюры генерируются через JS -->
-        </div>
+        <div class="gallery-thumbs" id="gallery-thumbs"></div>
       </div>
 
-      <!-- Информация о товаре -->
       <div class="product-info">
         <div class="product-category-badge" id="product-category">💻 Софт</div>
         <h1 class="product-detail-title" id="product-title">Название товара</h1>
         <p class="product-detail-desc" id="product-desc">Описание товара</p>
 
-        <!-- Характеристики -->
-        <div class="product-features" id="product-features">
-          <!-- Генерируются через JS -->
-        </div>
+        <div class="product-features" id="product-features"></div>
 
-        <!-- Цена и кнопка -->
         <div class="product-action">
           <div class="product-detail-price" id="product-price">0 ₽</div>
           <button class="btn-pay" id="btn-pay" onclick="payProduct()">
@@ -46,7 +40,6 @@
     </div>
   </main>
 
-  <!-- Сообщение об оплате -->
   <div class="pay-overlay" id="pay-overlay" style="display: none;">
     <div class="pay-card">
       <div class="pay-icon">✅</div>
@@ -67,9 +60,13 @@
 
     let currentProduct = null;
     let currentImageIndex = 0;
+    let currentUser = null;
 
-    // Загрузка товара
-    function loadProduct() {
+    async function loadProduct() {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) { window.location.href = 'login.html'; return; }
+      currentUser = user;
+
       const productData = localStorage.getItem('currentProduct');
       if (!productData) {
         window.location.href = 'index.html';
@@ -78,14 +75,12 @@
       
       currentProduct = JSON.parse(productData);
       
-      // Заполняем данные
       document.getElementById('product-title').textContent = currentProduct.title;
       document.getElementById('product-desc').textContent = currentProduct.fullDesc;
       document.getElementById('product-category').textContent = getCategoryName(currentProduct.category);
       document.getElementById('product-price').textContent = currentProduct.isBonus ? 'Бесплатно' : currentProduct.price + ' ₽';
-      document.getElementById('btn-pay-text').textContent = currentProduct.isBonus ? ' Получить' : '💳 Оплатить';
+      document.getElementById('btn-pay-text').textContent = currentProduct.isBonus ? '🎁 Получить' : '💳 Оплатить';
 
-      // Галерея
       const galleryImage = document.getElementById('gallery-image');
       const galleryThumbs = document.getElementById('gallery-thumbs');
       
@@ -100,7 +95,6 @@
         galleryThumbs.appendChild(thumb);
       });
 
-      // Характеристики
       const featuresContainer = document.getElementById('product-features');
       featuresContainer.innerHTML = '';
       if (currentProduct.features) {
@@ -114,54 +108,60 @@
     }
 
     function getCategoryName(category) {
-      const names = {
-        soft: ' Софт',
-        services: '🛠 Услуги',
-        bonuses: '🎁 Бонусы'
-      };
+      const names = { soft: '💻 Софт', services: '🛠 Услуги', bonuses: ' Бонусы' };
       return names[category] || category;
     }
 
-    // Переключение изображения
     window.switchImage = function(index) {
       currentImageIndex = index;
       document.getElementById('gallery-image').textContent = currentProduct.images[index];
-      
       document.querySelectorAll('.gallery-thumb').forEach((thumb, i) => {
         thumb.classList.toggle('active', i === index);
       });
     };
 
-    // Следующее изображение
     window.nextImage = function() {
       const next = (currentImageIndex + 1) % currentProduct.images.length;
       switchImage(next);
     };
 
-    // Предыдущее изображение
     window.prevImage = function() {
       const prev = (currentImageIndex - 1 + currentProduct.images.length) % currentProduct.images.length;
       switchImage(prev);
     };
 
-    // Оплата
     window.payProduct = async function() {
-      if (!currentProduct) return;
+      if (!currentProduct || !currentUser) return;
       
       const btnPay = document.getElementById('btn-pay');
       btnPay.disabled = true;
-      document.getElementById('btn-pay-text').textContent = '⏳ Обработка...';
+      document.getElementById('btn-pay-text').textContent = ' Обработка...';
 
-      // Симуляция оплаты (здесь будет реальная интеграция)
+      // Сохраняем покупку в базу
+      const { error } = await supabase.from('purchases').insert({
+        user_id: currentUser.id,
+        product_id: currentProduct.id,
+        product_name: currentProduct.title,
+        product_category: currentProduct.category,
+        amount: currentProduct.price,
+        status: 'completed'
+      });
+
+      if (error) {
+        alert('Ошибка: ' + error.message);
+        btnPay.disabled = false;
+        document.getElementById('btn-pay-text').textContent = currentProduct.isBonus ? '🎁 Получить' : '💳 Оплатить';
+        return;
+      }
+
       await new Promise(r => setTimeout(r, 1500));
 
-      // Показываем сообщение об успехе
       document.getElementById('pay-subtitle').textContent = 
         currentProduct.isBonus ? 'Бонус активирован!' : `${currentProduct.title} оплачен!`;
       document.getElementById('pay-overlay').style.display = 'flex';
 
       btnPay.disabled = false;
-      document.getElementById('btn-pay-text').textContent = currentProduct.isBonus ? '🎁 Получить' : '💳 Оплатить';
+      document.getElementById('btn-pay-text').textContent = currentProduct.isBonus ? '🎁 Получить' : ' Оплатить';
     };
 
     window.closePayOverlay = function() {
