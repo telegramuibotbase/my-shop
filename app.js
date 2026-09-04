@@ -10,7 +10,6 @@ const logoutBtn = document.getElementById('logout-btn');
 const headerBonus = document.getElementById('header-bonus');
 const headerBonusValue = document.getElementById('header-bonus-value');
 
-// База товаров с подробными данными
 const products = [
   {
     id: 1,
@@ -26,23 +25,23 @@ const products = [
   {
     id: 2,
     category: 'soft',
-    icon: '🎮',
+    icon: '',
     title: 'Game Booster Pro',
     shortDesc: 'Оптимизация системы для игр',
     fullDesc: 'Максимальная оптимизация вашей системы для игр. Автоматически отключает ненужные процессы, очищает оперативную память, оптимизирует настройки графики. Увеличение FPS до 40%.',
     price: 250,
-    images: ['🎮', '', '🚀', '📊'],
+    images: ['🎮', '🚀', '', '⚡'],
     features: ['Увеличение FPS до 40%', 'Автоматическая оптимизация', 'Очистка RAM', 'Настройка графики']
   },
   {
     id: 3,
     category: 'services',
-    icon: '',
+    icon: '🛠',
     title: 'Настройка ПК',
     shortDesc: 'Удалённая настройка системы',
     fullDesc: 'Профессиональная удалённая настройка вашего компьютера. Установка драйверов, настройка системы, установка необходимого ПО, оптимизация производительности. Работаем через AnyDesk или TeamViewer.',
     price: 500,
-    images: ['🛠', '💻', '️', '🔧'],
+    images: ['🛠', '', '🔧', '✅'],
     features: ['Удалённая работа', 'Установка драйверов', 'Настройка системы', 'Установка ПО']
   },
   {
@@ -53,7 +52,7 @@ const products = [
     shortDesc: 'Полная диагностика и удаление вирусов',
     fullDesc: 'Полная диагностика компьютера на наличие вирусов, троянов, шпионского ПО и других угроз. Удаление всех вредоносных программ, установка антивируса, настройка защиты. Гарантия чистоты системы.',
     price: 300,
-    images: ['🛡', '🔍', '', '✅'],
+    images: ['🛡', '🔍', '🦠', '✅'],
     features: ['Полная диагностика', 'Удаление вирусов', 'Установка антивируса', 'Настройка защиты']
   },
   {
@@ -64,7 +63,7 @@ const products = [
     shortDesc: 'Удвой свой бонусный баланс',
     fullDesc: 'Специальное предложение! Удвойте свой текущий бонусный баланс моментально. Идеально для тех, кто хочет получить больше бонусов для будущих покупок. Активируется мгновенно после оплаты.',
     price: 0,
-    images: ['🎁', '✨', '💎', ''],
+    images: ['', '✨', '💎', ''],
     features: ['Моментальная активация', 'Удвоение баланса', 'Без ограничений', 'Для всех пользователей'],
     isBonus: true
   },
@@ -76,7 +75,7 @@ const products = [
     shortDesc: 'Скидка 10% на любую услугу',
     fullDesc: 'Получите промокод на скидку 10% на любую услугу в нашем магазине. Промокод действует 30 дней с момента активации. Можно использовать только один раз. Не суммируется с другими акциями.',
     price: 0,
-    images: ['🎟', '', '🏷️', '✅'],
+    images: ['🎟', '🏷️', '💰', '✅'],
     features: ['Скидка 10%', 'Действует 30 дней', 'На любую услугу', 'Одноразовое использование'],
     isBonus: true
   }
@@ -93,6 +92,7 @@ function renderProducts(filter = 'all') {
   filtered.forEach(product => {
     const card = document.createElement('div');
     card.className = 'product-card';
+    card.onclick = () => openProduct(product.id);
     card.innerHTML = `
       <div class="product-image">${product.images[0]}</div>
       <div class="product-category">${getCategoryName(product.category)}</div>
@@ -100,7 +100,7 @@ function renderProducts(filter = 'all') {
       <p class="product-short-desc">${product.shortDesc}</p>
       <div class="product-footer">
         <div class="product-price">${product.isBonus ? 'Бесплатно' : product.price + ' ₽'}</div>
-        <button class="btn-buy ${product.isBonus ? 'bonus' : ''}" onclick="openProduct(${product.id})">
+        <button class="btn-buy ${product.isBonus ? 'bonus' : ''}" onclick="event.stopPropagation(); openProduct(${product.id})">
           ${product.isBonus ? 'Получить' : 'Купить'}
         </button>
       </div>
@@ -118,11 +118,9 @@ function getCategoryName(category) {
   return names[category] || category;
 }
 
-// Открыть страницу товара
 window.openProduct = function(productId) {
   const product = products.find(p => p.id === productId);
   if (product) {
-    // Сохраняем товар в localStorage для страницы product.html
     localStorage.setItem('currentProduct', JSON.stringify(product));
     window.location.href = 'product.html';
   }
