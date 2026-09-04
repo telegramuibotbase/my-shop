@@ -10,30 +10,97 @@ const logoutBtn = document.getElementById('logout-btn');
 const headerBonus = document.getElementById('header-bonus');
 const headerBonusValue = document.getElementById('header-bonus-value');
 
+// База товаров с подробными данными
 const products = [
-  { id: 1, category: 'soft', icon: '💻', title: 'Windows Activator', desc: 'Надёжная активация Windows 10/11. Мгновенная доставка ключа.', price: '150 ₽' },
-  { id: 2, category: 'soft', icon: '🎮', title: 'Game Booster Pro', desc: 'Оптимизация системы для максимальной FPS в играх.', price: '250 ₽' },
-  { id: 3, category: 'services', icon: '', title: 'Настройка ПК', desc: 'Удалённая настройка системы, драйверов и программ.', price: '500 ₽' },
-  { id: 4, category: 'services', icon: '🛡', title: 'Чистка от вирусов', desc: 'Полная диагностика и удаление вредоносного ПО.', price: '300 ₽' },
-  { id: 5, category: 'bonuses', icon: '', title: 'x2 Бонусы', desc: 'Удвой свой бонусный баланс при следующей покупке!', price: 'Бесплатно', isBonus: true },
-  { id: 6, category: 'bonuses', icon: '', title: 'Промокод на скидку', desc: 'Скидка 10% на любую услугу в магазине.', price: 'Бесплатно', isBonus: true }
+  {
+    id: 1,
+    category: 'soft',
+    icon: '💻',
+    title: 'Windows Activator',
+    shortDesc: 'Надёжная активация Windows 10/11',
+    fullDesc: 'Профессиональный инструмент для активации Windows 10 и Windows 11. Поддерживает все редакции: Home, Pro, Enterprise. Мгновенная доставка ключа на email после оплаты. Пожизненная гарантия активации.',
+    price: 150,
+    images: ['💻', '🖥️', '⚙️', '✅'],
+    features: ['Мгновенная доставка', 'Все редакции Windows', 'Пожизненная гарантия', 'Техподдержка 24/7']
+  },
+  {
+    id: 2,
+    category: 'soft',
+    icon: '🎮',
+    title: 'Game Booster Pro',
+    shortDesc: 'Оптимизация системы для игр',
+    fullDesc: 'Максимальная оптимизация вашей системы для игр. Автоматически отключает ненужные процессы, очищает оперативную память, оптимизирует настройки графики. Увеличение FPS до 40%.',
+    price: 250,
+    images: ['🎮', '', '🚀', '📊'],
+    features: ['Увеличение FPS до 40%', 'Автоматическая оптимизация', 'Очистка RAM', 'Настройка графики']
+  },
+  {
+    id: 3,
+    category: 'services',
+    icon: '',
+    title: 'Настройка ПК',
+    shortDesc: 'Удалённая настройка системы',
+    fullDesc: 'Профессиональная удалённая настройка вашего компьютера. Установка драйверов, настройка системы, установка необходимого ПО, оптимизация производительности. Работаем через AnyDesk или TeamViewer.',
+    price: 500,
+    images: ['🛠', '💻', '️', '🔧'],
+    features: ['Удалённая работа', 'Установка драйверов', 'Настройка системы', 'Установка ПО']
+  },
+  {
+    id: 4,
+    category: 'services',
+    icon: '🛡',
+    title: 'Чистка от вирусов',
+    shortDesc: 'Полная диагностика и удаление вирусов',
+    fullDesc: 'Полная диагностика компьютера на наличие вирусов, троянов, шпионского ПО и других угроз. Удаление всех вредоносных программ, установка антивируса, настройка защиты. Гарантия чистоты системы.',
+    price: 300,
+    images: ['🛡', '🔍', '', '✅'],
+    features: ['Полная диагностика', 'Удаление вирусов', 'Установка антивируса', 'Настройка защиты']
+  },
+  {
+    id: 5,
+    category: 'bonuses',
+    icon: '🎁',
+    title: 'x2 Бонусы',
+    shortDesc: 'Удвой свой бонусный баланс',
+    fullDesc: 'Специальное предложение! Удвойте свой текущий бонусный баланс моментально. Идеально для тех, кто хочет получить больше бонусов для будущих покупок. Активируется мгновенно после оплаты.',
+    price: 0,
+    images: ['🎁', '✨', '💎', ''],
+    features: ['Моментальная активация', 'Удвоение баланса', 'Без ограничений', 'Для всех пользователей'],
+    isBonus: true
+  },
+  {
+    id: 6,
+    category: 'bonuses',
+    icon: '🎟',
+    title: 'Промокод на скидку',
+    shortDesc: 'Скидка 10% на любую услугу',
+    fullDesc: 'Получите промокод на скидку 10% на любую услугу в нашем магазине. Промокод действует 30 дней с момента активации. Можно использовать только один раз. Не суммируется с другими акциями.',
+    price: 0,
+    images: ['🎟', '', '🏷️', '✅'],
+    features: ['Скидка 10%', 'Действует 30 дней', 'На любую услугу', 'Одноразовое использование'],
+    isBonus: true
+  }
 ];
 
 function renderProducts(filter = 'all') {
   const grid = document.getElementById('product-grid');
   if (!grid) return;
+  
   grid.innerHTML = '';
+  
   const filtered = filter === 'all' ? products : products.filter(p => p.category === filter);
+  
   filtered.forEach(product => {
     const card = document.createElement('div');
     card.className = 'product-card';
     card.innerHTML = `
-      <div class="product-icon">${product.icon}</div>
-      <div class="product-title">${product.title}</div>
-      <div class="product-desc">${product.desc}</div>
+      <div class="product-image">${product.images[0]}</div>
+      <div class="product-category">${getCategoryName(product.category)}</div>
+      <h3 class="product-title">${product.title}</h3>
+      <p class="product-short-desc">${product.shortDesc}</p>
       <div class="product-footer">
-        <div class="product-price">${product.price}</div>
-        <button class="btn-buy ${product.isBonus ? 'bonus' : ''}" onclick="alert('Функция покупки скоро будет доступна!')">
+        <div class="product-price">${product.isBonus ? 'Бесплатно' : product.price + ' ₽'}</div>
+        <button class="btn-buy ${product.isBonus ? 'bonus' : ''}" onclick="openProduct(${product.id})">
           ${product.isBonus ? 'Получить' : 'Купить'}
         </button>
       </div>
@@ -42,10 +109,34 @@ function renderProducts(filter = 'all') {
   });
 }
 
+function getCategoryName(category) {
+  const names = {
+    soft: '💻 Софт',
+    services: '🛠 Услуги',
+    bonuses: '🎁 Бонусы'
+  };
+  return names[category] || category;
+}
+
+// Открыть страницу товара
+window.openProduct = function(productId) {
+  const product = products.find(p => p.id === productId);
+  if (product) {
+    // Сохраняем товар в localStorage для страницы product.html
+    localStorage.setItem('currentProduct', JSON.stringify(product));
+    window.location.href = 'product.html';
+  }
+};
+
 async function checkAuth() {
   if (!avatarBtn) return;
+  
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) { window.location.href = 'login.html'; return; }
+  
+  if (!user) {
+    window.location.href = 'login.html';
+    return;
+  }
   
   const { data: profile } = await supabase
     .from('profiles')
@@ -70,6 +161,7 @@ async function checkAuth() {
   
   avatarBtn.style.display = 'block';
   headerBonus.style.display = 'flex';
+  
   renderProducts('all');
 }
 
