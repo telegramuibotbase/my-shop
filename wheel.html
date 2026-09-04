@@ -34,17 +34,22 @@
         </div>
       </div>
 
-      <button class="btn-spin ready" id="btn-spin" onclick="spinRoulette()">
-        <span class="btn-shine"></span>
-        <span class="btn-text">🎯 КРУТИТЬ РУЛЕТКУ</span>
-      </button>
+      <!-- Кнопка по центру под рулеткой -->
+      <div class="roulette-controls">
+        <button class="btn-spin ready" id="btn-spin" onclick="spinRoulette()">
+          <span class="btn-shine"></span>
+          <span class="btn-text">🎯 КРУТИТЬ РУЛЕТКУ</span>
+        </button>
 
-      <div class="timer-section" id="timer-section" style="display: none;">
-        <div class="timer-icon">⏳</div>
-        <div class="timer-label">Следующее вращение через:</div>
-        <div class="timer-display" id="timer-display">00:00:00</div>
+        <!-- Таймер под кнопкой -->
+        <div class="timer-section" id="timer-section" style="display: none;">
+          <div class="timer-icon">⏳</div>
+          <div class="timer-label">Следующее вращение через:</div>
+          <div class="timer-display" id="timer-display">00:00:00</div>
+        </div>
       </div>
 
+      <!-- Сообщение о выигрыше -->
       <div class="win-overlay" id="win-message" style="display: none;">
         <div class="confetti-container" id="confetti"></div>
         <div class="win-card">
@@ -52,7 +57,7 @@
           <div class="win-icon" id="win-icon"></div>
           <div class="win-title" id="win-title">ПОЗДРАВЛЯЕМ!</div>
           <div class="win-subtitle">Ты выиграл:</div>
-          <div class="win-amount" id="win-amount">+0 </div>
+          <div class="win-amount" id="win-amount">+0 🎁</div>
           <button class="btn-claim" onclick="closeWinMessage()">
             <span class="btn-shine"></span>
             ЗАБРАТЬ
@@ -60,6 +65,7 @@
         </div>
       </div>
 
+      <!-- Сообщение о проигрыше -->
       <div class="lose-overlay" id="lose-message" style="display: none;">
         <div class="lose-card">
           <div class="lose-icon">😔</div>
@@ -80,14 +86,11 @@
     let currentUser = null;
     let isSpinning = false;
 
-    // ===== ТЕСТОВЫЙ РЕЖИМ =====
-    const TEST_MODE = true; // Поставь false когда закончишь тестировать
-
     const prizes = [
       { amount: 0, chance: 40, label: 'Пусто', icon: '😢', color: '#4b5563' },
-      { amount: 50, chance: 30, label: '50', icon: '', color: '#10b981' },
+      { amount: 50, chance: 30, label: '50', icon: '🎁', color: '#10b981' },
       { amount: 100, chance: 20, label: '100', icon: '💎', color: '#3b82f6' },
-      { amount: 500, chance: 9.997, label: '500', icon: '', color: '#f59e0b' },
+      { amount: 500, chance: 9.997, label: '500', icon: '🔥', color: '#f59e0b' },
       { amount: 7777777, chance: 0.003, label: '7.7M', icon: '👑', color: '#dc2626' }
     ];
 
@@ -161,14 +164,6 @@
     }
 
     async function checkSpinAvailability() {
-      // В тестовом режиме — всегда показываем кнопку
-      if (TEST_MODE) {
-        document.getElementById('btn-spin').style.display = 'block';
-        document.getElementById('btn-spin').classList.add('ready');
-        document.getElementById('timer-section').style.display = 'none';
-        return;
-      }
-
       const { data: profile } = await supabase.from('profiles').select('last_spin_at').eq('id', currentUser.id).single();
       if (!profile || !profile.last_spin_at) {
         document.getElementById('btn-spin').style.display = 'block';
@@ -249,7 +244,7 @@
         console.error('Sector width is 0!');
         isSpinning = false;
         btnSpin.disabled = false;
-        btnSpin.querySelector('.btn-text').textContent = '🎯 КРУТИТЬ РУЛЕТКУ';
+        btnSpin.querySelector('.btn-text').textContent = ' КРУТИТЬ РУЛЕТКУ';
         return;
       }
 
@@ -273,22 +268,12 @@
       strip.style.transform = `translateX(${targetTranslate}px)`;
 
       setTimeout(async () => {
-        // В тестовом режиме НЕ сохраняем last_spin_at
-        if (!TEST_MODE) {
-          if (wonPrize.amount > 0) {
-            const { data: profile } = await supabase.from('profiles').select('bonus_balance').eq('id', currentUser.id).single();
-            const newBalance = (profile?.bonus_balance || 0) + wonPrize.amount;
-            await supabase.from('profiles').update({ bonus_balance: newBalance, last_spin_at: new Date().toISOString() }).eq('id', currentUser.id);
-          } else {
-            await supabase.from('profiles').update({ last_spin_at: new Date().toISOString() }).eq('id', currentUser.id);
-          }
+        if (wonPrize.amount > 0) {
+          const { data: profile } = await supabase.from('profiles').select('bonus_balance').eq('id', currentUser.id).single();
+          const newBalance = (profile?.bonus_balance || 0) + wonPrize.amount;
+          await supabase.from('profiles').update({ bonus_balance: newBalance, last_spin_at: new Date().toISOString() }).eq('id', currentUser.id);
         } else {
-          // В тестовом режиме всё равно начисляем бонусы, но без таймера
-          if (wonPrize.amount > 0) {
-            const { data: profile } = await supabase.from('profiles').select('bonus_balance').eq('id', currentUser.id).single();
-            const newBalance = (profile?.bonus_balance || 0) + wonPrize.amount;
-            await supabase.from('profiles').update({ bonus_balance: newBalance }).eq('id', currentUser.id);
-          }
+          await supabase.from('profiles').update({ last_spin_at: new Date().toISOString() }).eq('id', currentUser.id);
         }
 
         if (wonPrize.amount > 0) {
@@ -304,16 +289,10 @@
         
         isSpinning = false;
         btnSpin.disabled = false;
-        btnSpin.querySelector('.btn-text').textContent = ' КРУТИТЬ РУЛЕТКУ';
-        
-        // В тестовом режиме сразу показываем кнопку, без таймера
-        if (TEST_MODE) {
-          btnSpin.classList.add('ready');
-        } else {
-          btnSpin.style.display = 'none';
-          document.getElementById('timer-section').style.display = 'block';
-          startTimer(24 * 60 * 60 * 1000);
-        }
+        btnSpin.querySelector('.btn-text').textContent = '🎯 КРУТИТЬ РУЛЕТКУ';
+        btnSpin.style.display = 'none';
+        document.getElementById('timer-section').style.display = 'block';
+        startTimer(24 * 60 * 60 * 1000);
       }, 6000);
     };
 
