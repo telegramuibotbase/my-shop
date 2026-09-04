@@ -1874,3 +1874,23 @@ body.light-theme .lose-subtitle { color: #888; }
   .win-title, .lose-title { font-size: 28px; }
   .win-amount { font-size: 42px; }
 }
+
+/* Контейнер для кнопки и таймера по центру */
+.roulette-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-top: 30px;
+}
+
+.roulette-controls .btn-spin {
+  margin-bottom: 0;
+}
+
+.roulette-controls .timer-section {
+  margin-top: 20px;
+  width: 100%;
+  max-width: 400px;
+}
