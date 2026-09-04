@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Админ-панель</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <a href="index.html" class="logo">← Назад в магазин</a>
+    <div class="admin-badge">👑 Админ-панель</div>
+  </header>
+
+  <main class="admin-page">
+    <div class="admin-container">
+      <!-- Вкладки -->
+      <div class="admin-tabs">
+        <button class="admin-tab active" data-tab="orders">📦 Заявки</button>
+        <button class="admin-tab" data-tab="products">🛍️ Товары</button>
+        <button class="admin-tab" data-tab="users">👥 Пользователи</button>
+        <button class="admin-tab" data-tab="bonuses">🎁 Бонусы</button>
+      </div>
+
+      <!-- Заявки на оплату -->
+      <div class="admin-section" id="section-orders">
+        <h2>Заявки на оплату</h2>
+        <div class="orders-list" id="orders-list">
+          <div class="empty-state">Загрузка...</div>
+        </div>
+      </div>
+
+      <!-- Управление товарами -->
+      <div class="admin-section" id="section-products" style="display: none;">
+        <h2>Управление товарами</h2>
+        <button class="btn-add-product" onclick="openAddProductModal()">+ Добавить товар</button>
+        <div class="products-list" id="products-list"></div>
+      </div>
+
+      <!-- Пользователи -->
+      <div class="admin-section" id="section-users" style="display: none;">
+        <h2>Пользователи</h2>
+        <div class="users-list" id="users-list"></div>
+      </div>
+
+      <!-- Бонусы -->
+      <div class="admin-section" id="section-bonuses" style="display: none;">
+        <h2>Начисление бонусов</h2>
+        <div class="bonus-form">
+          <div class="form-group">
+            <label>ID пользователя:</label>
+            <input type="text" id="bonus-user-id" class="form-input" placeholder="Введите ID пользователя">
+          </div>
+          <div class="form-group">
+            <label>Количество бонусов:</label>
+            <input type="number" id="bonus-amount" class="form-input" placeholder="1000">
+          </div>
+          <button class="btn-submit-bonus" onclick="addBonus()">🎁 Начислить бонусы</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Модальное окно подтверждения заказа -->
+  <div class="modal" id="confirmOrderModal" style="display: none;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Подтверждение заказа</h3>
+        <button class="modal-close" onclick="closeConfirmModal()">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="order-details" id="order-details"></div>
+        <div class="form-group">
+          <label>Комментарий админа:</label>
+          <textarea id="admin-comment" class="form-input" placeholder="Доставлено на email, активировано и т.д."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" onclick="closeConfirmModal()">Отмена</button>
+        <button class="btn-save" onclick="confirmOrder()">✅ Подтвердить</button>
+        <button class="btn-reject" onclick="rejectOrder()">❌ Отклонить</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+    import { supabaseConfig } from './supabase-config.js';
+
+    const supabase = createClient(supabaseConfig.url, supabaseConfig.anonKey);
+
+    let currentUser = null;
+    let currentOrderId = null;
+
+    // Проверка авторизации и прав админа
+    async function checkAuth() {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        window.location.href = 'login.html';
+        return;
+      }
+      
+      // TODO: Проверка прав админа (по email или роли)
+      // Пока разрешаем всем авторизованным пользователям
+      currentUser = user;
+      
+      loadOrders();
+    }
+
+    // Загрузка заявок
+    async function loadOrders() {
+      const { data: orders, error } = await supabase
+        .from('orders')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      const ordersList = document.getElementById('orders-list');
+
+      if (error || !orders || orders.length === 0) {
+        ordersList.innerHTML = '<div class="empty-state">Нет заявок</div>';
+        return;
+      }
+
+      ordersList.innerHTML = orders.map(order => `
+        <div class="order-item status-${order.status}">
+          <div class="order-info">
+            <div class="order-name">${order.product_name}</div>
+            <div class="order-date">${new Date(order.created_at).toLocaleString('ru-RU')}</div>
+            <div class="order-method">${getPaymentMethodName(order.payment_method)}</div>
+          </div>
+          <div class="order-amount">${order.amount} ₽</div>
+          <div class="order-status">${getStatusIcon(order.status)}</div>
+          <button class="btn-manage" onclick="openConfirmModal('${order.id}')">Управление</button>
+        </div>
+      `).join('');
+    }
+
+    function getPaymentMethodName(method) {
+      const names = {
+        card: '💳 Карта BY',
+        donationalerts: '🌐 DonationAlerts',
+        steam: '🎮 Steam'
+      };
+      return names[method] || method;
+    }
+
+    function getStatusIcon(status) {
+      const icons = {
+        pending: '⏳ Ожидает',
+        completed: '✅ Оплачено',
+        rejected: '❌ Отклонено'
+      };
+      return icons[status] || status;
+    }
+
+    window.openConfirmModal = function(orderId) {
+      currentOrderId = orderId;
+      document.getElementById('confirmOrderModal').style.display = 'flex';
+      
+      // Загружаем детали заказа
+      supabase.from('orders').select('*').eq('id', orderId).single().then(({ data }) => {
+        if (data) {
+          document.getElementById('order-details').innerHTML = `
+            <div class="detail-row"><span>Товар:</span><span>${data.product_name}</span></div>
+            <div class="detail-row"><span>Сумма:</span><span>${data.amount} ₽</span></div>
+            <div class="detail-row"><span>Способ оплаты:</span><span>${getPaymentMethodName(data.payment_method)}</span></div>
+            <div class="detail-row"><span>Статус:</span><span>${getStatusIcon(data.status)}</span></div>
+            ${data.admin_comment ? `<div class="detail-row"><span>Комментарий:</span><span>${data.admin_comment}</span></div>` : ''}
+          `;
+        }
+      });
+    };
+
+    window.closeConfirmModal = function() {
+      document.getElementById('confirmOrderModal').style.display = 'none';
+      document.getElementById('admin-comment').value = '';
+      currentOrderId = null;
+    };
+
+    window.confirmOrder = async function() {
+      if (!currentOrderId) return;
+
+      const comment = document.getElementById('admin-comment').value.trim();
+
+      const { error } = await supabase
+        .from('orders')
+        .update({ status: 'completed', admin_comment: comment, updated_at: new Date().toISOString() })
+        .eq('id', currentOrderId);
+
+      if (error) {
+        alert('Ошибка: ' + error.message);
+        return;
+      }
+
+      alert('✅ Заказ подтверждён!');
+      closeConfirmModal();
+      loadOrders();
+    };
+
+    window.rejectOrder = async function() {
+      if (!currentOrderId) return;
+
+      const comment = document.getElementById('admin-comment').value.trim();
+
+      const { error } = await supabase
+        .from('orders')
+        .update({ status: 'rejected', admin_comment: comment, updated_at: new Date().toISOString() })
+        .eq('id', currentOrderId);
+
+      if (error) {
+        alert('Ошибка: ' + error.message);
+        return;
+      }
+
+      alert('❌ Заказ отклонён!');
+      closeConfirmModal();
+      loadOrders();
+    };
+
+    // Переключение вкладок
+    document.querySelectorAll('.admin-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        
+        document.querySelectorAll('.admin-section').forEach(s => s.style.display = 'none');
+        document.getElementById(`section-${tab.dataset.tab}`).style.display = 'block';
+      });
+    });
+
+    checkAuth();
+  </script>
+</body>
+</html>
