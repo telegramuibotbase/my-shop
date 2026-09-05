@@ -16,12 +16,11 @@
     <div class="admin-container">
       <div class="admin-tabs">
         <button class="admin-tab active" data-tab="orders">📦 Заявки (<span id="orders-count">0</span>)</button>
-        <button class="admin-tab" data-tab="products">️ Товары</button>
-        <button class="admin-tab" data-tab="users"> Пользователи</button>
-        <button class="admin-tab" data-tab="bonuses"> Бонусы</button>
+        <button class="admin-tab" data-tab="products">🛍️ Товары</button>
+        <button class="admin-tab" data-tab="users">👥 Пользователи</button>
+        <button class="admin-tab" data-tab="bonuses">🎁 Бонусы</button>
       </div>
 
-      <!-- Заявки -->
       <div class="admin-section" id="section-orders">
         <h2>📦 Заявки на оплату</h2>
         <div class="filter-buttons">
@@ -33,22 +32,19 @@
         <div class="orders-list" id="orders-list"><div class="empty-state">Загрузка...</div></div>
       </div>
 
-      <!-- Товары -->
       <div class="admin-section" id="section-products" style="display: none;">
         <h2>🛍️ Управление товарами</h2>
         <button class="btn-add-product" onclick="window.openAddProductModal()">+ Добавить товар</button>
         <div class="products-list" id="products-list"><div class="empty-state">Загрузка...</div></div>
       </div>
 
-      <!-- Пользователи -->
       <div class="admin-section" id="section-users" style="display: none;">
-        <h2>👥 Пользователи</h2>
+        <h2> Пользователи</h2>
         <div class="users-list" id="users-list"><div class="empty-state">Загрузка...</div></div>
       </div>
 
-      <!-- Бонусы -->
       <div class="admin-section" id="section-bonuses" style="display: none;">
-        <h2> Начисление бонусов</h2>
+        <h2>🎁 Начисление бонусов</h2>
         <div class="bonus-form">
           <div class="form-group">
             <label>ID пользователя (числовой, например 100001):</label>
@@ -58,7 +54,7 @@
             <label>Количество бонусов:</label>
             <input type="number" id="bonus-amount" class="form-input" placeholder="1000">
           </div>
-          <button class="btn-submit-bonus" onclick="window.addBonus()">🎁 Начислить бонусы</button>
+          <button class="btn-submit-bonus" onclick="window.addBonus()"> Начислить бонусы</button>
         </div>
       </div>
     </div>
@@ -86,57 +82,97 @@
     </div>
   </div>
 
-  <!-- Модалка товара -->
+  <!-- Модалка товара (ОБНОВЛЁННАЯ) -->
   <div class="modal" id="addProductModal" style="display: none;">
-    <div class="modal-content">
+    <div class="modal-content modal-large">
       <div class="modal-header">
         <h3 id="product-modal-title">Добавить товар</h3>
         <button class="modal-close" onclick="window.closeAddProductModal()">×</button>
       </div>
       <div class="modal-body">
-        <div class="form-group">
-          <label>Категория:</label>
-          <select id="product-category" class="form-input">
-            <option value="soft">💻 Софт</option>
-            <option value="services">🛠️ Услуги</option>
-            <option value="bonuses">🎁 Бонусы</option>
-          </select>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Категория:</label>
+            <select id="product-category" class="form-input">
+              <option value="soft"> Софт</option>
+              <option value="services">🛠️ Услуги</option>
+              <option value="bonuses">🎁 Бонусы</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Иконка (эмодзи для карточки):</label>
+            <input type="text" id="product-icon" class="form-input" placeholder="💻">
+          </div>
         </div>
-        <div class="form-group">
-          <label>Иконка (эмодзи):</label>
-          <input type="text" id="product-icon" class="form-input" placeholder="💻">
-        </div>
+
         <div class="form-group">
           <label>Название:</label>
           <input type="text" id="product-title" class="form-input" placeholder="Windows Activator">
         </div>
+
         <div class="form-group">
           <label>Краткое описание:</label>
           <input type="text" id="product-short-desc" class="form-input" placeholder="Надёжная активация Windows">
         </div>
+
         <div class="form-group">
           <label>Полное описание:</label>
           <textarea id="product-full-desc" class="form-input" rows="4" placeholder="Подробное описание..."></textarea>
         </div>
-        <div class="form-group">
-          <label>Цена (0 для бонусов):</label>
-          <input type="number" id="product-price" class="form-input" placeholder="150">
+
+        <!-- ЦЕНА И ТИП ОПЛАТЫ -->
+        <div class="form-row">
+          <div class="form-group">
+            <label>Тип оплаты:</label>
+            <div class="price-type-selector">
+              <label class="price-type-option">
+                <input type="radio" name="price-type" value="money" checked onchange="window.switchPriceType('money')">
+                <span class="price-type-label">💰 Рубли</span>
+              </label>
+              <label class="price-type-option">
+                <input type="radio" name="price-type" value="bonus" onchange="window.switchPriceType('bonus')">
+                <span class="price-type-label">🎁 Бонусы</span>
+              </label>
+              <label class="price-type-option">
+                <input type="radio" name="price-type" value="free" onchange="window.switchPriceType('free')">
+                <span class="price-type-label">🆓 Бесплатно</span>
+              </label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label id="price-label">Цена (в рублях):</label>
+            <input type="number" id="product-price" class="form-input" placeholder="150" min="0">
+          </div>
         </div>
+
+        <!-- ЗАГРУЗКА ФОТО -->
         <div class="form-group">
-          <label>Изображения (эмодзи через запятую):</label>
-          <input type="text" id="product-images" class="form-input" placeholder="💻,🖥️,️,✅">
+          <label>📸 Фотографии товара:</label>
+          <div class="image-upload-area">
+            <input type="file" id="product-images-input" class="file-input" accept="image/*" multiple onchange="window.previewProductImages(this)">
+            <label for="product-images-input" class="image-upload-btn">
+              📁 Выбрать фотографии
+            </label>
+            <span class="upload-hint">Можно выбрать несколько фото (макс. 5, до 2 МБ каждое)</span>
+          </div>
+          <div class="image-preview-grid" id="image-preview-grid"></div>
+          <input type="hidden" id="product-images-urls" value="">
         </div>
+
+        <!-- Эмодзи для галереи (резерв) -->
+        <div class="form-group">
+          <label>Эмодзи для галереи (если нет фото):</label>
+          <input type="text" id="product-images-emoji" class="form-input" placeholder="💻,🖥️,⚙️,✅">
+        </div>
+
         <div class="form-group">
           <label>Характеристики (через запятую):</label>
           <input type="text" id="product-features" class="form-input" placeholder="Мгновенная доставка,Гарантия">
         </div>
-        <div class="form-group">
-          <label><input type="checkbox" id="product-is-bonus"> Это бонус (бесплатно)</label>
-        </div>
       </div>
       <div class="modal-footer">
         <button class="btn-cancel" onclick="window.closeAddProductModal()">Отмена</button>
-        <button class="btn-save" onclick="window.saveProduct()">💾 Сохранить</button>
+        <button class="btn-save" id="btn-save-product" onclick="window.saveProduct()"> Сохранить</button>
       </div>
     </div>
   </div>
@@ -150,6 +186,8 @@
     let currentOrderId = null;
     let currentProductId = null;
     let currentFilter = 'all';
+    let uploadedImageUrls = [];
+    let selectedImageFiles = [];
 
     async function checkAuth() {
       const { data: { user }, error } = await supabase.auth.getUser();
@@ -177,7 +215,7 @@
       
       if (error) {
         console.error('❌ Ошибка:', error);
-        ordersList.innerHTML = `<div class="empty-state" style="color:red">Ошибка: ${error.message}<br>Проверьте таблицу 'orders' в Supabase.</div>`;
+        ordersList.innerHTML = `<div class="empty-state" style="color:red">Ошибка: ${error.message}</div>`;
         return;
       }
 
@@ -195,7 +233,7 @@
             <div class="order-method">${getPaymentMethodName(order.payment_method)}</div>
             ${order.admin_comment ? `<div class="order-comment">💬 ${order.admin_comment}</div>` : ''}
           </div>
-          <div class="order-amount">${order.amount} ₽</div>
+          <div class="order-amount">${order.amount} ${order.price_type === 'bonus' ? '' : '₽'}</div>
           <div class="order-status">${getStatusIcon(order.status)}</div>
           <button class="btn-manage" onclick="window.openConfirmModal('${order.id}')">Управление</button>
         </div>
@@ -203,7 +241,7 @@
     };
 
     function getPaymentMethodName(method) {
-      const names = { card: '💳 Карта BY', donationalerts: '🌐 DonationAlerts', steam: '🎮 Steam' };
+      const names = { card: '💳 Карта BY', donationalerts: ' DonationAlerts', steam: '🎮 Steam' };
       return names[method] || method;
     }
 
@@ -219,7 +257,7 @@
 
       document.getElementById('order-details').innerHTML = `
         <div class="detail-row"><span>Товар:</span><span>${data.product_name}</span></div>
-        <div class="detail-row"><span>Сумма:</span><span>${data.amount} ₽</span></div>
+        <div class="detail-row"><span>Сумма:</span><span>${data.amount} ${data.price_type === 'bonus' ? '🎁 бонусов' : '₽'}</span></div>
         <div class="detail-row"><span>Способ:</span><span>${getPaymentMethodName(data.payment_method)}</span></div>
         <div class="detail-row"><span>Статус:</span><span>${getStatusIcon(data.status)}</span></div>
         <div class="detail-row"><span>Дата:</span><span>${new Date(data.created_at).toLocaleString('ru-RU')}</span></div>
@@ -237,7 +275,7 @@
       if (!currentOrderId) return;
       const comment = document.getElementById('admin-comment').value.trim();
       
-      const { data: order } = await supabase.from('orders').select('user_id, product_name').eq('id', currentOrderId).single();
+      const { data: order } = await supabase.from('orders').select('user_id, product_name, amount, price_type').eq('id', currentOrderId).single();
       
       const { error } = await supabase.from('orders').update({ 
         status: 'completed', 
@@ -247,12 +285,21 @@
       
       if (error) { alert('❌ Ошибка: ' + error.message); return; }
 
+      // Если оплата бонусами - списываем с баланса
+      if (order && order.price_type === 'bonus' && order.amount > 0) {
+        const { data: profile } = await supabase.from('profiles').select('bonus_balance').eq('id', order.user_id).single();
+        if (profile) {
+          const newBalance = Math.max(0, (profile.bonus_balance || 0) - order.amount);
+          await supabase.from('profiles').update({ bonus_balance: newBalance }).eq('id', order.user_id);
+        }
+      }
+
       if (order) {
         await supabase.from('notifications').insert({
           user_id: order.user_id,
           title: '✅ Заказ подтверждён',
           message: `Ваш заказ "${order.product_name}" подтверждён администратором.`
-        }).then(r => { if (r.error) console.log('Уведомление не отправлено:', r.error.message); });
+        }).then(r => { if (r.error) console.log('Уведомление:', r.error.message); });
       }
 
       alert('✅ Заказ подтверждён! Пользователь получил уведомление.');
@@ -279,7 +326,7 @@
           user_id: order.user_id,
           title: '❌ Заказ отклонён',
           message: `Ваш заказ "${order.product_name}" отклонён. ${comment ? 'Причина: ' + comment : ''}`
-        }).then(r => { if (r.error) console.log('Уведомление не отправлено:', r.error.message); });
+        }).then(r => { if (r.error) console.log('Уведомление:', r.error.message); });
       }
 
       alert('❌ Заказ отклонён! Пользователь получил уведомление.');
@@ -311,24 +358,104 @@
         productsList.innerHTML = '<div class="empty-state">Нет товаров. Добавьте первый!</div>';
         return;
       }
-      productsList.innerHTML = products.map(p => `
+      productsList.innerHTML = products.map(p => {
+        const priceDisplay = p.price_type === 'bonus' ? `${p.price} 🎁` : p.price_type === 'free' ? 'Бесплатно' : `${p.price} ₽`;
+        const mainImage = p.image_urls && p.image_urls.length > 0 
+          ? `<img src="${p.image_urls[0]}" class="product-thumb-img">` 
+          : `<div class="product-icon">${p.icon}</div>`;
+        return `
         <div class="product-item">
-          <div class="product-icon">${p.icon}</div>
+          ${mainImage}
           <div class="product-info">
             <div class="product-name">${p.title}</div>
             <div class="product-category">${p.category}</div>
-            <div class="product-price">${p.is_bonus ? 'Бесплатно' : p.price + ' ₽'}</div>
+            <div class="product-price">${priceDisplay}</div>
           </div>
           <div class="product-actions">
             <button class="btn-edit" onclick="window.editProduct(${p.id})">✏️</button>
-            <button class="btn-delete" onclick="window.deleteProduct(${p.id})">️</button>
+            <button class="btn-delete" onclick="window.deleteProduct(${p.id})">🗑️</button>
           </div>
         </div>
-      `).join('');
+      `}).join('');
+    };
+
+    window.switchPriceType = function(type) {
+      const label = document.getElementById('price-label');
+      const priceInput = document.getElementById('product-price');
+      
+      if (type === 'money') {
+        label.textContent = 'Цена (в рублях):';
+        priceInput.placeholder = '150';
+        priceInput.disabled = false;
+      } else if (type === 'bonus') {
+        label.textContent = 'Цена (в бонусах):';
+        priceInput.placeholder = '500';
+        priceInput.disabled = false;
+      } else {
+        label.textContent = 'Цена:';
+        priceInput.value = '0';
+        priceInput.disabled = true;
+      }
+    };
+
+    window.previewProductImages = function(input) {
+      const grid = document.getElementById('image-preview-grid');
+      grid.innerHTML = '';
+      selectedImageFiles = [];
+      uploadedImageUrls = [];
+      
+      if (!input.files) return;
+      
+      const files = Array.from(input.files).slice(0, 5);
+      
+      files.forEach((file, index) => {
+        if (file.size > 2000000) {
+          alert(`Файл "${file.name}" слишком большой! Максимум 2 МБ.`);
+          return;
+        }
+        
+        selectedImageFiles.push(file);
+        
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const preview = document.createElement('div');
+          preview.className = 'image-preview-item';
+          preview.innerHTML = `
+            <img src="${e.target.result}" class="preview-img">
+            <button class="remove-image" onclick="window.removeImage(${index})">×</button>
+          `;
+          grid.appendChild(preview);
+        };
+        reader.readAsDataURL(file);
+      });
+    };
+
+    window.removeImage = function(index) {
+      selectedImageFiles.splice(index, 1);
+      const input = document.getElementById('product-images-input');
+      input.value = '';
+      
+      const grid = document.getElementById('image-preview-grid');
+      grid.innerHTML = '';
+      selectedImageFiles.forEach((file, i) => {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const preview = document.createElement('div');
+          preview.className = 'image-preview-item';
+          preview.innerHTML = `
+            <img src="${e.target.result}" class="preview-img">
+            <button class="remove-image" onclick="window.removeImage(${i})">×</button>
+          `;
+          grid.appendChild(preview);
+        };
+        reader.readAsDataURL(file);
+      });
     };
 
     window.openAddProductModal = function() {
       currentProductId = null;
+      uploadedImageUrls = [];
+      selectedImageFiles = [];
       document.getElementById('product-modal-title').textContent = 'Добавить товар';
       document.getElementById('product-category').value = 'soft';
       document.getElementById('product-icon').value = '';
@@ -336,15 +463,21 @@
       document.getElementById('product-short-desc').value = '';
       document.getElementById('product-full-desc').value = '';
       document.getElementById('product-price').value = '';
-      document.getElementById('product-images').value = '';
+      document.getElementById('product-price').disabled = false;
+      document.getElementById('product-images-emoji').value = '';
       document.getElementById('product-features').value = '';
-      document.getElementById('product-is-bonus').checked = false;
+      document.getElementById('product-images-input').value = '';
+      document.getElementById('image-preview-grid').innerHTML = '';
+      document.querySelector('input[name="price-type"][value="money"]').checked = true;
+      window.switchPriceType('money');
       document.getElementById('addProductModal').style.display = 'flex';
     };
 
     window.closeAddProductModal = function() {
       document.getElementById('addProductModal').style.display = 'none';
       currentProductId = null;
+      uploadedImageUrls = [];
+      selectedImageFiles = [];
     };
 
     window.editProduct = async function(productId) {
@@ -359,47 +492,130 @@
       document.getElementById('product-short-desc').value = product.short_desc;
       document.getElementById('product-full-desc').value = product.full_desc;
       document.getElementById('product-price').value = product.price;
-      document.getElementById('product-images').value = product.images.join(',');
-      document.getElementById('product-features').value = product.features.join(',');
-      document.getElementById('product-is-bonus').checked = product.is_bonus;
+      document.getElementById('product-images-emoji').value = (product.images || []).join(',');
+      document.getElementById('product-features').value = (product.features || []).join(',');
+      
+      // Тип цены
+      const priceType = product.price_type || 'money';
+      document.querySelector(`input[name="price-type"][value="${priceType}"]`).checked = true;
+      window.switchPriceType(priceType);
+      
+      // Показываем существующие фото
+      uploadedImageUrls = product.image_urls || [];
+      const grid = document.getElementById('image-preview-grid');
+      grid.innerHTML = '';
+      uploadedImageUrls.forEach((url, i) => {
+        const preview = document.createElement('div');
+        preview.className = 'image-preview-item';
+        preview.innerHTML = `
+          <img src="${url}" class="preview-img">
+          <button class="remove-image" onclick="window.removeExistingImage(${i})">×</button>
+        `;
+        grid.appendChild(preview);
+      });
+      
       document.getElementById('addProductModal').style.display = 'flex';
     };
 
+    window.removeExistingImage = function(index) {
+      uploadedImageUrls.splice(index, 1);
+      const grid = document.getElementById('image-preview-grid');
+      grid.innerHTML = '';
+      uploadedImageUrls.forEach((url, i) => {
+        const preview = document.createElement('div');
+        preview.className = 'image-preview-item';
+        preview.innerHTML = `
+          <img src="${url}" class="preview-img">
+          <button class="remove-image" onclick="window.removeExistingImage(${i})">×</button>
+        `;
+        grid.appendChild(preview);
+      });
+    };
+
     window.saveProduct = async function() {
-      const productData = {
-        category: document.getElementById('product-category').value,
-        icon: document.getElementById('product-icon').value,
-        title: document.getElementById('product-title').value,
-        short_desc: document.getElementById('product-short-desc').value,
-        full_desc: document.getElementById('product-full-desc').value,
-        price: parseInt(document.getElementById('product-price').value) || 0,
-        images: document.getElementById('product-images').value.split(',').map(s => s.trim()).filter(s => s),
-        features: document.getElementById('product-features').value.split(',').map(s => s.trim()).filter(s => s),
-        is_bonus: document.getElementById('product-is-bonus').checked
-      };
+      const btn = document.getElementById('btn-save-product');
+      btn.disabled = true;
+      btn.textContent = '⏳ Сохранение...';
 
-      if (!productData.title || !productData.icon) {
-        alert('Заполните название и иконку!');
-        return;
+      try {
+        const priceType = document.querySelector('input[name="price-type"]:checked').value;
+        
+        const productData = {
+          category: document.getElementById('product-category').value,
+          icon: document.getElementById('product-icon').value,
+          title: document.getElementById('product-title').value,
+          short_desc: document.getElementById('product-short-desc').value,
+          full_desc: document.getElementById('product-full-desc').value,
+          price: parseInt(document.getElementById('product-price').value) || 0,
+          price_type: priceType,
+          images: document.getElementById('product-images-emoji').value.split(',').map(s => s.trim()).filter(s => s),
+          features: document.getElementById('product-features').value.split(',').map(s => s.trim()).filter(s => s),
+          is_bonus: priceType === 'bonus' || priceType === 'free'
+        };
+
+        if (!productData.title || !productData.icon) {
+          alert('Заполните название и иконку!');
+          btn.disabled = false;
+          btn.textContent = '💾 Сохранить';
+          return;
+        }
+
+        // Загружаем новые фото в Storage
+        if (selectedImageFiles.length > 0) {
+          const newUrls = [];
+          for (const file of selectedImageFiles) {
+            const fileExt = file.name.split('.').pop();
+            const fileName = `${currentUser.id}/${Date.now()}_${Math.random().toString(36).substr(2, 9)}.${fileExt}`;
+            
+            const { error: uploadError } = await supabase.storage
+              .from('product-images')
+              .upload(fileName, file);
+
+            if (uploadError) {
+              alert('Ошибка загрузки фото: ' + uploadError.message);
+              btn.disabled = false;
+              btn.textContent = '💾 Сохранить';
+              return;
+            }
+
+            const { data: fileData } = supabase.storage
+              .from('product-images')
+              .getPublicUrl(fileName);
+
+            newUrls.push(fileData.publicUrl);
+          }
+          
+          // Объединяем старые и новые URL
+          productData.image_urls = [...uploadedImageUrls, ...newUrls];
+        } else {
+          productData.image_urls = uploadedImageUrls;
+        }
+
+        let error;
+        if (currentProductId) {
+          const result = await supabase.from('products').update(productData).eq('id', currentProductId);
+          error = result.error;
+        } else {
+          const result = await supabase.from('products').insert(productData);
+          error = result.error;
+        }
+
+        if (error) {
+          alert('❌ Ошибка: ' + error.message);
+          btn.disabled = false;
+          btn.textContent = '💾 Сохранить';
+          return;
+        }
+
+        alert('✅ Товар сохранён!');
+        window.closeAddProductModal();
+        window.loadProducts();
+      } catch (e) {
+        alert('Ошибка: ' + e.message);
       }
 
-      let error;
-      if (currentProductId) {
-        const result = await supabase.from('products').update(productData).eq('id', currentProductId);
-        error = result.error;
-      } else {
-        const result = await supabase.from('products').insert(productData);
-        error = result.error;
-      }
-
-      if (error) {
-        alert(' Ошибка: ' + error.message);
-        return;
-      }
-
-      alert('✅ Товар сохранён!');
-      window.closeAddProductModal();
-      window.loadProducts();
+      btn.disabled = false;
+      btn.textContent = '💾 Сохранить';
     };
 
     window.deleteProduct = async function(productId) {
@@ -450,7 +666,6 @@
       const amount = parseInt(document.getElementById('bonus-amount').value);
       if (!userId || !amount) { alert('Заполните ID и количество!'); return; }
 
-      // Ищем по user_id (числовой ID)
       const { data: profile, error: findError } = await supabase
         .from('profiles')
         .select('id, user_id, bonus_balance, name')
@@ -482,7 +697,6 @@
       window.loadUsers();
     };
 
-    // Вкладки
     document.querySelectorAll('.admin-tab').forEach(tab => {
       tab.addEventListener('click', () => {
         document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
