@@ -9,7 +9,7 @@
 <body>
   <header>
     <a href="index.html" class="logo">← Назад в магазин</a>
-    <div class="admin-badge">👑 Админ-панель</div>
+    <div class="admin-badge"> Админ-панель</div>
   </header>
 
   <main class="admin-page">
@@ -23,12 +23,12 @@
 
       <!-- Заявки -->
       <div class="admin-section" id="section-orders">
-        <h2>📦 Заявки на оплату</h2>
+        <h2> Заявки на оплату</h2>
         <div class="filter-buttons">
           <button class="filter-btn active" data-filter="all">Все</button>
           <button class="filter-btn" data-filter="pending">⏳ Ожидают</button>
           <button class="filter-btn" data-filter="completed">✅ Оплачены</button>
-          <button class="filter-btn" data-filter="rejected">❌ Отклонены</button>
+          <button class="filter-btn" data-filter="rejected"> Отклонены</button>
         </div>
         <div class="orders-list" id="orders-list"><div class="empty-state">Загрузка...</div></div>
       </div>
@@ -36,7 +36,7 @@
       <!-- Товары -->
       <div class="admin-section" id="section-products" style="display: none;">
         <h2>🛍️ Управление товарами</h2>
-        <button class="btn-add-product" onclick="openAddProductModal()">+ Добавить товар</button>
+        <button class="btn-add-product" onclick="window.openAddProductModal()">+ Добавить товар</button>
         <div class="products-list" id="products-list"><div class="empty-state">Загрузка...</div></div>
       </div>
 
@@ -51,14 +51,14 @@
         <h2>🎁 Начисление бонусов</h2>
         <div class="bonus-form">
           <div class="form-group">
-            <label>ID пользователя:</label>
-            <input type="text" id="bonus-user-id" class="form-input" placeholder="Например: 100001">
+            <label>ID пользователя (числовой, например 100001):</label>
+            <input type="text" id="bonus-user-id" class="form-input" placeholder="100001">
           </div>
           <div class="form-group">
             <label>Количество бонусов:</label>
             <input type="number" id="bonus-amount" class="form-input" placeholder="1000">
           </div>
-          <button class="btn-submit-bonus" onclick="addBonus()">🎁 Начислить бонусы</button>
+          <button class="btn-submit-bonus" onclick="window.addBonus()">🎁 Начислить бонусы</button>
         </div>
       </div>
     </div>
@@ -69,7 +69,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h3>Управление заказом</h3>
-        <button class="modal-close" onclick="closeConfirmModal()">×</button>
+        <button class="modal-close" onclick="window.closeConfirmModal()">×</button>
       </div>
       <div class="modal-body">
         <div class="order-details" id="order-details"></div>
@@ -79,9 +79,64 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn-cancel" onclick="closeConfirmModal()">Отмена</button>
-        <button class="btn-save" onclick="confirmOrder()">✅ Подтвердить</button>
-        <button class="btn-reject" onclick="rejectOrder()">❌ Отклонить</button>
+        <button class="btn-cancel" onclick="window.closeConfirmModal()">Отмена</button>
+        <button class="btn-save" onclick="window.confirmOrder()">✅ Подтвердить</button>
+        <button class="btn-reject" onclick="window.rejectOrder()">❌ Отклонить</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Модалка товара -->
+  <div class="modal" id="addProductModal" style="display: none;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="product-modal-title">Добавить товар</h3>
+        <button class="modal-close" onclick="window.closeAddProductModal()">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Категория:</label>
+          <select id="product-category" class="form-input">
+            <option value="soft">💻 Софт</option>
+            <option value="services">️ Услуги</option>
+            <option value="bonuses">🎁 Бонусы</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Иконка (эмодзи):</label>
+          <input type="text" id="product-icon" class="form-input" placeholder="💻">
+        </div>
+        <div class="form-group">
+          <label>Название:</label>
+          <input type="text" id="product-title" class="form-input" placeholder="Windows Activator">
+        </div>
+        <div class="form-group">
+          <label>Краткое описание:</label>
+          <input type="text" id="product-short-desc" class="form-input" placeholder="Надёжная активация Windows">
+        </div>
+        <div class="form-group">
+          <label>Полное описание:</label>
+          <textarea id="product-full-desc" class="form-input" rows="4" placeholder="Подробное описание..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Цена (0 для бонусов):</label>
+          <input type="number" id="product-price" class="form-input" placeholder="150">
+        </div>
+        <div class="form-group">
+          <label>Изображения (эмодзи через запятую):</label>
+          <input type="text" id="product-images" class="form-input" placeholder="💻,🖥️,⚙️,✅">
+        </div>
+        <div class="form-group">
+          <label>Характеристики (через запятую):</label>
+          <input type="text" id="product-features" class="form-input" placeholder="Мгновенная доставка,Гарантия">
+        </div>
+        <div class="form-group">
+          <label><input type="checkbox" id="product-is-bonus"> Это бонус (бесплатно)</label>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" onclick="window.closeAddProductModal()">Отмена</button>
+        <button class="btn-save" onclick="window.saveProduct()">💾 Сохранить</button>
       </div>
     </div>
   </div>
@@ -93,6 +148,7 @@
     const supabase = createClient(supabaseConfig.url, supabaseConfig.anonKey);
     let currentUser = null;
     let currentOrderId = null;
+    let currentProductId = null;
     let currentFilter = 'all';
 
     async function checkAuth() {
@@ -103,25 +159,25 @@
         return;
       }
       currentUser = user;
-      console.log('✅ Авторизация успешна:', user.email);
+      console.log('✅ Авторизация:', user.email);
       
-      loadOrders();
-      loadProducts();
-      loadUsers();
+      window.loadOrders();
+      window.loadProducts();
+      window.loadUsers();
     }
 
-    // ===== 1. ЗАЯВКИ =====
-    async function loadOrders() {
+    // ===== ЗАЯВКИ =====
+    window.loadOrders = async function() {
       console.log('🔄 Загрузка заявок...');
       let query = supabase.from('orders').select('*').order('created_at', { ascending: false });
       if (currentFilter !== 'all') query = query.eq('status', currentFilter);
 
       const { data: orders, error } = await query;
-
       const ordersList = document.getElementById('orders-list');
+      
       if (error) {
-        console.error('❌ Ошибка загрузки заявок:', error);
-        ordersList.innerHTML = `<div class="empty-state" style="color:red">Ошибка: ${error.message}<br>Проверьте, создана ли таблица 'orders' в Supabase.</div>`;
+        console.error('❌ Ошибка:', error);
+        ordersList.innerHTML = `<div class="empty-state" style="color:red">Ошибка: ${error.message}<br>Проверьте таблицу 'orders' в Supabase.</div>`;
         return;
       }
 
@@ -141,18 +197,18 @@
           </div>
           <div class="order-amount">${order.amount} ₽</div>
           <div class="order-status">${getStatusIcon(order.status)}</div>
-          <button class="btn-manage" onclick="openConfirmModal('${order.id}')">Управление</button>
+          <button class="btn-manage" onclick="window.openConfirmModal('${order.id}')">Управление</button>
         </div>
       `).join('');
-    }
+    };
 
     function getPaymentMethodName(method) {
-      const names = { card: '💳 Карта BY', donationalerts: '🌐 DonationAlerts', steam: '🎮 Steam' };
+      const names = { card: '💳 Карта BY', donationalerts: '🌐 DonationAlerts', steam: ' Steam' };
       return names[method] || method;
     }
 
     function getStatusIcon(status) {
-      const icons = { pending: '⏳ Ожидает', completed: '✅ Оплачено', rejected: '❌ Отклонено' };
+      const icons = { pending: ' Ожидает', completed: '✅ Оплачено', rejected: '❌ Отклонено' };
       return icons[status] || status;
     }
 
@@ -166,6 +222,7 @@
         <div class="detail-row"><span>Сумма:</span><span>${data.amount} ₽</span></div>
         <div class="detail-row"><span>Способ:</span><span>${getPaymentMethodName(data.payment_method)}</span></div>
         <div class="detail-row"><span>Статус:</span><span>${getStatusIcon(data.status)}</span></div>
+        <div class="detail-row"><span>Дата:</span><span>${new Date(data.created_at).toLocaleString('ru-RU')}</span></div>
       `;
       document.getElementById('admin-comment').value = data.admin_comment || '';
       document.getElementById('confirmOrderModal').style.display = 'flex';
@@ -179,21 +236,57 @@
     window.confirmOrder = async function() {
       if (!currentOrderId) return;
       const comment = document.getElementById('admin-comment').value.trim();
-      const { error } = await supabase.from('orders').update({ status: 'completed', admin_comment: comment, updated_at: new Date().toISOString() }).eq('id', currentOrderId);
+      
+      // Сначала получаем заказ
+      const { data: order } = await supabase.from('orders').select('user_id, product_name').eq('id', currentOrderId).single();
+      
+      const { error } = await supabase.from('orders').update({ 
+        status: 'completed', 
+        admin_comment: comment, 
+        updated_at: new Date().toISOString() 
+      }).eq('id', currentOrderId);
+      
       if (error) { alert('❌ Ошибка: ' + error.message); return; }
-      alert('✅ Заказ подтверждён!');
-      closeConfirmModal();
-      loadOrders();
+
+      // Уведомление пользователю
+      if (order) {
+        await supabase.from('notifications').insert({
+          user_id: order.user_id,
+          title: '✅ Заказ подтверждён',
+          message: `Ваш заказ "${order.product_name}" подтверждён администратором.`
+        }).then(r => { if (r.error) console.log('Уведомление не отправлено:', r.error.message); });
+      }
+
+      alert('✅ Заказ подтверждён! Пользователь получил уведомление.');
+      window.closeConfirmModal();
+      window.loadOrders();
     };
 
     window.rejectOrder = async function() {
       if (!currentOrderId) return;
       const comment = document.getElementById('admin-comment').value.trim();
-      const { error } = await supabase.from('orders').update({ status: 'rejected', admin_comment: comment, updated_at: new Date().toISOString() }).eq('id', currentOrderId);
+      
+      const { data: order } = await supabase.from('orders').select('user_id, product_name').eq('id', currentOrderId).single();
+      
+      const { error } = await supabase.from('orders').update({ 
+        status: 'rejected', 
+        admin_comment: comment, 
+        updated_at: new Date().toISOString() 
+      }).eq('id', currentOrderId);
+      
       if (error) { alert('❌ Ошибка: ' + error.message); return; }
-      alert('❌ Заказ отклонён!');
-      closeConfirmModal();
-      loadOrders();
+
+      if (order) {
+        await supabase.from('notifications').insert({
+          user_id: order.user_id,
+          title: '❌ Заказ отклонён',
+          message: `Ваш заказ "${order.product_name}" отклонён. ${comment ? 'Причина: ' + comment : ''}`
+        }).then(r => { if (r.error) console.log('Уведомление не отправлено:', r.error.message); });
+      }
+
+      alert('❌ Заказ отклонён! Пользователь получил уведомление.');
+      window.closeConfirmModal();
+      window.loadOrders();
     };
 
     document.querySelectorAll('.filter-btn').forEach(btn => {
@@ -201,18 +294,18 @@
         document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         currentFilter = btn.dataset.filter;
-        loadOrders();
+        window.loadOrders();
       });
     });
 
-    // ===== 2. ТОВАРЫ =====
-    async function loadProducts() {
+    // ===== ТОВАРЫ =====
+    window.loadProducts = async function() {
       console.log('🔄 Загрузка товаров...');
       const { data: products, error } = await supabase.from('products').select('*').order('id', { ascending: true });
       const productsList = document.getElementById('products-list');
       
       if (error) {
-        console.error('❌ Ошибка загрузки товаров:', error);
+        console.error('❌ Ошибка:', error);
         productsList.innerHTML = `<div class="empty-state" style="color:red">Ошибка: ${error.message}</div>`;
         return;
       }
@@ -229,29 +322,105 @@
             <div class="product-price">${p.is_bonus ? 'Бесплатно' : p.price + ' ₽'}</div>
           </div>
           <div class="product-actions">
-            <button class="btn-delete" onclick="deleteProduct(${p.id})">🗑️</button>
+            <button class="btn-edit" onclick="window.editProduct(${p.id})">✏️</button>
+            <button class="btn-delete" onclick="window.deleteProduct(${p.id})">🗑️</button>
           </div>
         </div>
       `).join('');
-    }
-
-    window.deleteProduct = async function(id) {
-      if (!confirm('Удалить этот товар?')) return;
-      const { error } = await supabase.from('products').delete().eq('id', id);
-      if (error) { alert('❌ Ошибка: ' + error.message); return; }
-      alert('🗑️ Товар удалён!');
-      loadProducts();
     };
 
-    // ===== 3. ПОЛЬЗОВАТЕЛИ =====
-    async function loadUsers() {
+    window.openAddProductModal = function() {
+      currentProductId = null;
+      document.getElementById('product-modal-title').textContent = 'Добавить товар';
+      document.getElementById('product-category').value = 'soft';
+      document.getElementById('product-icon').value = '';
+      document.getElementById('product-title').value = '';
+      document.getElementById('product-short-desc').value = '';
+      document.getElementById('product-full-desc').value = '';
+      document.getElementById('product-price').value = '';
+      document.getElementById('product-images').value = '';
+      document.getElementById('product-features').value = '';
+      document.getElementById('product-is-bonus').checked = false;
+      document.getElementById('addProductModal').style.display = 'flex';
+    };
+
+    window.closeAddProductModal = function() {
+      document.getElementById('addProductModal').style.display = 'none';
+      currentProductId = null;
+    };
+
+    window.editProduct = async function(productId) {
+      currentProductId = productId;
+      const { data: product, error } = await supabase.from('products').select('*').eq('id', productId).single();
+      if (error) { alert('Ошибка: ' + error.message); return; }
+
+      document.getElementById('product-modal-title').textContent = 'Редактировать товар';
+      document.getElementById('product-category').value = product.category;
+      document.getElementById('product-icon').value = product.icon;
+      document.getElementById('product-title').value = product.title;
+      document.getElementById('product-short-desc').value = product.short_desc;
+      document.getElementById('product-full-desc').value = product.full_desc;
+      document.getElementById('product-price').value = product.price;
+      document.getElementById('product-images').value = product.images.join(',');
+      document.getElementById('product-features').value = product.features.join(',');
+      document.getElementById('product-is-bonus').checked = product.is_bonus;
+      document.getElementById('addProductModal').style.display = 'flex';
+    };
+
+    window.saveProduct = async function() {
+      const productData = {
+        category: document.getElementById('product-category').value,
+        icon: document.getElementById('product-icon').value,
+        title: document.getElementById('product-title').value,
+        short_desc: document.getElementById('product-short-desc').value,
+        full_desc: document.getElementById('product-full-desc').value,
+        price: parseInt(document.getElementById('product-price').value) || 0,
+        images: document.getElementById('product-images').value.split(',').map(s => s.trim()).filter(s => s),
+        features: document.getElementById('product-features').value.split(',').map(s => s.trim()).filter(s => s),
+        is_bonus: document.getElementById('product-is-bonus').checked
+      };
+
+      if (!productData.title || !productData.icon) {
+        alert('Заполните название и иконку!');
+        return;
+      }
+
+      let error;
+      if (currentProductId) {
+        const result = await supabase.from('products').update(productData).eq('id', currentProductId);
+        error = result.error;
+      } else {
+        const result = await supabase.from('products').insert(productData);
+        error = result.error;
+      }
+
+      if (error) {
+        alert('❌ Ошибка: ' + error.message);
+        return;
+      }
+
+      alert('✅ Товар сохранён!');
+      window.closeAddProductModal();
+      window.loadProducts();
+    };
+
+    window.deleteProduct = async function(productId) {
+      if (!confirm('Удалить этот товар?')) return;
+      const { error } = await supabase.from('products').delete().eq('id', productId);
+      if (error) { alert('❌ Ошибка: ' + error.message); return; }
+      alert('🗑️ Товар удалён!');
+      window.loadProducts();
+    };
+
+    // ===== ПОЛЬЗОВАТЕЛИ =====
+    window.loadUsers = async function() {
       console.log('🔄 Загрузка пользователей...');
-      const { data: users, error } = await supabase.from('profiles').select('user_id, name, avatar_url, bonus_balance').order('created_at', { ascending: false });
+      const { data: users, error } = await supabase.from('profiles').select('id, user_id, name, avatar_url, bonus_balance').order('created_at', { ascending: false });
       const usersList = document.getElementById('users-list');
       
       if (error) {
-        console.error('❌ Ошибка загрузки пользователей:', error);
-        usersList.innerHTML = `<div class="empty-state" style="color:red">Ошибка: ${error.message}<br>Проверьте таблицу 'profiles'.</div>`;
+        console.error('❌ Ошибка:', error);
+        usersList.innerHTML = `<div class="empty-state" style="color:red">Ошибка: ${error.message}</div>`;
         return;
       }
       if (!users || users.length === 0) {
@@ -266,38 +435,57 @@
             <div class="user-id">ID: ${u.user_id || 'Не указан'}</div>
             <div class="user-bonus">🎁 Баланс: ${u.bonus_balance || 0}</div>
           </div>
-          <button class="btn-manage" onclick="quickAddBonus('${u.user_id}')">🎁 + Бонус</button>
+          <button class="btn-manage" onclick="window.quickAddBonus('${u.user_id}')">🎁 + Бонус</button>
         </div>
       `).join('');
-    }
+    };
 
     window.quickAddBonus = function(userId) {
-      if(!userId) { alert('У пользователя нет ID'); return; }
+      if (!userId) { alert('У пользователя нет ID'); return; }
       document.getElementById('bonus-user-id').value = userId;
       document.querySelector('[data-tab="bonuses"]').click();
     };
 
-    // ===== 4. БОНУСЫ =====
+    // ===== БОНУСЫ =====
     window.addBonus = async function() {
       const userId = document.getElementById('bonus-user-id').value.trim();
       const amount = parseInt(document.getElementById('bonus-amount').value);
       if (!userId || !amount) { alert('Заполните ID и количество!'); return; }
 
-      const { data: profile, error: findError } = await supabase.from('profiles').select('id, bonus_balance, name').eq('user_id', userId).single();
-      if (findError || !profile) { alert('❌ Пользователь с таким ID не найден!'); return; }
+      // Ищем по user_id (числовой ID)
+      const { data: profile, error: findError } = await supabase
+        .from('profiles')
+        .select('id, user_id, bonus_balance, name')
+        .eq('user_id', parseInt(userId))
+        .single();
+      
+      if (findError || !profile) { 
+        alert('❌ Пользователь с ID ' + userId + ' не найден!'); 
+        return; 
+      }
 
       const newBalance = (profile.bonus_balance || 0) + amount;
-      const { error: updateError } = await supabase.from('profiles').update({ bonus_balance: newBalance }).eq('id', profile.id);
+      const { error: updateError } = await supabase
+        .from('profiles')
+        .update({ bonus_balance: newBalance })
+        .eq('id', profile.id);
       
       if (updateError) { alert('❌ Ошибка: ' + updateError.message); return; }
+
+      // Уведомление
+      await supabase.from('notifications').insert({
+        user_id: profile.id,
+        title: '🎁 Бонусы начислены',
+        message: `Администратор начислил вам ${amount} бонусов!`
+      }).then(r => { if (r.error) console.log('Уведомление:', r.error.message); });
 
       alert(`✅ Начислено ${amount} бонусов пользователю ${profile.name}!`);
       document.getElementById('bonus-user-id').value = '';
       document.getElementById('bonus-amount').value = '';
-      loadUsers();
+      window.loadUsers();
     };
 
-    // Переключение вкладок
+    // Вкладки
     document.querySelectorAll('.admin-tab').forEach(tab => {
       tab.addEventListener('click', () => {
         document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
