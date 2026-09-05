@@ -12,7 +12,6 @@ const headerBonusValue = document.getElementById('header-bonus-value');
 
 let products = [];
 
-// Загрузка товаров из базы
 async function loadProductsFromDB() {
   console.log('🔄 Загрузка товаров из базы...');
   const { data, error } = await supabase
@@ -46,15 +45,46 @@ function renderProducts(filter = 'all') {
     const card = document.createElement('div');
     card.className = 'product-card';
     card.onclick = () => openProduct(product.id);
+    
+    // Определяем отображение цены
+    const priceType = product.price_type || 'money';
+    let priceDisplay;
+    let btnText;
+    let badgeClass;
+    let badgeText;
+    
+    if (priceType === 'bonus') {
+      priceDisplay = product.price + ' 🎁';
+      btnText = 'Оплатить бонусами';
+      badgeClass = 'bonus-badge';
+      badgeText = '🎁 Бонусы';
+    } else if (priceType === 'free') {
+      priceDisplay = 'Бесплатно';
+      btnText = 'Получить';
+      badgeClass = 'free-badge';
+      badgeText = '🆓 Бесплатно';
+    } else {
+      priceDisplay = product.price + ' ₽';
+      btnText = 'Купить';
+      badgeClass = 'money-badge';
+      badgeText = '💰 Рубли';
+    }
+    
+    // Главное изображение
+    const mainImage = product.image_urls && product.image_urls.length > 0
+      ? `<img src="${product.image_urls[0]}" class="product-real-image">`
+      : `<div class="product-image">${product.icon}</div>`;
+    
     card.innerHTML = `
-      <div class="product-image">${product.icon}</div>
+      ${mainImage}
       <div class="product-category">${getCategoryName(product.category)}</div>
+      <div class="product-payment-badge ${badgeClass}">${badgeText}</div>
       <h3 class="product-title">${product.title}</h3>
       <p class="product-short-desc">${product.short_desc}</p>
       <div class="product-footer">
-        <div class="product-price">${product.is_bonus ? 'Бесплатно' : product.price + ' ₽'}</div>
-        <button class="btn-buy ${product.is_bonus ? 'bonus' : ''}" onclick="event.stopPropagation(); openProduct(${product.id})">
-          ${product.is_bonus ? 'Получить' : 'Купить'}
+        <div class="product-price">${priceDisplay}</div>
+        <button class="btn-buy ${priceType === 'bonus' ? 'bonus' : priceType === 'free' ? 'free' : ''}" onclick="event.stopPropagation(); openProduct(${product.id})">
+          ${btnText}
         </button>
       </div>
     `;
@@ -89,7 +119,6 @@ async function checkAuth() {
     return;
   }
   
-  // Загружаем профиль
   const { data: profile, error: profileError } = await supabase
     .from('profiles')
     .select('avatar_url, bonus_balance, user_id, name')
@@ -97,35 +126,23 @@ async function checkAuth() {
     .single();
   
   if (!profile || profileError) {
-    // Создаём профиль если нет
     const defaultAvatar = user.user_metadata?.avatar_url || '';
     const numericId = 100000 + Math.floor(Math.random() * 900000);
     
-    console.log(' Создаём профиль с user_id:', numericId);
+    console.log('📝 Создаём профиль с user_id:', numericId);
     
-    const { data: newProfile, error: insertError } = await supabase
-      .from('profiles')
-      .insert({
-        id: user.id,
-        user_id: numericId,
-        name: user.user_metadata?.full_name || user.user_metadata?.name || user.email || 'Пользователь',
-        avatar_url: defaultAvatar,
-        bonus_balance: 0
-      })
-      .select()
-      .single();
-    
-    if (insertError) {
-      console.error('❌ Ошибка создания профиля:', insertError);
-    } else {
-      console.log('✅ Профиль создан:', newProfile);
-    }
+    await supabase.from('profiles').insert({
+      id: user.id,
+      user_id: numericId,
+      name: user.user_metadata?.full_name || user.user_metadata?.name || user.email || 'Пользователь',
+      avatar_url: defaultAvatar,
+      bonus_balance: 0
+    });
     
     userAvatar.src = defaultAvatar || 'https://via.placeholder.com/40';
     headerBonusValue.textContent = '0';
   } else {
-    console.log('✅ Профиль загружен:', profile);
-    console.log('🔢 user_id:', profile.user_id, 'тип:', typeof profile.user_id);
+    console.log('✅ Профиль загружен, user_id:', profile.user_id);
     userAvatar.src = profile.avatar_url || user.user_metadata?.avatar_url || 'https://via.placeholder.com/40';
     headerBonusValue.textContent = profile.bonus_balance || 0;
   }
@@ -133,7 +150,6 @@ async function checkAuth() {
   avatarBtn.style.display = 'block';
   headerBonus.style.display = 'flex';
   
-  // Загружаем товары
   products = await loadProductsFromDB();
   renderProducts('all');
 }
