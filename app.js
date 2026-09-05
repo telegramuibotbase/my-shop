@@ -10,76 +10,24 @@ const logoutBtn = document.getElementById('logout-btn');
 const headerBonus = document.getElementById('header-bonus');
 const headerBonusValue = document.getElementById('header-bonus-value');
 
-const products = [
-  {
-    id: 1,
-    category: 'soft',
-    icon: '💻',
-    title: 'Windows Activator',
-    shortDesc: 'Надёжная активация Windows 10/11',
-    fullDesc: 'Профессиональный инструмент для активации Windows 10 и Windows 11. Поддерживает все редакции: Home, Pro, Enterprise. Мгновенная доставка ключа на email после оплаты. Пожизненная гарантия активации.',
-    price: 150,
-    images: ['💻', '🖥️', '⚙️', '✅'],
-    features: ['Мгновенная доставка', 'Все редакции Windows', 'Пожизненная гарантия', 'Техподдержка 24/7']
-  },
-  {
-    id: 2,
-    category: 'soft',
-    icon: '',
-    title: 'Game Booster Pro',
-    shortDesc: 'Оптимизация системы для игр',
-    fullDesc: 'Максимальная оптимизация вашей системы для игр. Автоматически отключает ненужные процессы, очищает оперативную память, оптимизирует настройки графики. Увеличение FPS до 40%.',
-    price: 250,
-    images: ['🎮', '🚀', '', '⚡'],
-    features: ['Увеличение FPS до 40%', 'Автоматическая оптимизация', 'Очистка RAM', 'Настройка графики']
-  },
-  {
-    id: 3,
-    category: 'services',
-    icon: '🛠',
-    title: 'Настройка ПК',
-    shortDesc: 'Удалённая настройка системы',
-    fullDesc: 'Профессиональная удалённая настройка вашего компьютера. Установка драйверов, настройка системы, установка необходимого ПО, оптимизация производительности. Работаем через AnyDesk или TeamViewer.',
-    price: 500,
-    images: ['🛠', '', '🔧', '✅'],
-    features: ['Удалённая работа', 'Установка драйверов', 'Настройка системы', 'Установка ПО']
-  },
-  {
-    id: 4,
-    category: 'services',
-    icon: '🛡',
-    title: 'Чистка от вирусов',
-    shortDesc: 'Полная диагностика и удаление вирусов',
-    fullDesc: 'Полная диагностика компьютера на наличие вирусов, троянов, шпионского ПО и других угроз. Удаление всех вредоносных программ, установка антивируса, настройка защиты. Гарантия чистоты системы.',
-    price: 300,
-    images: ['🛡', '🔍', '🦠', '✅'],
-    features: ['Полная диагностика', 'Удаление вирусов', 'Установка антивируса', 'Настройка защиты']
-  },
-  {
-    id: 5,
-    category: 'bonuses',
-    icon: '🎁',
-    title: 'x2 Бонусы',
-    shortDesc: 'Удвой свой бонусный баланс',
-    fullDesc: 'Специальное предложение! Удвойте свой текущий бонусный баланс моментально. Идеально для тех, кто хочет получить больше бонусов для будущих покупок. Активируется мгновенно после оплаты.',
-    price: 0,
-    images: ['', '✨', '💎', ''],
-    features: ['Моментальная активация', 'Удвоение баланса', 'Без ограничений', 'Для всех пользователей'],
-    isBonus: true
-  },
-  {
-    id: 6,
-    category: 'bonuses',
-    icon: '🎟',
-    title: 'Промокод на скидку',
-    shortDesc: 'Скидка 10% на любую услугу',
-    fullDesc: 'Получите промокод на скидку 10% на любую услугу в нашем магазине. Промокод действует 30 дней с момента активации. Можно использовать только один раз. Не суммируется с другими акциями.',
-    price: 0,
-    images: ['🎟', '🏷️', '💰', '✅'],
-    features: ['Скидка 10%', 'Действует 30 дней', 'На любую услугу', 'Одноразовое использование'],
-    isBonus: true
+let products = [];
+
+// Загрузка товаров из базы
+async function loadProductsFromDB() {
+  console.log('🔄 Загрузка товаров из базы...');
+  const { data, error } = await supabase
+    .from('products')
+    .select('*')
+    .order('id', { ascending: true });
+
+  if (error) {
+    console.error('❌ Ошибка загрузки товаров:', error);
+    return [];
   }
-];
+
+  console.log('✅ Загружено товаров:', data?.length || 0);
+  return data || [];
+}
 
 function renderProducts(filter = 'all') {
   const grid = document.getElementById('product-grid');
@@ -89,19 +37,24 @@ function renderProducts(filter = 'all') {
   
   const filtered = filter === 'all' ? products : products.filter(p => p.category === filter);
   
+  if (filtered.length === 0) {
+    grid.innerHTML = '<div class="empty-state" style="grid-column: 1/-1; text-align: center; padding: 40px; color: #666;">Товары пока не добавлены</div>';
+    return;
+  }
+  
   filtered.forEach(product => {
     const card = document.createElement('div');
     card.className = 'product-card';
     card.onclick = () => openProduct(product.id);
     card.innerHTML = `
-      <div class="product-image">${product.images[0]}</div>
+      <div class="product-image">${product.icon}</div>
       <div class="product-category">${getCategoryName(product.category)}</div>
       <h3 class="product-title">${product.title}</h3>
-      <p class="product-short-desc">${product.shortDesc}</p>
+      <p class="product-short-desc">${product.short_desc}</p>
       <div class="product-footer">
-        <div class="product-price">${product.isBonus ? 'Бесплатно' : product.price + ' ₽'}</div>
-        <button class="btn-buy ${product.isBonus ? 'bonus' : ''}" onclick="event.stopPropagation(); openProduct(${product.id})">
-          ${product.isBonus ? 'Получить' : 'Купить'}
+        <div class="product-price">${product.is_bonus ? 'Бесплатно' : product.price + ' ₽'}</div>
+        <button class="btn-buy ${product.is_bonus ? 'bonus' : ''}" onclick="event.stopPropagation(); openProduct(${product.id})">
+          ${product.is_bonus ? 'Получить' : 'Купить'}
         </button>
       </div>
     `;
@@ -112,7 +65,7 @@ function renderProducts(filter = 'all') {
 function getCategoryName(category) {
   const names = {
     soft: '💻 Софт',
-    services: '🛠 Услуги',
+    services: '🛠️ Услуги',
     bonuses: '🎁 Бонусы'
   };
   return names[category] || category;
@@ -136,20 +89,26 @@ async function checkAuth() {
     return;
   }
   
+  // Загружаем профиль
   const { data: profile } = await supabase
     .from('profiles')
-    .select('avatar_url, bonus_balance')
+    .select('avatar_url, bonus_balance, user_id')
     .eq('id', user.id)
     .single();
   
   if (!profile) {
+    // Создаём профиль если нет
     const defaultAvatar = user.user_metadata?.avatar_url || '';
-    await supabase.from('profiles').insert({
+    const numericId = 100000 + Math.floor(Math.random() * 900000); // Генерируем числовой ID
+    
+    const { data: newProfile } = await supabase.from('profiles').insert({
       id: user.id,
+      user_id: numericId,
       name: user.user_metadata?.full_name || user.user_metadata?.name || user.email || 'Пользователь',
       avatar_url: defaultAvatar,
       bonus_balance: 0
-    });
+    }).select().single();
+    
     userAvatar.src = defaultAvatar || 'https://via.placeholder.com/40';
     headerBonusValue.textContent = '0';
   } else {
@@ -160,6 +119,8 @@ async function checkAuth() {
   avatarBtn.style.display = 'block';
   headerBonus.style.display = 'flex';
   
+  // Загружаем товары
+  products = await loadProductsFromDB();
   renderProducts('all');
 }
 
