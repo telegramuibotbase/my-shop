@@ -9,26 +9,26 @@
 <body>
   <header>
     <a href="index.html" class="logo">← Назад в магазин</a>
-    <div class="admin-badge"> Админ-панель</div>
+    <div class="admin-badge">👑 Админ-панель</div>
   </header>
 
   <main class="admin-page">
     <div class="admin-container">
       <div class="admin-tabs">
         <button class="admin-tab active" data-tab="orders">📦 Заявки (<span id="orders-count">0</span>)</button>
-        <button class="admin-tab" data-tab="products">🛍️ Товары</button>
-        <button class="admin-tab" data-tab="users">👥 Пользователи</button>
-        <button class="admin-tab" data-tab="bonuses">🎁 Бонусы</button>
+        <button class="admin-tab" data-tab="products">️ Товары</button>
+        <button class="admin-tab" data-tab="users"> Пользователи</button>
+        <button class="admin-tab" data-tab="bonuses"> Бонусы</button>
       </div>
 
       <!-- Заявки -->
       <div class="admin-section" id="section-orders">
-        <h2> Заявки на оплату</h2>
+        <h2>📦 Заявки на оплату</h2>
         <div class="filter-buttons">
           <button class="filter-btn active" data-filter="all">Все</button>
           <button class="filter-btn" data-filter="pending">⏳ Ожидают</button>
           <button class="filter-btn" data-filter="completed">✅ Оплачены</button>
-          <button class="filter-btn" data-filter="rejected"> Отклонены</button>
+          <button class="filter-btn" data-filter="rejected">❌ Отклонены</button>
         </div>
         <div class="orders-list" id="orders-list"><div class="empty-state">Загрузка...</div></div>
       </div>
@@ -48,7 +48,7 @@
 
       <!-- Бонусы -->
       <div class="admin-section" id="section-bonuses" style="display: none;">
-        <h2>🎁 Начисление бонусов</h2>
+        <h2> Начисление бонусов</h2>
         <div class="bonus-form">
           <div class="form-group">
             <label>ID пользователя (числовой, например 100001):</label>
@@ -98,7 +98,7 @@
           <label>Категория:</label>
           <select id="product-category" class="form-input">
             <option value="soft">💻 Софт</option>
-            <option value="services">️ Услуги</option>
+            <option value="services">🛠️ Услуги</option>
             <option value="bonuses">🎁 Бонусы</option>
           </select>
         </div>
@@ -124,7 +124,7 @@
         </div>
         <div class="form-group">
           <label>Изображения (эмодзи через запятую):</label>
-          <input type="text" id="product-images" class="form-input" placeholder="💻,🖥️,⚙️,✅">
+          <input type="text" id="product-images" class="form-input" placeholder="💻,🖥️,️,✅">
         </div>
         <div class="form-group">
           <label>Характеристики (через запятую):</label>
@@ -203,12 +203,12 @@
     };
 
     function getPaymentMethodName(method) {
-      const names = { card: '💳 Карта BY', donationalerts: '🌐 DonationAlerts', steam: ' Steam' };
+      const names = { card: '💳 Карта BY', donationalerts: '🌐 DonationAlerts', steam: '🎮 Steam' };
       return names[method] || method;
     }
 
     function getStatusIcon(status) {
-      const icons = { pending: ' Ожидает', completed: '✅ Оплачено', rejected: '❌ Отклонено' };
+      const icons = { pending: '⏳ Ожидает', completed: '✅ Оплачено', rejected: '❌ Отклонено' };
       return icons[status] || status;
     }
 
@@ -237,7 +237,6 @@
       if (!currentOrderId) return;
       const comment = document.getElementById('admin-comment').value.trim();
       
-      // Сначала получаем заказ
       const { data: order } = await supabase.from('orders').select('user_id, product_name').eq('id', currentOrderId).single();
       
       const { error } = await supabase.from('orders').update({ 
@@ -248,7 +247,6 @@
       
       if (error) { alert('❌ Ошибка: ' + error.message); return; }
 
-      // Уведомление пользователю
       if (order) {
         await supabase.from('notifications').insert({
           user_id: order.user_id,
@@ -323,7 +321,7 @@
           </div>
           <div class="product-actions">
             <button class="btn-edit" onclick="window.editProduct(${p.id})">✏️</button>
-            <button class="btn-delete" onclick="window.deleteProduct(${p.id})">🗑️</button>
+            <button class="btn-delete" onclick="window.deleteProduct(${p.id})">️</button>
           </div>
         </div>
       `).join('');
@@ -395,7 +393,7 @@
       }
 
       if (error) {
-        alert('❌ Ошибка: ' + error.message);
+        alert(' Ошибка: ' + error.message);
         return;
       }
 
@@ -435,7 +433,7 @@
             <div class="user-id">ID: ${u.user_id || 'Не указан'}</div>
             <div class="user-bonus">🎁 Баланс: ${u.bonus_balance || 0}</div>
           </div>
-          <button class="btn-manage" onclick="window.quickAddBonus('${u.user_id}')">🎁 + Бонус</button>
+          <button class="btn-manage" onclick="window.quickAddBonus('${u.user_id}')"> + Бонус</button>
         </div>
       `).join('');
     };
@@ -472,7 +470,6 @@
       
       if (updateError) { alert('❌ Ошибка: ' + updateError.message); return; }
 
-      // Уведомление
       await supabase.from('notifications').insert({
         user_id: profile.id,
         title: '🎁 Бонусы начислены',
