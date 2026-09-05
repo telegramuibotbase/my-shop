@@ -15,9 +15,9 @@
     <div class="product-detail-container">
       <div class="product-gallery">
         <div class="gallery-main" id="gallery-main">
-          <div class="gallery-image" id="gallery-image">💻</div>
-          <button class="gallery-nav prev" onclick="prevImage()">‹</button>
-          <button class="gallery-nav next" onclick="nextImage()">›</button>
+          <div class="gallery-image" id="gallery-image"></div>
+          <button class="gallery-nav prev" onclick="window.prevImage()">‹</button>
+          <button class="gallery-nav next" onclick="window.nextImage()">›</button>
         </div>
         <div class="gallery-thumbs" id="gallery-thumbs"></div>
       </div>
@@ -26,12 +26,10 @@
         <div class="product-category-badge" id="product-category">💻 Софт</div>
         <h1 class="product-detail-title" id="product-title">Название товара</h1>
         <p class="product-detail-desc" id="product-desc">Описание товара</p>
-
         <div class="product-features" id="product-features"></div>
-
         <div class="product-action">
           <div class="product-detail-price" id="product-price">0 ₽</div>
-          <button class="btn-pay" id="btn-pay" onclick="openPaymentModal()">
+          <button class="btn-pay" id="btn-pay" onclick="window.openPaymentModal()">
             <span class="btn-shine"></span>
             <span id="btn-pay-text">💳 Оплатить</span>
           </button>
@@ -40,50 +38,47 @@
     </div>
   </main>
 
-  <!-- Модальное окно оплаты -->
+  <!-- Модалка оплаты -->
   <div class="payment-modal" id="payment-modal" style="display: none;">
     <div class="payment-modal-content">
       <div class="payment-modal-header">
         <h3>💳 Оплата товара</h3>
-        <button class="modal-close" onclick="closePaymentModal()">×</button>
+        <button class="modal-close" onclick="window.closePaymentModal()">×</button>
       </div>
-      
       <div class="payment-modal-body">
         <div class="payment-product-info">
           <div class="payment-product-name" id="payment-product-name">Товар</div>
           <div class="payment-product-amount" id="payment-product-amount">0 ₽</div>
         </div>
 
-        <!-- Выбор способа оплаты -->
         <div class="payment-methods">
           <label class="payment-method-label">Выберите способ оплаты:</label>
           <div class="payment-method-options">
             <label class="payment-method-card">
-              <input type="radio" name="payment-method" value="card" checked onchange="switchPaymentMethod('card')">
+              <input type="radio" name="payment-method" value="card" checked onchange="window.switchPaymentMethod('card')">
               <div class="payment-method-icon">💳</div>
               <div class="payment-method-name">🇧🇾 Перевод на карту (BY)</div>
             </label>
             <label class="payment-method-card">
-              <input type="radio" name="payment-method" value="donationalerts" onchange="switchPaymentMethod('donationalerts')">
-              <div class="payment-method-icon">🌐</div>
+              <input type="radio" name="payment-method" value="donationalerts" onchange="window.switchPaymentMethod('donationalerts')">
+              <div class="payment-method-icon"></div>
               <div class="payment-method-name">🌍 Онлайн оплата (СНГ)</div>
             </label>
             <label class="payment-method-card">
-              <input type="radio" name="payment-method" value="steam" onchange="switchPaymentMethod('steam')">
+              <input type="radio" name="payment-method" value="steam" onchange="window.switchPaymentMethod('steam')">
               <div class="payment-method-icon">🎮</div>
               <div class="payment-method-name">Steam скины</div>
             </label>
           </div>
         </div>
 
-        <!-- Способ 1: Карта BY -->
         <div class="payment-details" id="payment-details-card">
           <div class="payment-details-title">Реквизиты для перевода:</div>
           <div class="payment-card-info">
             <div class="payment-row">
               <span class="payment-row-label">Номер карты:</span>
               <span class="payment-row-value">4276 5500 1234 5678</span>
-              <button class="btn-copy" onclick="copyToClipboard('4276550012345678')">📋</button>
+              <button class="btn-copy" onclick="window.copyToClipboard('4276550012345678')">📋</button>
             </div>
             <div class="payment-row">
               <span class="payment-row-label">Получатель:</span>
@@ -99,14 +94,11 @@
           </div>
         </div>
 
-        <!-- Способ 2: DonationAlerts -->
         <div class="payment-details" id="payment-details-donationalerts" style="display: none;">
           <div class="payment-details-title">Онлайн оплата через DonationAlerts:</div>
           <div class="donationalerts-box">
             <div class="donationalerts-link">
-              <a href="https://www.donationalerts.com/r/your_username" target="_blank" class="donationalerts-btn">
-                🌐 Перейти к оплате
-              </a>
+              <a href="https://www.donationalerts.com/r/your_username" target="_blank" class="donationalerts-btn">🌐 Перейти к оплате</a>
             </div>
             <div class="payment-row">
               <span class="payment-row-label">Сумма к оплате:</span>
@@ -118,14 +110,11 @@
           </div>
         </div>
 
-        <!-- Способ 3: Steam -->
         <div class="payment-details" id="payment-details-steam" style="display: none;">
           <div class="payment-details-title">Оплата Steam скинами:</div>
           <div class="steam-box">
             <div class="steam-link">
-              <a href="https://steamcommunity.com/tradeoffer/new/?partner=YOUR_STEAM_ID&token=YOUR_TOKEN" target="_blank" class="steam-btn">
-                🎮 Отправить трейд
-              </a>
+              <a href="https://steamcommunity.com/tradeoffer/new/?partner=YOUR_STEAM_ID&token=YOUR_TOKEN" target="_blank" class="steam-btn">🎮 Отправить трейд</a>
             </div>
             <div class="payment-row">
               <span class="payment-row-label">Сумма скинов:</span>
@@ -137,15 +126,13 @@
           </div>
         </div>
 
-        <!-- Комментарий -->
         <div class="payment-comment">
           <label class="comment-label">💬 Комментарий (необязательно):</label>
           <textarea id="payment-comment" class="comment-input" placeholder="Ваш email для доставки, Steam ID и т.д."></textarea>
         </div>
 
-        <!-- Кнопка "Я оплатил" -->
         <div class="payment-confirm">
-          <button class="btn-i-paid" id="btn-i-paid" onclick="confirmPayment()">
+          <button class="btn-i-paid" id="btn-i-paid" onclick="window.confirmPayment()">
             <span class="btn-shine"></span>
             ✅ Я оплатил
           </button>
@@ -154,13 +141,12 @@
     </div>
   </div>
 
-  <!-- Сообщение об успешной отправке -->
   <div class="pay-overlay" id="pay-overlay" style="display: none;">
     <div class="pay-card">
-      <div class="pay-icon">⏳</div>
+      <div class="pay-icon"></div>
       <div class="pay-title">Заявка отправлена!</div>
       <div class="pay-subtitle" id="pay-subtitle">Ожидает подтверждения админа</div>
-      <button class="btn-claim" onclick="closePayOverlay()">
+      <button class="btn-claim" onclick="window.closePayOverlay()">
         <span class="btn-shine"></span>
         В КАТАЛОГ
       </button>
@@ -172,7 +158,6 @@
     import { supabaseConfig } from './supabase-config.js';
 
     const supabase = createClient(supabaseConfig.url, supabaseConfig.anonKey);
-
     let currentProduct = null;
     let currentImageIndex = 0;
     let currentUser = null;
@@ -183,10 +168,7 @@
       currentUser = user;
 
       const productData = localStorage.getItem('currentProduct');
-      if (!productData) {
-        window.location.href = 'index.html';
-        return;
-      }
+      if (!productData) { window.location.href = 'index.html'; return; }
       
       currentProduct = JSON.parse(productData);
       
@@ -201,15 +183,13 @@
 
       const galleryImage = document.getElementById('gallery-image');
       const galleryThumbs = document.getElementById('gallery-thumbs');
-      
       galleryImage.textContent = currentProduct.images[0];
-      
       galleryThumbs.innerHTML = '';
       currentProduct.images.forEach((img, index) => {
         const thumb = document.createElement('div');
         thumb.className = 'gallery-thumb' + (index === 0 ? ' active' : '');
         thumb.textContent = img;
-        thumb.onclick = () => switchImage(index);
+        thumb.onclick = () => window.switchImage(index);
         galleryThumbs.appendChild(thumb);
       });
 
@@ -226,7 +206,7 @@
     }
 
     function getCategoryName(category) {
-      const names = { soft: '💻 Софт', services: ' Услуги', bonuses: '🎁 Бонусы' };
+      const names = { soft: '💻 Софт', services: '🛠️ Услуги', bonuses: '🎁 Бонусы' };
       return names[category] || category;
     }
 
@@ -240,17 +220,16 @@
 
     window.nextImage = function() {
       const next = (currentImageIndex + 1) % currentProduct.images.length;
-      switchImage(next);
+      window.switchImage(next);
     };
 
     window.prevImage = function() {
       const prev = (currentImageIndex - 1 + currentProduct.images.length) % currentProduct.images.length;
-      switchImage(prev);
+      window.switchImage(prev);
     };
 
     window.openPaymentModal = function() {
       if (!currentProduct) return;
-      
       document.getElementById('payment-product-name').textContent = currentProduct.title;
       document.getElementById('payment-product-amount').textContent = currentProduct.isBonus ? 'Бесплатно' : currentProduct.price + ' ₽';
       document.getElementById('payment-modal').style.display = 'flex';
@@ -288,57 +267,44 @@
         product_name: currentProduct.title,
         amount: currentProduct.price,
         payment_method: paymentMethod,
-        payment_screenshot: null,
         status: 'pending',
         admin_comment: comment
       };
 
-      console.log(' Отправка заказа:', orderData);
+      console.log('📦 Отправка заказа:', orderData);
 
       const btn = document.getElementById('btn-i-paid');
       btn.disabled = true;
-      btn.innerHTML = '<span class="btn-shine"></span> ⏳ Отправка...';
+      btn.innerHTML = '<span class="btn-shine"></span>  Отправка...';
 
       try {
-        // Пробуем Supabase
         const { data, error } = await supabase.from('orders').insert(orderData);
 
         if (error) {
           console.error('❌ Ошибка Supabase:', error);
-          
-          // Fallback на localStorage если Supabase не работает
-          console.log('⚠️ Fallback на localStorage');
+          // Fallback на localStorage
           const orders = JSON.parse(localStorage.getItem('orders') || '[]');
           orders.push({ ...orderData, id: Date.now().toString(), created_at: new Date().toISOString() });
           localStorage.setItem('orders', JSON.stringify(orders));
-          
-          console.log('✅ Сохранено в localStorage');
+          console.log('️ Сохранено в localStorage');
         } else {
-          console.log('✅ Заказ создан в Supabase:', data);
+          console.log('✅ Заказ создан:', data);
+          // Уведомление пользователю
+          await supabase.from('notifications').insert({
+            user_id: currentUser.id,
+            title: '📦 Заказ создан',
+            message: `Ваш заказ "${currentProduct.title}" создан и ожидает подтверждения админа.`
+          }).then(r => { if (r.error) console.log('Уведомление:', r.error.message); });
         }
 
-        closePaymentModal();
+        window.closePaymentModal();
         document.getElementById('pay-subtitle').textContent = 
           `Заявка на "${currentProduct.title}" создана. Ожидайте подтверждения админа.`;
         document.getElementById('pay-overlay').style.display = 'flex';
 
       } catch (error) {
         console.error('❌ Исключение:', error);
-        
-        // Fallback на localStorage
-        try {
-          const orders = JSON.parse(localStorage.getItem('orders') || '[]');
-          orders.push({ ...orderData, id: Date.now().toString(), created_at: new Date().toISOString() });
-          localStorage.setItem('orders', JSON.stringify(orders));
-          
-          closePaymentModal();
-          document.getElementById('pay-subtitle').textContent = 
-            `Заявка на "${currentProduct.title}" создана. Ожидайте подтверждения админа.`;
-          document.getElementById('pay-overlay').style.display = 'flex';
-        } catch (localError) {
-          console.error('❌ Ошибка localStorage:', localError);
-          alert('Ошибка: ' + error.message);
-        }
+        alert('Ошибка: ' + error.message);
       }
 
       btn.disabled = false;
