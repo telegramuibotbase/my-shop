@@ -24,7 +24,6 @@
       
       <button class="btn-edit-small" onclick="openEditModal()">✏️ Редактировать профиль</button>
       
-      <!-- Бонусный баланс -->
       <div class="bonus-calm-section">
         <div class="bonus-calm-card">
           <div class="bonus-calm-label" data-i18n="bonusBalance">Бонусный баланс</div>
@@ -37,7 +36,6 @@
         </div>
       </div>
       
-      <!-- История покупок -->
       <div class="section-card">
         <div class="section-header">
           <h3>🛍️ История покупок</h3>
@@ -47,7 +45,6 @@
         </div>
       </div>
       
-      <!-- Друзья -->
       <div class="section-card">
         <div class="section-header">
           <h3>👥 Друзья</h3>
@@ -58,7 +55,6 @@
         </div>
       </div>
       
-      <!-- Реферальная система -->
       <div class="section-card">
         <div class="section-header">
           <h3>🎁 Реферальная система</h3>
@@ -71,13 +67,11 @@
         </div>
       </div>
       
-      <!-- Настройки -->
       <div class="section-card settings-section-inline" id="settings-section">
         <div class="section-header">
           <h3>⚙️ Настройки</h3>
         </div>
         
-        <!-- Безопасность -->
         <div class="settings-block">
           <h4 class="settings-block-title">🔒 Безопасность</h4>
           
@@ -102,7 +96,6 @@
           </div>
         </div>
 
-        <!-- Внешний вид -->
         <div class="settings-block">
           <h4 class="settings-block-title" data-i18n="appearance">🎨 Внешний вид</h4>
           
@@ -111,13 +104,12 @@
               <div class="setting-label" data-i18n="theme">Тема</div>
             </div>
             <div class="toggle-group">
-              <button class="toggle-btn active" id="theme-dark" onclick="setTheme('dark')">🌙 Тёмная</button>
+              <button class="toggle-btn active" id="theme-dark" onclick="setTheme('dark')"> Тёмная</button>
               <button class="toggle-btn" id="theme-light" onclick="setTheme('light')">☀️ Светлая</button>
             </div>
           </div>
         </div>
 
-        <!-- Язык -->
         <div class="settings-block">
           <h4 class="settings-block-title" data-i18n="language">🌐 Язык</h4>
           
@@ -127,12 +119,11 @@
             </div>
             <div class="toggle-group">
               <button class="toggle-btn active" id="lang-ru" onclick="setLanguage('ru')">🇷🇺 Русский</button>
-              <button class="toggle-btn" id="lang-en" onclick="setLanguage('en')">🇬🇧 English</button>
+              <button class="toggle-btn" id="lang-en" onclick="setLanguage('en')">🇧 English</button>
             </div>
           </div>
         </div>
 
-        <!-- Валюта -->
         <div class="settings-block">
           <h4 class="settings-block-title" data-i18n="currency">💱 Валюта</h4>
           
@@ -141,24 +132,23 @@
               <div class="setting-label" data-i18n="selectCurrency">Отображение цен</div>
             </div>
             <select class="currency-select" id="currency-select" onchange="setCurrency(this.value)">
-              <option value="RUB">🇷 RUB (Рубль)</option>
+              <option value="RUB">🇷🇺 RUB (Рубль)</option>
               <option value="USD">🇺🇸 USD (Доллар)</option>
-              <option value="EUR">🇪🇺 EUR (Евро)</option>
+              <option value="EUR">🇪 EUR (Евро)</option>
               <option value="BYN">🇧🇾 BYN (Бел. рубль)</option>
             </select>
           </div>
         </div>
       </div>
       
-      <!-- Поддержка -->
       <div class="section-card">
         <div class="section-header">
-          <h3> Поддержка</h3>
+          <h3>💬 Поддержка</h3>
         </div>
         <div class="section-content">
           <p>Нужна помощь? Свяжитесь с нами!</p>
           <div class="support-links">
-            <a href="#" class="support-link"> Email: support@myshop.com</a>
+            <a href="#" class="support-link">📧 Email: support@myshop.com</a>
             <a href="#" class="support-link">💬 Telegram: @myshop_support</a>
           </div>
         </div>
@@ -166,7 +156,7 @@
     </div>
   </main>
 
-  <!-- Модальное окно редактирования профиля -->
+  <!-- Модальные окна (те же что были) -->
   <div class="modal" id="editModal">
     <div class="modal-content">
       <div class="modal-header">
@@ -182,7 +172,7 @@
           <label>Новая аватарка</label>
           <div class="file-upload-wrapper">
             <input type="file" id="edit-avatar-file" class="file-input" accept="image/*" onchange="previewImage(this)">
-            <label for="edit-avatar-file" class="file-upload-btn"> Выбрать файл</label>
+            <label for="edit-avatar-file" class="file-upload-btn">📁 Выбрать файл</label>
             <span class="file-name" id="file-name">Файл не выбран</span>
           </div>
         </div>
@@ -197,7 +187,6 @@
     </div>
   </div>
 
-  <!-- Модальное окно добавления друга -->
   <div class="modal" id="addFriendModal">
     <div class="modal-content">
       <div class="modal-header">
@@ -212,16 +201,15 @@
       </div>
       <div class="modal-footer">
         <button class="btn-cancel" onclick="closeAddFriendModal()">Отмена</button>
-        <button class="btn-save" onclick="addFriend()">➕ Добавить</button>
+        <button class="btn-save" onclick="addFriend()"> Добавить</button>
       </div>
     </div>
   </div>
 
-  <!-- Модальное окно привязки почты -->
   <div class="modal" id="emailModal">
     <div class="modal-content">
       <div class="modal-header">
-        <h3>📧 Привязать почту</h3>
+        <h3> Привязать почту</h3>
         <button class="modal-close" onclick="closeEmailModal()">×</button>
       </div>
       <div class="modal-body">
@@ -237,7 +225,6 @@
     </div>
   </div>
 
-  <!-- Модальное окно привязки Telegram -->
   <div class="modal" id="telegramModal">
     <div class="modal-content">
       <div class="modal-header">
@@ -253,7 +240,7 @@
       </div>
       <div class="modal-footer">
         <button class="btn-cancel" onclick="closeTelegramModal()">Отмена</button>
-        <button class="btn-save" onclick="saveTelegram()"> Сохранить</button>
+        <button class="btn-save" onclick="saveTelegram()">💾 Сохранить</button>
       </div>
     </div>
   </div>
@@ -289,11 +276,11 @@
       en: {
         bonusBalance: 'Bonus Balance',
         email: 'Email',
-        appearance: '🎨 Appearance',
+        appearance: ' Appearance',
         theme: 'Theme',
         language: '🌐 Language',
         selectLanguage: 'Select language',
-        currency: '💱 Currency',
+        currency: ' Currency',
         selectCurrency: 'Price display',
         notLinked: 'Not linked',
         notLinkedTg: 'Not linked',
@@ -418,16 +405,27 @@
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) { window.location.href = 'login.html'; return; }
       currentUser = user;
+      
       const { data: profile } = await supabase.from('profiles').select('*').eq('id', user.id).single();
       
       if (!profile) {
         const defaultName = user.user_metadata?.full_name || user.user_metadata?.name || user.email || 'Пользователь';
         const defaultAvatar = user.user_metadata?.avatar_url || '';
         const provider = (user.app_metadata?.provider || 'Discord').charAt(0).toUpperCase() + (user.app_metadata?.provider || 'discord').slice(1);
-        const { data: newProfile } = await supabase.from('profiles').insert({ id: user.id, name: defaultName, avatar_url: defaultAvatar, balance: 0, bonus_balance: 0 }).select().single();
-        currentUserId = newProfile?.user_id;
+        const numericId = 100000 + Math.floor(Math.random() * 900000);
+        
+        const { data: newProfile } = await supabase.from('profiles').insert({
+          id: user.id,
+          user_id: numericId,
+          name: defaultName,
+          avatar_url: defaultAvatar,
+          balance: 0,
+          bonus_balance: 0
+        }).select().single();
+        
+        currentUserId = numericId;
         currentAvatarUrl = defaultAvatar;
-        displayProfile(defaultName, defaultAvatar, 0, provider, newProfile?.user_id, user.email);
+        displayProfile(defaultName, defaultAvatar, 0, provider, numericId, user.email);
         loadFriends();
         loadPurchases();
         return;
@@ -448,6 +446,7 @@
       document.getElementById('profile-name').textContent = name;
       document.getElementById('profile-provider').textContent = provider;
       document.getElementById('profile-bonus-balance').textContent = bonusBalance || 0;
+      // Показываем ЧИСЛОВОЙ user_id, а не UUID
       document.getElementById('profile-user-id').textContent = 'ID #' + (userId || '000000');
       document.getElementById('referral-code').textContent = 'Ваш код: REF-' + (userId || '000000');
       document.getElementById('edit-name').value = name;
@@ -476,17 +475,23 @@
       }
     }
     
-    // Загрузка истории покупок
     async function loadPurchases() {
+      if (!currentUser) return;
+      
       const { data: purchases, error } = await supabase
-        .from('purchases')
+        .from('orders')
         .select('*')
         .eq('user_id', currentUser.id)
         .order('created_at', { ascending: false });
 
       const purchasesList = document.getElementById('purchases-list');
 
-      if (error || !purchases || purchases.length === 0) {
+      if (error) {
+        purchasesList.innerHTML = '<div class="empty-state">Ошибка загрузки</div>';
+        return;
+      }
+
+      if (!purchases || purchases.length === 0) {
         purchasesList.innerHTML = '<div class="empty-state">У вас пока нет покупок</div>';
         return;
       }
@@ -500,21 +505,42 @@
           <div class="purchase-amount ${p.amount === 0 ? 'free' : ''}">
             ${p.amount === 0 ? 'Бесплатно' : p.amount + ' ₽'}
           </div>
-          <div class="purchase-status">${p.status === 'completed' ? '✅' : '⏳'}</div>
+          <div class="purchase-status">${p.status === 'completed' ? '✅' : p.status === 'rejected' ? '❌' : '⏳'}</div>
         </div>
       `).join('');
     }
 
     async function loadFriends() {
-      const { data: friends } = await supabase.from('friends').select('*, profiles!friend_id(name, avatar_url, user_id)').eq('user_id', currentUser.id).eq('status', 'accepted');
+      if (!currentUser) return;
+      
+      const { data: friends } = await supabase
+        .from('friends')
+        .select('*, profiles!friend_id(name, avatar_url, user_id)')
+        .eq('user_id', currentUser.id)
+        .eq('status', 'accepted');
+      
       const friendsList = document.getElementById('friends-list');
       const settings = JSON.parse(localStorage.getItem('userSettings') || '{}');
       const lang = settings.lang || 'ru';
+      
       if (!friends || friends.length === 0) { 
         friendsList.innerHTML = '<div class="empty-state">' + translations[lang].noFriends + '</div>'; 
         return; 
       }
-      friendsList.innerHTML = friends.map(friend => `<div class="friend-item"><img src="${friend.profiles.avatar_url || 'https://via.placeholder.com/40'}" class="friend-avatar"><div class="friend-info"><div class="friend-name">${friend.profiles.name}</div><div class="friend-id">ID #${friend.profiles.user_id}</div></div><div class="friend-actions"><button class="btn-friend-action" onclick="sendMessage('${friend.friend_id}')">💬 Написать</button><button class="btn-friend-action" onclick="sendBonus('${friend.friend_id}')">⭐ Бонус</button></div></div>`).join('');
+      
+      friendsList.innerHTML = friends.map(friend => `
+        <div class="friend-item">
+          <img src="${friend.profiles.avatar_url || 'https://via.placeholder.com/40'}" class="friend-avatar">
+          <div class="friend-info">
+            <div class="friend-name">${friend.profiles.name}</div>
+            <div class="friend-id">ID #${friend.profiles.user_id}</div>
+          </div>
+          <div class="friend-actions">
+            <button class="btn-friend-action" onclick="sendMessage('${friend.friend_id}')">💬 Написать</button>
+            <button class="btn-friend-action" onclick="sendBonus('${friend.friend_id}')">⭐ Бонус</button>
+          </div>
+        </div>
+      `).join('');
     }
     
     window.previewImage = function(input) {
