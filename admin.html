@@ -14,7 +14,6 @@
 
   <main class="admin-page">
     <div class="admin-container">
-      <!-- Вкладки -->
       <div class="admin-tabs">
         <button class="admin-tab active" data-tab="orders">📦 Заявки (<span id="orders-count">0</span>)</button>
         <button class="admin-tab" data-tab="products">🛍️ Товары</button>
@@ -22,35 +21,29 @@
         <button class="admin-tab" data-tab="bonuses">🎁 Бонусы</button>
       </div>
 
-      <!-- Заявки на оплату -->
+      <!-- Заявки -->
       <div class="admin-section" id="section-orders">
-        <h2> Заявки на оплату</h2>
+        <h2>📦 Заявки на оплату</h2>
         <div class="filter-buttons">
           <button class="filter-btn active" data-filter="all">Все</button>
           <button class="filter-btn" data-filter="pending">⏳ Ожидают</button>
           <button class="filter-btn" data-filter="completed">✅ Оплачены</button>
           <button class="filter-btn" data-filter="rejected">❌ Отклонены</button>
         </div>
-        <div class="orders-list" id="orders-list">
-          <div class="empty-state">Загрузка...</div>
-        </div>
+        <div class="orders-list" id="orders-list"><div class="empty-state">Загрузка...</div></div>
       </div>
 
-      <!-- Управление товарами -->
+      <!-- Товары -->
       <div class="admin-section" id="section-products" style="display: none;">
         <h2>🛍️ Управление товарами</h2>
         <button class="btn-add-product" onclick="openAddProductModal()">+ Добавить товар</button>
-        <div class="products-list" id="products-list">
-          <div class="empty-state">Загрузка...</div>
-        </div>
+        <div class="products-list" id="products-list"><div class="empty-state">Загрузка...</div></div>
       </div>
 
       <!-- Пользователи -->
       <div class="admin-section" id="section-users" style="display: none;">
         <h2>👥 Пользователи</h2>
-        <div class="users-list" id="users-list">
-          <div class="empty-state">Загрузка...</div>
-        </div>
+        <div class="users-list" id="users-list"><div class="empty-state">Загрузка...</div></div>
       </div>
 
       <!-- Бонусы -->
@@ -59,7 +52,7 @@
         <div class="bonus-form">
           <div class="form-group">
             <label>ID пользователя:</label>
-            <input type="text" id="bonus-user-id" class="form-input" placeholder="Введите ID пользователя (например: 100001)">
+            <input type="text" id="bonus-user-id" class="form-input" placeholder="Например: 100001">
           </div>
           <div class="form-group">
             <label>Количество бонусов:</label>
@@ -71,7 +64,7 @@
     </div>
   </main>
 
-  <!-- Модальное окно подтверждения заказа -->
+  <!-- Модалка управления заказом -->
   <div class="modal" id="confirmOrderModal" style="display: none;">
     <div class="modal-content">
       <div class="modal-header">
@@ -82,7 +75,7 @@
         <div class="order-details" id="order-details"></div>
         <div class="form-group">
           <label>Комментарий админа:</label>
-          <textarea id="admin-comment" class="form-input" placeholder="Доставлено на email, активировано и т.д."></textarea>
+          <textarea id="admin-comment" class="form-input" placeholder="Доставлено на email и т.д."></textarea>
         </div>
       </div>
       <div class="modal-footer">
@@ -93,108 +86,46 @@
     </div>
   </div>
 
-  <!-- Модальное окно добавления товара -->
-  <div class="modal" id="addProductModal" style="display: none;">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3 id="product-modal-title">Добавить товар</h3>
-        <button class="modal-close" onclick="closeAddProductModal()">×</button>
-      </div>
-      <div class="modal-body">
-        <div class="form-group">
-          <label>Категория:</label>
-          <select id="product-category" class="form-input">
-            <option value="soft">💻 Софт</option>
-            <option value="services">️ Услуги</option>
-            <option value="bonuses">🎁 Бонусы</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Иконка (эмодзи):</label>
-          <input type="text" id="product-icon" class="form-input" placeholder="💻">
-        </div>
-        <div class="form-group">
-          <label>Название:</label>
-          <input type="text" id="product-title" class="form-input" placeholder="Windows Activator">
-        </div>
-        <div class="form-group">
-          <label>Краткое описание:</label>
-          <input type="text" id="product-short-desc" class="form-input" placeholder="Надёжная активация Windows">
-        </div>
-        <div class="form-group">
-          <label>Полное описание:</label>
-          <textarea id="product-full-desc" class="form-input" rows="4" placeholder="Подробное описание товара..."></textarea>
-        </div>
-        <div class="form-group">
-          <label>Цена (0 для бонусов):</label>
-          <input type="number" id="product-price" class="form-input" placeholder="150">
-        </div>
-        <div class="form-group">
-          <label>Изображения (эмодзи через запятую):</label>
-          <input type="text" id="product-images" class="form-input" placeholder="💻,🖥️,⚙️,✅">
-        </div>
-        <div class="form-group">
-          <label>Характеристики (через запятую):</label>
-          <input type="text" id="product-features" class="form-input" placeholder="Мгновенная доставка,Все редакции Windows">
-        </div>
-        <div class="form-group">
-          <label>
-            <input type="checkbox" id="product-is-bonus"> Это бонус (бесплатно)
-          </label>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn-cancel" onclick="closeAddProductModal()">Отмена</button>
-        <button class="btn-save" onclick="saveProduct()">💾 Сохранить</button>
-      </div>
-    </div>
-  </div>
-
   <script type="module">
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
     import { supabaseConfig } from './supabase-config.js';
 
     const supabase = createClient(supabaseConfig.url, supabaseConfig.anonKey);
-
     let currentUser = null;
     let currentOrderId = null;
-    let currentProductId = null;
     let currentFilter = 'all';
 
-    // Проверка авторизации
     async function checkAuth() {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
+      const { data: { user }, error } = await supabase.auth.getUser();
+      if (error || !user) {
+        alert('Ошибка авторизации. Войдите в аккаунт.');
         window.location.href = 'login.html';
         return;
       }
       currentUser = user;
+      console.log('✅ Авторизация успешна:', user.email);
       
       loadOrders();
       loadProducts();
       loadUsers();
     }
 
-    // ===== ЗАЯВКИ =====
+    // ===== 1. ЗАЯВКИ =====
     async function loadOrders() {
+      console.log('🔄 Загрузка заявок...');
       let query = supabase.from('orders').select('*').order('created_at', { ascending: false });
-      
-      if (currentFilter !== 'all') {
-        query = query.eq('status', currentFilter);
-      }
+      if (currentFilter !== 'all') query = query.eq('status', currentFilter);
 
       const { data: orders, error } = await query;
-      const ordersList = document.getElementById('orders-list');
-      const ordersCount = document.getElementById('orders-count');
 
+      const ordersList = document.getElementById('orders-list');
       if (error) {
-        console.error('Ошибка загрузки заказов:', error);
-        ordersList.innerHTML = '<div class="empty-state">Ошибка загрузки</div>';
+        console.error('❌ Ошибка загрузки заявок:', error);
+        ordersList.innerHTML = `<div class="empty-state" style="color:red">Ошибка: ${error.message}<br>Проверьте, создана ли таблица 'orders' в Supabase.</div>`;
         return;
       }
 
-      ordersCount.textContent = orders?.length || 0;
-
+      document.getElementById('orders-count').textContent = orders?.length || 0;
       if (!orders || orders.length === 0) {
         ordersList.innerHTML = '<div class="empty-state">Нет заявок</div>';
         return;
@@ -216,83 +147,40 @@
     }
 
     function getPaymentMethodName(method) {
-      const names = {
-        card: '💳 Карта BY',
-        donationalerts: '🌐 DonationAlerts',
-        steam: '🎮 Steam'
-      };
+      const names = { card: '💳 Карта BY', donationalerts: '🌐 DonationAlerts', steam: '🎮 Steam' };
       return names[method] || method;
     }
 
     function getStatusIcon(status) {
-      const icons = {
-        pending: '⏳ Ожидает',
-        completed: '✅ Оплачено',
-        rejected: '❌ Отклонено'
-      };
+      const icons = { pending: '⏳ Ожидает', completed: '✅ Оплачено', rejected: '❌ Отклонено' };
       return icons[status] || status;
     }
 
     window.openConfirmModal = async function(orderId) {
       currentOrderId = orderId;
-      document.getElementById('confirmOrderModal').style.display = 'flex';
-      
       const { data, error } = await supabase.from('orders').select('*').eq('id', orderId).single();
-      
-      if (error) {
-        alert('Ошибка загрузки заказа: ' + error.message);
-        return;
-      }
+      if (error) { alert('Ошибка: ' + error.message); return; }
 
-      if (data) {
-        document.getElementById('order-details').innerHTML = `
-          <div class="detail-row"><span>Товар:</span><span>${data.product_name}</span></div>
-          <div class="detail-row"><span>Сумма:</span><span>${data.amount} ₽</span></div>
-          <div class="detail-row"><span>Способ оплаты:</span><span>${getPaymentMethodName(data.payment_method)}</span></div>
-          <div class="detail-row"><span>Статус:</span><span>${getStatusIcon(data.status)}</span></div>
-          <div class="detail-row"><span>Дата:</span><span>${new Date(data.created_at).toLocaleString('ru-RU')}</span></div>
-          ${data.admin_comment ? `<div class="detail-row"><span>Комментарий:</span><span>${data.admin_comment}</span></div>` : ''}
-        `;
-        document.getElementById('admin-comment').value = data.admin_comment || '';
-      }
+      document.getElementById('order-details').innerHTML = `
+        <div class="detail-row"><span>Товар:</span><span>${data.product_name}</span></div>
+        <div class="detail-row"><span>Сумма:</span><span>${data.amount} ₽</span></div>
+        <div class="detail-row"><span>Способ:</span><span>${getPaymentMethodName(data.payment_method)}</span></div>
+        <div class="detail-row"><span>Статус:</span><span>${getStatusIcon(data.status)}</span></div>
+      `;
+      document.getElementById('admin-comment').value = data.admin_comment || '';
+      document.getElementById('confirmOrderModal').style.display = 'flex';
     };
 
     window.closeConfirmModal = function() {
       document.getElementById('confirmOrderModal').style.display = 'none';
-      document.getElementById('admin-comment').value = '';
       currentOrderId = null;
     };
 
     window.confirmOrder = async function() {
       if (!currentOrderId) return;
-
       const comment = document.getElementById('admin-comment').value.trim();
-
-      const { error } = await supabase
-        .from('orders')
-        .update({ 
-          status: 'completed', 
-          admin_comment: comment, 
-          updated_at: new Date().toISOString() 
-        })
-        .eq('id', currentOrderId);
-
-      if (error) {
-        alert('❌ Ошибка: ' + error.message);
-        return;
-      }
-
-      // Создаём уведомление для пользователя
-      const { data: order } = await supabase.from('orders').select('user_id, product_name').eq('id', currentOrderId).single();
-      
-      if (order) {
-        await supabase.from('notifications').insert({
-          user_id: order.user_id,
-          title: '✅ Заказ подтверждён',
-          message: `Ваш заказ "${order.product_name}" подтверждён администратором.`
-        });
-      }
-
+      const { error } = await supabase.from('orders').update({ status: 'completed', admin_comment: comment, updated_at: new Date().toISOString() }).eq('id', currentOrderId);
+      if (error) { alert('❌ Ошибка: ' + error.message); return; }
       alert('✅ Заказ подтверждён!');
       closeConfirmModal();
       loadOrders();
@@ -300,39 +188,14 @@
 
     window.rejectOrder = async function() {
       if (!currentOrderId) return;
-
       const comment = document.getElementById('admin-comment').value.trim();
-
-      const { error } = await supabase
-        .from('orders')
-        .update({ 
-          status: 'rejected', 
-          admin_comment: comment, 
-          updated_at: new Date().toISOString() 
-        })
-        .eq('id', currentOrderId);
-
-      if (error) {
-        alert('❌ Ошибка: ' + error.message);
-        return;
-      }
-
-      const { data: order } = await supabase.from('orders').select('user_id, product_name').eq('id', currentOrderId).single();
-      
-      if (order) {
-        await supabase.from('notifications').insert({
-          user_id: order.user_id,
-          title: '❌ Заказ отклонён',
-          message: `Ваш заказ "${order.product_name}" отклонён. ${comment ? 'Причина: ' + comment : ''}`
-        });
-      }
-
-      alert(' Заказ отклонён!');
+      const { error } = await supabase.from('orders').update({ status: 'rejected', admin_comment: comment, updated_at: new Date().toISOString() }).eq('id', currentOrderId);
+      if (error) { alert('❌ Ошибка: ' + error.message); return; }
+      alert('❌ Заказ отклонён!');
       closeConfirmModal();
       loadOrders();
     };
 
-    // Фильтры заявок
     document.querySelectorAll('.filter-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -342,218 +205,91 @@
       });
     });
 
-    // ===== ТОВАРЫ =====
+    // ===== 2. ТОВАРЫ =====
     async function loadProducts() {
-      const { data: products, error } = await supabase
-        .from('products')
-        .select('*')
-        .order('id', { ascending: true });
-
+      console.log('🔄 Загрузка товаров...');
+      const { data: products, error } = await supabase.from('products').select('*').order('id', { ascending: true });
       const productsList = document.getElementById('products-list');
-
+      
       if (error) {
-        console.error('Ошибка загрузки товаров:', error);
-        productsList.innerHTML = '<div class="empty-state">Ошибка загрузки</div>';
+        console.error('❌ Ошибка загрузки товаров:', error);
+        productsList.innerHTML = `<div class="empty-state" style="color:red">Ошибка: ${error.message}</div>`;
         return;
       }
-
       if (!products || products.length === 0) {
-        productsList.innerHTML = '<div class="empty-state">Нет товаров</div>';
+        productsList.innerHTML = '<div class="empty-state">Нет товаров. Добавьте первый!</div>';
         return;
       }
-
-      productsList.innerHTML = products.map(product => `
+      productsList.innerHTML = products.map(p => `
         <div class="product-item">
-          <div class="product-icon">${product.icon}</div>
+          <div class="product-icon">${p.icon}</div>
           <div class="product-info">
-            <div class="product-name">${product.title}</div>
-            <div class="product-category">${getCategoryName(product.category)}</div>
-            <div class="product-price">${product.is_bonus ? 'Бесплатно' : product.price + ' ₽'}</div>
+            <div class="product-name">${p.title}</div>
+            <div class="product-category">${p.category}</div>
+            <div class="product-price">${p.is_bonus ? 'Бесплатно' : p.price + ' ₽'}</div>
           </div>
           <div class="product-actions">
-            <button class="btn-edit" onclick="editProduct(${product.id})">✏️</button>
-            <button class="btn-delete" onclick="deleteProduct(${product.id})">🗑️</button>
+            <button class="btn-delete" onclick="deleteProduct(${p.id})">🗑️</button>
           </div>
         </div>
       `).join('');
     }
 
-    function getCategoryName(category) {
-      const names = { soft: '💻 Софт', services: '🛠️ Услуги', bonuses: '🎁 Бонусы' };
-      return names[category] || category;
-    }
-
-    window.openAddProductModal = function() {
-      currentProductId = null;
-      document.getElementById('product-modal-title').textContent = 'Добавить товар';
-      document.getElementById('product-category').value = 'soft';
-      document.getElementById('product-icon').value = '';
-      document.getElementById('product-title').value = '';
-      document.getElementById('product-short-desc').value = '';
-      document.getElementById('product-full-desc').value = '';
-      document.getElementById('product-price').value = '';
-      document.getElementById('product-images').value = '';
-      document.getElementById('product-features').value = '';
-      document.getElementById('product-is-bonus').checked = false;
-      document.getElementById('addProductModal').style.display = 'flex';
+    window.deleteProduct = async function(id) {
+      if (!confirm('Удалить этот товар?')) return;
+      const { error } = await supabase.from('products').delete().eq('id', id);
+      if (error) { alert('❌ Ошибка: ' + error.message); return; }
+      alert('🗑️ Товар удалён!');
+      loadProducts();
     };
 
-    window.closeAddProductModal = function() {
-      document.getElementById('addProductModal').style.display = 'none';
-      currentProductId = null;
-    };
-
-    window.editProduct = async function(productId) {
-      currentProductId = productId;
-      const { data: product, error } = await supabase.from('products').select('*').eq('id', productId).single();
+    // ===== 3. ПОЛЬЗОВАТЕЛИ =====
+    async function loadUsers() {
+      console.log('🔄 Загрузка пользователей...');
+      const { data: users, error } = await supabase.from('profiles').select('user_id, name, avatar_url, bonus_balance').order('created_at', { ascending: false });
+      const usersList = document.getElementById('users-list');
       
       if (error) {
-        alert('Ошибка загрузки товара: ' + error.message);
+        console.error('❌ Ошибка загрузки пользователей:', error);
+        usersList.innerHTML = `<div class="empty-state" style="color:red">Ошибка: ${error.message}<br>Проверьте таблицу 'profiles'.</div>`;
         return;
       }
-
-      document.getElementById('product-modal-title').textContent = 'Редактировать товар';
-      document.getElementById('product-category').value = product.category;
-      document.getElementById('product-icon').value = product.icon;
-      document.getElementById('product-title').value = product.title;
-      document.getElementById('product-short-desc').value = product.short_desc;
-      document.getElementById('product-full-desc').value = product.full_desc;
-      document.getElementById('product-price').value = product.price;
-      document.getElementById('product-images').value = product.images.join(',');
-      document.getElementById('product-features').value = product.features.join(',');
-      document.getElementById('product-is-bonus').checked = product.is_bonus;
-      document.getElementById('addProductModal').style.display = 'flex';
-    };
-
-    window.saveProduct = async function() {
-      const productData = {
-        category: document.getElementById('product-category').value,
-        icon: document.getElementById('product-icon').value,
-        title: document.getElementById('product-title').value,
-        short_desc: document.getElementById('product-short-desc').value,
-        full_desc: document.getElementById('product-full-desc').value,
-        price: parseInt(document.getElementById('product-price').value) || 0,
-        images: document.getElementById('product-images').value.split(',').map(s => s.trim()),
-        features: document.getElementById('product-features').value.split(',').map(s => s.trim()),
-        is_bonus: document.getElementById('product-is-bonus').checked
-      };
-
-      if (!productData.title || !productData.icon) {
-        alert('Заполните название и иконку!');
-        return;
-      }
-
-      let error;
-      if (currentProductId) {
-        const result = await supabase.from('products').update(productData).eq('id', currentProductId);
-        error = result.error;
-      } else {
-        const result = await supabase.from('products').insert(productData);
-        error = result.error;
-      }
-
-      if (error) {
-        alert('❌ Ошибка: ' + error.message);
-        return;
-      }
-
-      alert('✅ Товар сохранён!');
-      closeAddProductModal();
-      loadProducts();
-    };
-
-    window.deleteProduct = async function(productId) {
-      if (!confirm('Удалить этот товар?')) return;
-
-      const { error } = await supabase.from('products').delete().eq('id', productId);
-
-      if (error) {
-        alert('❌ Ошибка: ' + error.message);
-        return;
-      }
-
-      alert('️ Товар удалён!');
-      loadProducts();
-    };
-
-    // ===== ПОЛЬЗОВАТЕЛИ =====
-    async function loadUsers() {
-      const { data: users, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      const usersList = document.getElementById('users-list');
-
-      if (error) {
-        console.error('Ошибка загрузки пользователей:', error);
-        usersList.innerHTML = '<div class="empty-state">Ошибка загрузки</div>';
-        return;
-      }
-
       if (!users || users.length === 0) {
         usersList.innerHTML = '<div class="empty-state">Нет пользователей</div>';
         return;
       }
-
-      usersList.innerHTML = users.map(user => `
+      usersList.innerHTML = users.map(u => `
         <div class="user-item">
-          <img src="${user.avatar_url || 'https://via.placeholder.com/40'}" class="user-avatar">
+          <img src="${u.avatar_url || 'https://via.placeholder.com/40'}" class="user-avatar">
           <div class="user-info">
-            <div class="user-name">${user.name}</div>
-            <div class="user-id">ID: ${user.user_id}</div>
-            <div class="user-bonus">🎁 Баланс: ${user.bonus_balance || 0}</div>
+            <div class="user-name">${u.name || 'Без имени'}</div>
+            <div class="user-id">ID: ${u.user_id || 'Не указан'}</div>
+            <div class="user-bonus">🎁 Баланс: ${u.bonus_balance || 0}</div>
           </div>
-          <button class="btn-manage" onclick="quickAddBonus('${user.user_id}')">🎁 + Бонус</button>
+          <button class="btn-manage" onclick="quickAddBonus('${u.user_id}')">🎁 + Бонус</button>
         </div>
       `).join('');
     }
 
     window.quickAddBonus = function(userId) {
+      if(!userId) { alert('У пользователя нет ID'); return; }
       document.getElementById('bonus-user-id').value = userId;
       document.querySelector('[data-tab="bonuses"]').click();
     };
 
-    // ===== БОНУСЫ =====
+    // ===== 4. БОНУСЫ =====
     window.addBonus = async function() {
       const userId = document.getElementById('bonus-user-id').value.trim();
       const amount = parseInt(document.getElementById('bonus-amount').value);
+      if (!userId || !amount) { alert('Заполните ID и количество!'); return; }
 
-      if (!userId || !amount) {
-        alert('Заполните ID пользователя и количество бонусов!');
-        return;
-      }
-
-      // Находим профиль по user_id
-      const { data: profile, error: findError } = await supabase
-        .from('profiles')
-        .select('id, bonus_balance, name')
-        .eq('user_id', userId)
-        .single();
-
-      if (findError || !profile) {
-        alert('❌ Пользователь не найден!');
-        return;
-      }
+      const { data: profile, error: findError } = await supabase.from('profiles').select('id, bonus_balance, name').eq('user_id', userId).single();
+      if (findError || !profile) { alert('❌ Пользователь с таким ID не найден!'); return; }
 
       const newBalance = (profile.bonus_balance || 0) + amount;
-
-      const { error: updateError } = await supabase
-        .from('profiles')
-        .update({ bonus_balance: newBalance, updated_at: new Date().toISOString() })
-        .eq('id', profile.id);
-
-      if (updateError) {
-        alert('❌ Ошибка начисления: ' + updateError.message);
-        return;
-      }
-
-      // Уведомление пользователю
-      await supabase.from('notifications').insert({
-        user_id: profile.id,
-        title: ' Бонусы начислены',
-        message: `Администратор начислил вам ${amount} бонусов!`
-      });
+      const { error: updateError } = await supabase.from('profiles').update({ bonus_balance: newBalance }).eq('id', profile.id);
+      
+      if (updateError) { alert('❌ Ошибка: ' + updateError.message); return; }
 
       alert(`✅ Начислено ${amount} бонусов пользователю ${profile.name}!`);
       document.getElementById('bonus-user-id').value = '';
@@ -566,7 +302,6 @@
       tab.addEventListener('click', () => {
         document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
         tab.classList.add('active');
-        
         document.querySelectorAll('.admin-section').forEach(s => s.style.display = 'none');
         document.getElementById(`section-${tab.dataset.tab}`).style.display = 'block';
       });
