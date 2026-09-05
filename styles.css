@@ -3367,3 +3367,166 @@ body.light-theme .comment-input {
     min-width: auto;
   }
 }
+
+/* ===== СТРАНИЦА ЗАКАЗОВ И УВЕДОМЛЕНИЯ ===== */
+.orders-page {
+  margin-top: 80px;
+  padding: 40px 20px;
+  min-height: calc(100vh - 80px);
+}
+
+.orders-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.orders-container h1 {
+  font-size: 32px;
+  background: linear-gradient(135deg, #fff 0%, #c4b5fd 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+.order-card {
+  background: rgba(26, 26, 36, 0.6);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(124, 92, 255, 0.15);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 15px;
+  transition: all 0.3s ease;
+}
+
+.order-card:hover {
+  border-color: rgba(124, 92, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.order-card.status-completed { border-left: 4px solid #10b981; }
+.order-card.status-pending { border-left: 4px solid #fbbf24; }
+.order-card.status-rejected { border-left: 4px solid #ef4444; }
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.order-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.order-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.order-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.order-row span:first-child {
+  color: #9ca3af;
+}
+
+.order-row span:last-child {
+  color: #fff;
+  font-weight: 600;
+}
+
+/* Уведомления в шапке */
+.notifications-icon {
+  position: relative;
+  cursor: pointer;
+  font-size: 24px;
+  margin-right: 15px;
+  transition: transform 0.3s;
+}
+
+.notifications-icon:hover {
+  transform: scale(1.1);
+}
+
+#notif-count {
+  position: absolute;
+  top: -8px;
+  right: -10px;
+  background: #ef4444;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 7px;
+  font-size: 11px;
+  font-weight: bold;
+  min-width: 18px;
+  text-align: center;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.notif-item {
+  padding: 15px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  transition: background 0.3s;
+}
+
+.notif-item:last-child {
+  border-bottom: none;
+}
+
+.notif-item.read {
+  opacity: 0.6;
+}
+
+.notif-item:hover {
+  background: rgba(124, 92, 255, 0.05);
+}
+
+.notif-title {
+  font-weight: 700;
+  margin-bottom: 5px;
+  color: #fff;
+  font-size: 15px;
+}
+
+.notif-message {
+  color: #9ca3af;
+  font-size: 14px;
+  margin-bottom: 5px;
+  line-height: 1.4;
+}
+
+.notif-time {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+/* Светлая тема */
+body.light-theme .order-card {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(124, 92, 255, 0.15);
+}
+
+body.light-theme .order-name { color: #1a1a24; }
+body.light-theme .order-row span:last-child { color: #1a1a24; }
+
+body.light-theme .notif-item:hover {
+  background: rgba(124, 92, 255, 0.05);
+}
+
+body.light-theme .notif-title { color: #1a1a24; }
+
+@media (max-width: 600px) {
+  .order-card { padding: 15px; }
+  .order-name { font-size: 16px; }
+}
