@@ -90,28 +90,42 @@ async function checkAuth() {
   }
   
   // Загружаем профиль
-  const { data: profile } = await supabase
+  const { data: profile, error: profileError } = await supabase
     .from('profiles')
-    .select('avatar_url, bonus_balance, user_id')
+    .select('avatar_url, bonus_balance, user_id, name')
     .eq('id', user.id)
     .single();
   
-  if (!profile) {
+  if (!profile || profileError) {
     // Создаём профиль если нет
     const defaultAvatar = user.user_metadata?.avatar_url || '';
-    const numericId = 100000 + Math.floor(Math.random() * 900000); // Генерируем числовой ID
+    const numericId = 100000 + Math.floor(Math.random() * 900000);
     
-    const { data: newProfile } = await supabase.from('profiles').insert({
-      id: user.id,
-      user_id: numericId,
-      name: user.user_metadata?.full_name || user.user_metadata?.name || user.email || 'Пользователь',
-      avatar_url: defaultAvatar,
-      bonus_balance: 0
-    }).select().single();
+    console.log(' Создаём профиль с user_id:', numericId);
+    
+    const { data: newProfile, error: insertError } = await supabase
+      .from('profiles')
+      .insert({
+        id: user.id,
+        user_id: numericId,
+        name: user.user_metadata?.full_name || user.user_metadata?.name || user.email || 'Пользователь',
+        avatar_url: defaultAvatar,
+        bonus_balance: 0
+      })
+      .select()
+      .single();
+    
+    if (insertError) {
+      console.error('❌ Ошибка создания профиля:', insertError);
+    } else {
+      console.log('✅ Профиль создан:', newProfile);
+    }
     
     userAvatar.src = defaultAvatar || 'https://via.placeholder.com/40';
     headerBonusValue.textContent = '0';
   } else {
+    console.log('✅ Профиль загружен:', profile);
+    console.log('🔢 user_id:', profile.user_id, 'тип:', typeof profile.user_id);
     userAvatar.src = profile.avatar_url || user.user_metadata?.avatar_url || 'https://via.placeholder.com/40';
     headerBonusValue.textContent = profile.bonus_balance || 0;
   }
