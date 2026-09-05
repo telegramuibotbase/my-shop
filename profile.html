@@ -104,8 +104,8 @@
               <div class="setting-label" data-i18n="theme">Тема</div>
             </div>
             <div class="toggle-group">
-              <button class="toggle-btn active" id="theme-dark" onclick="setTheme('dark')"> Тёмная</button>
-              <button class="toggle-btn" id="theme-light" onclick="setTheme('light')">☀️ Светлая</button>
+              <button class="toggle-btn active" id="theme-dark" onclick="setTheme('dark')">🌙 Тёмная</button>
+              <button class="toggle-btn" id="theme-light" onclick="setTheme('light')">️ Светлая</button>
             </div>
           </div>
         </div>
@@ -119,7 +119,7 @@
             </div>
             <div class="toggle-group">
               <button class="toggle-btn active" id="lang-ru" onclick="setLanguage('ru')">🇷🇺 Русский</button>
-              <button class="toggle-btn" id="lang-en" onclick="setLanguage('en')">🇧 English</button>
+              <button class="toggle-btn" id="lang-en" onclick="setLanguage('en')">🇬🇧 English</button>
             </div>
           </div>
         </div>
@@ -134,7 +134,7 @@
             <select class="currency-select" id="currency-select" onchange="setCurrency(this.value)">
               <option value="RUB">🇷🇺 RUB (Рубль)</option>
               <option value="USD">🇺🇸 USD (Доллар)</option>
-              <option value="EUR">🇪 EUR (Евро)</option>
+              <option value="EUR">🇺 EUR (Евро)</option>
               <option value="BYN">🇧🇾 BYN (Бел. рубль)</option>
             </select>
           </div>
@@ -156,7 +156,7 @@
     </div>
   </main>
 
-  <!-- Модальные окна (те же что были) -->
+  <!-- Модальные окна -->
   <div class="modal" id="editModal">
     <div class="modal-content">
       <div class="modal-header">
@@ -172,7 +172,7 @@
           <label>Новая аватарка</label>
           <div class="file-upload-wrapper">
             <input type="file" id="edit-avatar-file" class="file-input" accept="image/*" onchange="previewImage(this)">
-            <label for="edit-avatar-file" class="file-upload-btn">📁 Выбрать файл</label>
+            <label for="edit-avatar-file" class="file-upload-btn"> Выбрать файл</label>
             <span class="file-name" id="file-name">Файл не выбран</span>
           </div>
         </div>
@@ -201,7 +201,7 @@
       </div>
       <div class="modal-footer">
         <button class="btn-cancel" onclick="closeAddFriendModal()">Отмена</button>
-        <button class="btn-save" onclick="addFriend()"> Добавить</button>
+        <button class="btn-save" onclick="addFriend()">➕ Добавить</button>
       </div>
     </div>
   </div>
@@ -209,7 +209,7 @@
   <div class="modal" id="emailModal">
     <div class="modal-content">
       <div class="modal-header">
-        <h3> Привязать почту</h3>
+        <h3>📧 Привязать почту</h3>
         <button class="modal-close" onclick="closeEmailModal()">×</button>
       </div>
       <div class="modal-body">
@@ -240,7 +240,7 @@
       </div>
       <div class="modal-footer">
         <button class="btn-cancel" onclick="closeTelegramModal()">Отмена</button>
-        <button class="btn-save" onclick="saveTelegram()">💾 Сохранить</button>
+        <button class="btn-save" onclick="saveTelegram()"> Сохранить</button>
       </div>
     </div>
   </div>
@@ -276,11 +276,11 @@
       en: {
         bonusBalance: 'Bonus Balance',
         email: 'Email',
-        appearance: ' Appearance',
+        appearance: '🎨 Appearance',
         theme: 'Theme',
-        language: '🌐 Language',
+        language: ' Language',
         selectLanguage: 'Select language',
-        currency: ' Currency',
+        currency: '💱 Currency',
         selectCurrency: 'Price display',
         notLinked: 'Not linked',
         notLinkedTg: 'Not linked',
@@ -436,6 +436,9 @@
       const name = profile.name || user.user_metadata?.full_name || user.user_metadata?.name || 'Пользователь';
       const bonusBalance = profile.bonus_balance || 0;
       const provider = (user.app_metadata?.provider || 'Discord').charAt(0).toUpperCase() + (user.app_metadata?.provider || 'discord').slice(1);
+      
+      console.log(' Загружен user_id:', profile.user_id, 'тип:', typeof profile.user_id);
+      
       displayProfile(name, currentAvatarUrl, bonusBalance, provider, profile.user_id, user.email);
       loadFriends();
       loadPurchases();
@@ -446,9 +449,13 @@
       document.getElementById('profile-name').textContent = name;
       document.getElementById('profile-provider').textContent = provider;
       document.getElementById('profile-bonus-balance').textContent = bonusBalance || 0;
-      // Показываем ЧИСЛОВОЙ user_id, а не UUID
-      document.getElementById('profile-user-id').textContent = 'ID #' + (userId || '000000');
-      document.getElementById('referral-code').textContent = 'Ваш код: REF-' + (userId || '000000');
+      
+      // ВАЖНО: Показываем ЧИСЛОВОЙ user_id, а не UUID
+      const displayId = userId || 0;
+      console.log(' Отображаем ID:', displayId, 'тип:', typeof displayId);
+      document.getElementById('profile-user-id').textContent = 'ID #' + displayId;
+      document.getElementById('referral-code').textContent = 'Ваш код: REF-' + displayId;
+      
       document.getElementById('edit-name').value = name;
       document.getElementById('preview-avatar').src = avatar || 'https://via.placeholder.com/80';
       
@@ -505,7 +512,7 @@
           <div class="purchase-amount ${p.amount === 0 ? 'free' : ''}">
             ${p.amount === 0 ? 'Бесплатно' : p.amount + ' ₽'}
           </div>
-          <div class="purchase-status">${p.status === 'completed' ? '✅' : p.status === 'rejected' ? '❌' : '⏳'}</div>
+          <div class="purchase-status">${p.status === 'completed' ? '✅' : p.status === 'rejected' ? '❌' : ''}</div>
         </div>
       `).join('');
     }
